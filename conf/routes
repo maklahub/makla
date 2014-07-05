@@ -14,6 +14,7 @@ GET     /myprofile                  controllers.Application.myProfile()
 GET     /myphotos                   controllers.Application.myPhotos()
 GET     /myvideos                   controllers.Application.myVideos()
 GET     /search/:q                  controllers.Application.searchArtistas( q: String )
+GET     /saveCard                  controllers.SaveCreditCard.index()
 
 GET     /widget/:userName           controllers.Application.myWidget( userName: String )
 

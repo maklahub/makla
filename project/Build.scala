@@ -13,6 +13,8 @@ object ApplicationBuild extends Build {
     "com.amazonaws" % "aws-java-sdk" % "1.3.11",
     "com.typesafe" %% "play-plugins-mailer" % "2.1-RC2",
     "org.apache.commons" % "commons-email" % "1.3.1",
+    "com.paypal.sdk" % "paypal-core" % "1.6.1",
+    "com.paypal.sdk" % "rest-api-sdk" % "0.9.1",
     javaCore,
     javaJdbc,
     javaEbean

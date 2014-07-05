@@ -22,7 +22,8 @@ public class Application extends Controller {
         //System.out.print( allArtistas );
         //   return ok(views.html.index.render( artistasAsJson, userTypesAsJson));
        // return ok( menus );
-        return ok( views.html.index.render( menus ));
+        return ok( views.html.index.render( menus ) );
+
 
     }
 
