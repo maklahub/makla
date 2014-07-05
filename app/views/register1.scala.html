@@ -1,0 +1,100 @@
+@(firstName: String, lastName: String, email: String )
+@headerOut()
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="@routes.Assets.at("bootstrap/css/bootstrap.min.css")">
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/style.css")">
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js">  </script>-->
+    <script type="text/javascript" src="/javascripts/jquery-1.9.0.min.js">  </script>
+
+    <script type="text/javascript" src="@routes.Assets.at("bootstrap/js/bootstrap.min.js")">  </script>
+    <script type="text/javascript" src="@routes.Assets.at("utils/api.js")"></script>
+    <script type="text/javascript" src="/javascripts/jquery.masonry.js"></script>
+    <script type="text/javascript" src="@routes.Assets.at("utils/utils.js")"></script>
+
+<body>
+
+<div id="stepsPage" class="container">
+    <div class="row-fluid">
+        <div>
+            <div id="stepsContentContainer">
+                <h4> Personal Info</h4>
+                <div>
+                    <form action="completeRegistration" method="post" enctype="multipart/form-data">
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">First Name: </span>
+                            <input class="span6" name="firstName" id="firstName" value="@{ firstName }" type="text" placeholder="First Name">
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">Last Name: </span>
+                            <input class="span6" name="lastName" id="lastName" value="@{ lastName }" type="text" placeholder="Last Name">
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">User Name: </span>
+                            <input class="span6" name="userName" id="userName" value="@{ firstName}.@{lastName}" type="text" placeholder="Username">
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">Email: </span>
+                            <input class="span6" name="email" id="userEmail" value="@{ email }" type="text" placeholder="Email">
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">Password: </span>
+                            <input class="span6" name="password" id="password" type="password" placeholder="Password">
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">Location: </span>
+                            <input class="span4" id="city" type="text" placeholder="City"/>
+                            <input class="span2" id="state" type="text" placeholder="State"/>
+                            <input class="span4" id="country" type="text" placeholder="Country"/>
+                        </div>
+                        <div class="input-prepend row-fluid">
+                            <span class="add-on">Birthday: </span>
+                            <select class="span2">
+                                <option>Month</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                            <select class="span2">
+                                <option>Day</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                            <select class="span2">
+                                <option>Year</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                        <div class="row-fluid">
+                            <label class="radio inline">
+                                <input type="radio" id="female" name="type" value="femal"> Female
+                            </label>
+                            <label class="radio inline">
+                                <input type="radio" id="male" name="type" value="femal"> Male
+                            </label>
+                        </div>
+
+                        <h5> Upload profile Image</h5>
+                        <div class="frow" >
+                            <input class="span12 finputText " type="file" name="profileImage" id="profileImage">
+                        </div>
+                        <div class="frow" >
+                            <input class="btn btn-primary span12" type="submit" value="Complete Registration" id="uploadProfileImage">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

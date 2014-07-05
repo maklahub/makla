@@ -1,0 +1,45 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+GET     /home                       controllers.Application.home()
+#GET     /artistas                   controllers.Application.artistas()
+#GET     /deleteArtista/:id          controllers.Application.deleteArtista( id: Long )
+GET     /byName/:name               controllers.Application.byName( name: String )
+GET     /signOut                    controllers.Application.signOut()
+GET     /profile/:userName          controllers.Application.profile( userName: String )
+GET     /myprofile                  controllers.Application.myProfile()
+GET     /myphotos                   controllers.Application.myPhotos()
+GET     /myvideos                   controllers.Application.myVideos()
+GET     /search/:q                  controllers.Application.searchArtistas( q: String )
+
+GET     /widget/:userName           controllers.Application.myWidget( userName: String )
+
+
+
+
+
+POST     /addVideo                  controllers.Register.addVideo()
+POST     /completeRegistration      controllers.Register.completeRegistration()
+POST     /addMyPhotos               controllers.AddPhotos.addMyPhotos()
+
+GET      /login                     controllers.LogIn.index()
+POST      /login                    controllers.LogIn.index()
+POST      /loginToComment           controllers.LogIn.loginToComment()
+GET    /register                    controllers.Register.index()
+POST     /register                  controllers.Register.index()
+
+POST    /saveProfileData            controllers.Register.saveProfileData()
+
+
+
+POST     /addComment                controllers.Application.addComment()
+
+GET      /getComments/:photoId      controllers.Application.getComments( photoId: String)
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /*file                      controllers.Assets.at(path="/public", file)

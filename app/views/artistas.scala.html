@@ -1,0 +1,44 @@
+@(artistas: String)
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> Artistas</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="stylesheets/style.css"/>
+    <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js">  </script>-->
+    <script type="text/javascript" src="/javascripts/jquery-1.9.0.min.js">  </script>
+    <script type="text/javascript" src="javascripts/jquery.masonry.js"></script>
+    <script type="text/javascript" src="javascripts/domObjects.js"></script>
+    <script>
+        $(function(){
+            // create some screens
+            var artistas = @Html(artistas);
+            console.log( artistas );
+            var $container = $(' #container ');
+            $.each( artistas.allArtistas , function ( i, element){
+                console.log( element );
+                var s1 = new Screen( element ).render();
+                $container.append( s1 );
+            });
+
+            $container.imagesLoaded( function() {
+                $container.masonry();
+            });
+
+        });
+
+
+
+
+    </script>
+
+</head>
+<body>
+
+    <div id="container">
+
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <title> Makla platform - </title>
+<meta name="viewport" content="user-scalable=no, initial-scale = 1.0,maximum-scale = 0.8,width=device-width" />
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
+    <!--[if IE]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+    <![endif]-->
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js">  </script>
+
+<script type="text/javascript" src="/javascripts/date.js"></script>
+<script type="text/javascript" src="/utils/api.js"></script>
+<script type="text/javascript" src="/utils/utils.js"></script>
+<script type="text/javascript" src="/javascripts/jquery.masonry.js"></script>
+<script type="text/javascript" src="/javascripts/domObjects.js"></script>
+<script type="text/javascript" src="/javascripts/ie.js"></script>
+<script type="text/javascript" >
+
+
+    function UserProfile( u ){
+        //console.log( u );
+        var userProfileImg =  u.activeProfileImage.url || "/images/clown.jpg";
+        var userFullName = u.fullName;
+        this.wrapper = "";
+       // this.profileImage = "<li><span style='width: 75px;overflow: hidden;height: 55px; display: inline-block;border: solid 1px'> <img width='100%'  src= " + userProfileImg +"></span></li>";
+        this.profileImage = '<li> <div id="user-profile-div"><img id="drop-down-account" title="'+ userFullName +'" class="v-center" width="100%" src="' + userProfileImg + '"></div></li>';
+       // this.fullName = "<li> <span style='height: 55px; border: solid 1px'> <strong> " + userFullName + " </strong></span> </li>";
+       // this.fullName = "  <li id='drop-down-account' class='profile-li-height'><strong> " + userFullName + "<span class='caret'></span></strong></li>";
+        this.dropDown = "   <div class='dropdown'><ul id='d' class='dropdown-menu'> <li><a tabindex='-1' href='/signOut'>Sign Out </a></li>" +
+                "<li class='divider'></li> <li><a tabindex='-1' href='#'>Setting</a></li> </ul><div>";
+        this.html = function(){
+            return this.wrapper + this.profileImage + this.dropDown ;
+        }
+    }
+    UserProfile.prototype.render = function(){
+       return this.html();
+    }
+
+    $( document).ready( function(){
+        // Slide down main content
+        slideDownMainContent();
+        var u = @Html(session.get("sessionUser"));
+        var $profileContainer = $("#profile-ul");
+            $profileContainer.html( new UserProfile( u ).render() );
+
+        $('#drop-down-account').on('click', function(){
+            $('#d').slideDown();
+
+        });
+        $('.dropdown-menu').mouseleave( function(){
+            $('#d').slideUp();
+        });
+
+        $( "#search-artistas").keyup( function(){
+            var $resultContainer = $( "#search-result" );
+            $resultContainer.html("");
+            var q = $( this).val();
+            if (q.length >= 1){
+               // alert( " > 3 " );
+                ajaxReturnJson( "/search/" + q, function ( data ){
+                   // alert( JSON.stringify(data) );
+                    $.each( data.searchResult , function( i, e){
+                        $resultContainer.append(  new SearchResultObject( e ).render() );
+                    });
+                } );
+            }
+        });
+
+
+    });
+
+</script>
+</head>
+<body>
+<hr class="stepsHr">
+<div id="header-top-bar" class="top">
+    <div class="row-fluid inner-header">
+        <div class="span4"> <h2> <a href="/"> <span class="logo"></span> Makla</a></h2></div>
+        <div class="span4">
+            <div style=" position: relative;">
+                <input id="search-artistas" type="text" class="input-large" style="width: 100%" placeholder="Search performers, Artists, Acrobats ... "/>
+                <div id="search-result">
+
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <ul id="profile-ul">
+
+            </ul>
+
+        </div>
+
+    </div>
+    <!---  Sub top bar  -->
+    <hr class="stepsHr">
+    <div class="tool-bar" id="tool-bar"> tool bar</div>
+
+
+</div>
+

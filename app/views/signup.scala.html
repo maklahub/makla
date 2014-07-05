@@ -1,0 +1,118 @@
+@(artistas: String, userTypes: String )
+@headerOut()
+
+    <script type="text/javascript">
+        $( document).ready( function(){
+            var documentWidth = $( document).width();
+          // alert( $( document).width());
+            $(function(){
+                // create some screens
+                var artistas = @Html(artistas);
+                var userTypes = @Html(userTypes);
+                $.each( userTypes, function( i, ut ){
+                    console.log( ut );
+                    var $e = $('<option>');
+                    $e.attr({ 'value' : ut.name , 'data-ref' : ut.reference});
+                    $e.text( ucFirstAllWords(ut.label) );
+
+                    $("#user-types-select").append( $e );
+                });
+                var $container = $(' #artistas-container ');
+                $container.css( 'visibility', 'hidden');
+                $.each( artistas.allArtistas , function ( i, element){
+                    console.log( element );
+                    var s1 = new Screen( element ).render();
+                    $container.append( s1 );
+                });
+
+            if ( documentWidth > 480){
+               // alert( " add class psan 2" );
+                if ( documentWidth >= 1200){
+                    $('.item').css( 'width', documentWidth/ 5 - 6 + "px");
+                }
+                else if ( documentWidth >=  800){
+                    $('.item').css( 'width', documentWidth/ 3 - 8 + "px");
+                }
+                else {
+                    $('.item').css( 'width', documentWidth/ 2 -  12  + "px");
+                }
+
+           }
+            else {
+                $('#artistas-container .item').css( 'width' , documentWidth+ "px");
+            }
+
+                //
+               // grayScaleHtmlPage();
+
+                $container.imagesLoaded( function() {
+                    $container.masonry().css('visibility', 'visible');
+                    $('#artistas-container .item').hover(
+                            function() {
+                               console.log( $( this).children(":last"));
+                                $( this).children(":first").fadeIn();
+                                $( this).children(":last").delay(1000).fadeIn();
+                            }, function() {
+                                $( this).children(":first").fadeOut();
+                                $( this).children(":last").fadeOut( );
+                            }
+                    );
+                });
+
+            });
+});
+
+
+    </script>
+
+<div class="container-fluid" id="content-container">
+    <div id="c">
+
+        <div id="forms">
+            <div id="homeImage">
+
+            </div>
+
+            <div class="f ">
+                <form method="post" action="register">
+                    <div class="frow header">
+                        <div><h2 class="h2">New to ArtistaOne ? Sign up</h2></div>
+                    </div>
+                    <hr class="hr">
+                    <div class="frow"  >
+                        <div class="flabel "> Who are you?</div>
+                        <select class="finputText" name="userType" id="user-types-select">
+                            <option></option>
+
+                        </select>
+                    </div>
+                    <div class="frow" >
+                        <div class="flabel "> First Name</div>
+                        <input class="finputText" type="text" name="firstName">
+                    </div>
+
+                    <div class="frow" >
+                        <div class="flabel "> Last Name</div>
+                        <input class="finputText" type="text" name="lastName">
+                    </div>
+                    <div class="frow" >
+                        <div class="flabel "> Email</div>
+                        <input class="finputText" type="text" name="email">
+                    </div>
+
+                    <div class="frow" >
+                        <input class="btn signup-btn" type="submit" value="Sign up for ArtistaOne">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <div id="artistas-container"></div>
+
+</div>
+
+
+</body>
+</html>

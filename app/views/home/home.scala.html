@@ -1,0 +1,73 @@
+
+@(feeds: String)
+
+@headerIn()
+
+    <script>
+        $( document).ready( function(){
+
+        $(function(){
+            // create some screens
+            var feeds = @Html(feeds);
+            console.log( "feeds" );
+            console.log( feeds );
+            var $container = $(' #fc-container ');
+            var feedPageWidth = $container.width();
+            $.each( feeds , function ( i, element){
+                console.log( element );
+                var f = new FeedsScreen( element).render();
+                $container.append( f );
+            });
+            $container.imagesLoaded( function() {
+                $container.masonry();
+            });
+            if ( feedPageWidth > 480){
+                // alert( " add class psan 2" );
+                if ( feedPageWidth  >= 1200){
+                    $('.feed-item').css( 'width', feedPageWidth/ 4 - 20 + "px");
+                }
+                else if ( feedPageWidth >=  800){
+                    $('.feed-item').css( 'width', feedPageWidth/ 4 - 20 + "px");
+                }
+                else {
+                    $('.feed-item').css( 'width', feedPageWidth/ 2 -  20  + "px");
+                }
+
+            }
+            else {
+                //alert('yeah');
+                //$('feed-item').css( 'width' , feedPageWidth + "px");
+                $('.feed-item').css( 'width' ,"98%");
+            }
+        });
+
+        });
+
+
+    </script>
+
+
+
+
+
+<div class="container-fluid" id="content-container">
+
+    <div class="row-fluid">
+        @sidemenu.sidemenu()
+        <div class="span11" style="float: right">
+            <div class="container-fluid">
+
+                <div id="fc-container">
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

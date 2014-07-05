@@ -1,0 +1,40 @@
+@(title: String)
+@headerOut()
+<body>
+   <div class="container-fluid" id="content-container">
+       <div id="c">
+           <div id="forms">
+
+               <div class="f2 ">
+                   <form method="post" action="login">
+                       <div class=" header">
+                           @title
+                           <div><h1 class="h1" style="padding: 0; color: white; text-shadow: 1px 1px 2px #222"> Sign in </h1></div>
+
+                       </div>
+
+                       <div class="frow" >
+                           <div class="flabel "> Email</div>
+                           <input class="finputText" type="text" name="email">
+                       </div>
+
+                       <div class="frow" >
+                           <div class="flabel "> Password</div>
+                           <input class="finputText" type="password" name="password">
+                       </div>
+
+                       <div class="frow" >
+                           <input class="btn signup-btn" type="submit" value="Sign in to ArtistaOne">
+                       </div>
+                   </form>
+               </div>
+
+           </div>
+
+       </div>
+
+
+   </div>
+
+</body>
+</html>

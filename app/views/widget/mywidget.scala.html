@@ -1,0 +1,292 @@
+@(profileData: String)
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title> video app</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <meta name="viewport" content="user-scalable=no, initial-scale = 1.0,maximum-scale = 0.8,width=device-width" />
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script type="text/javascript" src="/javascripts/domObjects.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery.masonry.js"></script>
+    <script type="text/javascript" src="/utils/utils.js"></script>
+
+
+    <script type="text/javascript">
+
+        function WidgetMyPhoto( o ){
+            var img = o.url || "walo";
+            var imgId = o.id;
+            this.header = " <div class='widget-v-center'>";
+            this.body = '<img alt="Thumbnail" src="' + o.url +'" width="100%"> <div class="order-btn"></div>';
+            this.footer= "<div class='img-footer'></div></div>";
+            this.html = function(){
+                return this.header + this.body + this.footer;
+            }
+        }
+        WidgetMyPhoto.prototype.render = function (){
+            return this.html();
+        }
+
+        $( document).ready( function(){
+
+
+            var profileData = @Html(profileData);
+            var userFullName = profileData.systemUser.fullName;
+            var userName = profileData.systemUser.userName;
+            var userProfileImgUrl = profileData.systemUser.activeProfileImage.url;
+            var myPhotos = profileData.photos;
+            var myVideos = profileData.videos;
+            $('#profile-user-name').html( userFullName );
+            var  $mediaContainer  = $('#body');
+            var $sideMenu = $("#widget-side-menu");
+            var $profileImgContainer = $( '#widget-profile-img' );
+
+            displayProfileIcon( userProfileImgUrl, $profileImgContainer);
+            displayMyPhotos( myPhotos, $mediaContainer)
+
+            $('body').on( 'click', '#slider-icon', function(){
+                if ( parseInt($sideMenu.height()) > 0){
+                   $sideMenu.animate({
+                       height: '0px'
+                   });
+                    $mediaContainer.animate({
+                        'padding-top' : '45px'
+                });
+                }
+                else {
+                  $sideMenu.animate({
+                      height: '60px'
+
+                  }, 'slow', function(){
+                      //alert(' done ');
+                     // $( this).addClass( 'span2' );
+                      $()
+                  });
+                    $mediaContainer.animate({
+                        'padding-top' : '105px'
+                    });
+                }
+            });
+
+            $('body').on( 'click', "#widget-myphotos-btn", function(){
+                $( '.active-my-icon' ).removeClass( 'active-my-icon' );
+                $( this ).addClass( 'active-my-icon' );
+                displayMyPhotos( myPhotos, $mediaContainer);
+            });
+
+            $('body').on( 'click', "#widget-myvideos-btn", function(){
+                $( '.active-my-icon' ).removeClass( 'active-my-icon' );
+                $( this ).addClass( 'active-my-icon' );
+                displayMyVideos( myVideos, $mediaContainer );
+            });
+
+
+            // Display the menu icons / actions
+              displayMenuIcons( widgetMenuIcons( userName ), $sideMenu );
+        });
+
+
+        function displayMyPhotos ( myPhotos, $container ){
+            $container.html('');
+            $.each( myPhotos, function( i, e){
+                console.log( e );
+                $container.append(  new WidgetMyPhoto( e ).render( ) );
+            });
+        }
+
+        function displayMyVideos ( myVideos, $container ){
+            $container.html('');
+            $.each( myVideos, function( i, e){
+                //alert( JSON.stringify( e ));
+                console.log( e );
+
+                var $videoContainer = $("<div>");
+                var $img = $("<img>");
+                $videoContainer.attr('class','artista-video');
+                //var videoId =  e.url.substring(e.url.indexOf("embed") + 6);
+                var videoId =  getYouTubeVideoId(e.url);
+                var tumbnail = "http://img.youtube.com/vi/" + videoId + "/mqdefault.jpg";
+
+                $img.attr('src', tumbnail);
+                $img.attr('id', videoId);
+                $img.css({ width: "100%", height  : "100%", border: 0});
+                $videoContainer.append( $img );
+                $container.append( $videoContainer );
+               // $container.append(  new WidgetMyPhoto( e ).render( ) );
+            });
+
+        }
+
+        function displayMenuIcons( objectFunction , $container ){
+            $.each( objectFunction , function( i , e){
+                var $span = $( '<button>' );
+                    $span.addClass(e.cssClass);
+                var $a = $( '<a>' );
+                    $a.attr('id', e.id).addClass( e.icon );
+                    $span.append( $a );
+
+                    $container.append( $span );
+            });
+        }
+
+        function displayProfileIcon( url, $container ){
+              var $img = $( '<img>' );
+                  $img.attr('src', url);
+                  $img.addClass( 'v-center' );
+                  $container.html( $img );
+        }
+
+    </script>
+
+    <style>
+
+        .topBar {
+            border-bottom: solid 1px rgb(5, 185, 255);
+            box-shadow: 0px 0px 20px rgba(114, 111, 111, 0.86);
+            width: 100%;
+            height: 45px;
+            background-color: rgb(0, 194, 255);
+            position: fixed;
+            z-index: 999;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+        }
+        .header{
+            border-bottom:solid 1px rgb(238, 238, 238);
+            box-shadow: 0px 0px 20px rgba(114, 111, 111, 0.86);
+            width: 100%;
+            height: 30px;
+            background-color: rgb(212, 212, 212);
+            position: fixed;
+            display: none;
+        }
+        .body{
+            border-bottom: solid 1px rgb(165, 164, 164);
+            box-shadow: 0px 0px 20px rgba(114, 111, 111, 0.86);
+            width: 95%;
+            margin: auto;
+            background-color: rgb(252, 252, 252);
+            overflow: auto;
+            padding: 5px 0px 45px 0px;
+        }
+        .footer{
+            border-bottom: solid 1px rgb(5, 5, 5);
+            box-shadow: 0px 0px 20px rgba(114, 111, 111, 0.86);
+            width: 100%;
+            background-color: rgb(34, 34, 34);
+            height: 40px;
+            position: fixed;
+            bottom: 0px;
+            z-index: 999;
+            color: #e1e1e1;
+        }
+        .widget-v-center{
+            max-width: 640px;
+            margin: auto;
+            position: relative;
+            box-shadow: 1px 2px 20px;
+
+        }
+        .order-btn,.img-footer{
+            position: absolute;
+            z-index: 1;
+            bottom: 0px;
+            border: solid 1px;
+            left: 0px;
+            right: 0px;
+            padding: 2px 0px;
+            text-align: center;
+        }
+        .img-footer{
+            height: 30px;
+            background: rgb(26, 26, 24);
+            opacity: .8;
+            z-index: 0;
+        }
+        .white{
+            color: white;
+            font-size: 25px;
+            text-shadow: 0px 1px 3px rgb(2, 4, 17);
+        }
+        .badge-success{
+            font-size: 18pt;
+            color: rgb(255, 122, 0);
+            background: transparent;
+            line-height: 2px;
+        }
+        #cart{
+            position: fixed;
+            z-index: 999;
+            right: 0px;
+        }
+        .text-center{
+            text-align: center;
+        }
+        #widget-side-menu{
+            border-bottom: solid 1px #fff;
+            position: fixed;
+            height: 0;
+            margin: 45px 0px 0px  0px;
+            width: 100%;
+            z-index: 2;
+            overflow: hidden;
+            text-align: center;
+            background: #e1e1e1;
+            background-image: url("../images/noise-2.png")
+        }
+        .widget-menu-icon{
+            display: inline-block;
+            padding: 13px 16px;
+            border: none;
+            background-color: transparent;
+        }
+        #widget-profile-img{
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            right: 4px;
+            top: 3px;
+            border: solid 1px;
+            overflow: hidden;
+            background: white;
+
+        }
+        .active-my-icon{
+            background-color: #0E9DEE;
+            border: solid 1px rgb(14, 139, 187);
+        }
+    </style>
+</head>
+<body id="widget">
+
+<div class="row-fluid">
+    <div class="topBar">
+        <button id="slider-icon" class="slider-icon"></button>
+        <h1 id="profile-systemUser1-name" class="text-center white"></h1>
+        <div id="widget-profile-img"></div>
+    </div>
+</div>
+
+
+<div class="row-fluid">
+    <div class="header"></div>
+</div>
+<div class="row-fluid">
+    <div id="widget-side-menu">
+
+    </div>
+    <div class="body" id="body">
+
+
+
+
+
+</div>
+<div class="row-fluid">
+    <div class="footer"><p class="text-center">2013 all rights reserved.</p></div>
+</div>
+
+</body>
+</html>

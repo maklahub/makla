@@ -1,0 +1,168 @@
+@(profileData: String)
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var profileData = @Html(profileData);
+        var profilePhotos = profileData.photos;
+        var profileVideos = profileData.videos;
+        var $mediaContainer = $("#artista-photos-container");
+        var $mediaViewer = $("#media-preview");
+        var $headerBar = $('#header-top-bar');
+        console.log(profileData);
+        // $("#pImage").attr('src' , profileData.systemUser.activeProfileImage.url);
+        $("#pImage").attr({'src':encodeURI(profileData.systemUser.profileImageUrl), 'data-id':profileData.systemUser.profileImageId, title: "Profile Photo"});
+        $("#profilePersonalInfo").html(new ProfilePersonalInfo(profileData.systemUser).html );
+
+        $.each(profilePhotos, function (i, e) {
+            //console.log(JSON.stringify(e));
+            var $imgContainer = $("<div>");
+            var $img = $("<img>");
+            $imgContainer.attr({'class':'artista-img', 'data-id':e.id, title: e.title});
+            $img.attr({'src':e.url, 'data-id':e.id, title: e.title});
+            console.log( "e.title: " + e.title);
+            $imgContainer.append($img);
+            $mediaContainer.append($imgContainer);
+        });
+
+        $('#profile-image-icon-btn').on('click', function () {
+            $mediaContainer.html('');
+            $mediaViewer.animate({
+                height:"0px",
+                padding:'0px'
+            }, 500, function () {
+                $(this).html("");
+                $(this).height('auto');
+            });
+            $.each(profilePhotos, function (i, e) {
+                console.log(JSON.stringify(e));
+                var $imgContainer = $("<div>");
+                var $img = $("<img>");
+                $imgContainer.attr({'class':'artista-img', 'data-id':e.id});
+                $img.attr({'src':e.url, 'data-id':e.id});
+                $imgContainer.append($img);
+                $mediaContainer.append($imgContainer);
+            });
+
+        });
+
+
+        $('#profile-video-icon-btn').on('click', function () {
+            $mediaContainer.html('');
+            $mediaViewer.animate({
+                height:"0px",
+                padding:'0px'
+            }, 500, function () {
+                $(this).html("");
+                $(this).height('auto');
+
+            });
+            $.each(profileVideos, function (i, e) {
+                //console.log( JSON.stringify(e));
+                var $videoContainer = $("<div>");
+                var $img = $("<img>");
+                $videoContainer.attr('class', 'artista-video');
+                //var videoId =  e.url.substring(e.url.indexOf("embed") + 6);
+                var videoId = getYouTubeVideoId(e.url);
+                var thumbnail = "http://img.youtube.com/vi/" + videoId + "/mqdefault.jpg";
+
+                $img.attr('src', thumbnail);
+                $img.attr('id', videoId);
+                $img.css({ width:"100%", height:"100%", border:0});
+                $videoContainer.append($img);
+                $mediaContainer.append($videoContainer);
+            });
+        });
+
+
+        $('body').on('click', '.artista-video', function () {
+              displayVideoMediaFrame( $( this ) );
+        });
+
+
+
+
+        $('body').on('click', '.artista-img', function () {
+             var loggedIn = 0;
+             @if(session.get("sessionUser")){ loggedIn = 1};
+             displayPhotoMediaFrame( $( this ), loggedIn  );
+
+        });
+
+        $('body').on('click', '#do-comment', function () {
+            var $commentTextArea = $('#comment-text-area') ;
+            var $commentContainer = $('#comments-Container');
+            var comment = stripTagsFromHtml($commentTextArea.val());
+            $commentTextArea.val('');
+            var dataId = $(this).attr('data-id');
+            var dataType = $(this).attr('data-type');
+            var o = {dataType:dataType, dataId:dataId, comment:comment};
+            if (comment) {
+                ajaxAppendHtml('/addComment', $commentContainer, o, CommentObject);
+            }
+        });
+
+
+        $('body').on('click', '.close-img-preview', function () {
+            $('body').removeClass('overflow-hidden');
+            var $photoMediaFrame =  $( "#photo-media-frame");
+            var $videoMediaFrame =  $( "#video-media-frame");
+
+            $photoMediaFrame.remove();
+            $videoMediaFrame.remove();
+            $('#shadow-box').remove();
+        });
+
+
+        });
+
+
+
+</script>
+
+
+<div class="container-fluid" id="content-container">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="container-fluid" id="personalInfoContainer">
+                <div class="span4">
+                    <div class="artista-img" id="profileImageContainer">
+                        <img id="pImage" src=""/>
+                    </div>
+                </div>
+                <div class="span8">
+                    <div id="profilePersonalInfo">
+                        <div><h2 class="h"> Elhassan Rais</h2></div>
+                        <div><h4 class="h"> Professional Acrobat</h4></div>
+                        <div><h5 class="h"> Berkeley, CA</h5></div>
+                        <div><p><strong> Profession:</strong> Human pyramids, Moroccan Tumbling, Chinese pole and Hnd
+                            balancing </p></div>
+
+                    </div>
+
+                </div>
+                <div id="profile-image-icon-btn" class="image-icon"></div>
+                <div id="profile-video-icon-btn" class="video-icon"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr class="stepsHr">
+
+
+<div class="container-fluid">
+    <div class="container-fluid" id="artista-photos-container">
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

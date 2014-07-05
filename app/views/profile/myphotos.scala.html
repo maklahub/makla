@@ -1,0 +1,115 @@
+@(myphotos: String)
+@headerIn()
+
+
+<script>
+    $(document).ready(function () {
+        //alert(" hi " + new ToolBar().render());
+        var myphotos = @Html(myphotos);
+        var $myphotosContainer = $("#artista-photos-container");
+        $('#tool-bar').html(new ToolBar(toolBarObjects.myphotosToolBar).render());
+
+        $.each(myphotos, function (i, e) {
+            //console.log( JSON.stringify(e));
+            var $imgContainer = $("<div>");
+            var url = e.url;
+            var $img = $("<img>");
+            $img.addClass('grayscale');
+            $imgContainer.attr({'class':'artista-img', 'data-id':e.id, title: e.title});
+            $img.attr({'src':url, 'data-id':e.id, title: e.title});
+            $imgContainer.append($img);
+            $myphotosContainer.append($imgContainer);
+
+
+        });
+
+        $('#tool-bar').on('click', '#myphotos-upload', function () {
+            $body = $('body');
+            $bodyWidth = $body.width();
+            $bodyHeight = $body.height();
+
+            var $dropDownContainer = $("<div>");
+            var $dropDownShadow = $("<div>");
+            $dropDownShadow.attr('class', "dropDownShadow");
+            $dropDownContainer.attr({'id':"dropDownContainer", 'class':"div-absolute-center form-background" });
+
+            $dropDownShadow.css({'z-index':1, 'position':'absolute', 'backgroundColor':'rgb(6, 1, 8)', height:"100%", width:"100%", 'top':0, 'opacity':0.8});
+            $dropDownContainer.css({'position':'absolute', 'backgroundColor':'rgb(230, 230, 230)', 'width':$bodyWidth / 2, 'top':"-400px", "min-width" : "300px", "max-width" :"360px", padding: "10px"});
+
+            $body.append($dropDownShadow);
+            // var wHtml = new DropDownWindow().render();
+            $dropDownContainer.html(new DropDownWindow(forms.uploadMyphotos, "Upload a Photo").render());
+            $body.append($dropDownContainer);
+            $dropDownContainer.animate({
+                top:0
+            }, "slow");
+
+            $dropDownContainer.on('click', '.close-dropDown', function () {
+                //alert( 'hi' );
+                $dropDownContainer.animate({
+                    top:-$dropDownContainer.height()
+                }, "slow", function () {
+                    $dropDownContainer.remove();
+                    $dropDownShadow.fadeOut();
+                });
+            });
+        });
+
+        $('body').on('click', '.close-img-preview', function () {
+            $('body').removeClass('overflow-hidden');
+            var $mediaFrame =  $( "#photo-media-frame");
+            $mediaFrame.remove();
+            $('#shadow-box').remove();
+        });
+
+
+        $('body').on('click', '.artista-img', function () {
+            var loggedIn = 0;
+             @if(session.get("sessionUser")){ loggedIn = 1};
+            displayPhotoMediaFrame( $( this ), loggedIn  );
+
+        });
+
+
+        $('body').on('click', '#do-comment', function () {
+            var $commentTextArea = $('#comment-text-area') ;
+            var $commentContainer = $('#comments-Container');
+            var comment = stripTagsFromHtml($commentTextArea.val());
+            $commentTextArea.val('');
+            var dataId = $(this).attr('data-id');
+            var dataType = $(this).attr('data-type');
+            var o = {dataType:dataType, dataId:dataId, comment:comment};
+            if (comment) {
+                ajaxAppendHtml('/addComment', $commentContainer, o, CommentObject);
+            }
+        });
+    });
+</script>
+
+<div class="container-fluid" id="content-container">
+    <div id="media-wrapper">
+        <div class="container-fluid boundery-top-bar"> Top bar</div>
+        <div id="media-preview"></div>
+        <div class="container-fluid boundery-bottom-bar"> .....</div>
+    </div>
+    <div class="row-fluid">
+        @sidemenu.sidemenu()
+        <div class="span11">
+
+            <div class="container-fluid">
+                <div class="container-fluid" id="artista-photos-container">
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

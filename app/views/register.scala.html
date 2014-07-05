@@ -1,0 +1,146 @@
+@(name:String, firstName: String, lastName: String, email: String, userType: String, userTypes: String, personCategories: String
+, orgCategories: String)
+@headerOut()
+
+<script type="text/javascript">
+    // set default userTypes on selection html element
+    $( document).ready( function(){
+        var userTypes = @Html(userTypes);
+        var personCategories = @Html(personCategories);
+        var orgCategories = @Html(orgCategories);
+        console.log( " Org categoies: ");
+        console.log( orgCategories );
+        var selectedUserType = "@{ userType }";
+        var firstName = "@{ firstName }";
+        var lastName = "@{ lastName }";
+        var email = "@{ email }";
+        var name = "@{ name }";
+        $.each( userTypes, function( i, ut ){
+            console.log( ut );
+            var $e = $('<option>');
+            $e.attr({ 'value' : ut.name , 'data-ref' : ut.reference});
+            $e.text( ucFirstAllWords(ut.label) );
+
+            $("#user-types-select").append( $e );
+        });
+        if ( selectedUserType.length > 0  ){
+            $("#registration-form .flabel").first().hide();
+            $("#user-types-select").val( selectedUserType );
+            if ( selectedUserType == "artist"){
+                // $('#who-are-you-container').after( new ArtistaForm().renderHtml().fadeIn( 'slow' ));
+                $("#registration-form").append( new SignUpPersonForm( firstName, lastName, email, personCategories ).renderHtml());
+            }
+            else {
+                $("#registration-form").append( new SignUpOrganizationForm( name, email, orgCategories ).renderHtml());
+            }
+
+        }
+
+        $('#user-types-select').change( function(){
+            //alert("test ");
+            var $this = $(this);
+            $('.dynamic-create-form').html("");
+          //  $( "select option:selected" ).each(function() {
+                var $selectionVal = $( this ).val();
+                if ( $selectionVal == "artist"){
+                   // $('#who-are-you-container').after( new ArtistaForm().renderHtml().fadeIn( 'slow' ));
+                    $("#registration-form").append( new SignUpPersonForm( firstName, lastName, email, personCategories ).renderHtml());
+                }
+               else if ( !$selectionVal.length ){
+                //    alert(" empty");
+                    $this.prev().fadeIn();
+               }
+               else {
+                   // if ( $selectionVal != ""){
+                        $('#registration-form').append( new SignUpOrganizationForm( name, email, orgCategories ).renderHtml().fadeIn( 'slow' ));
+                   // }
+                  //  else {
+                       // $this.siblings().fadeIn();
+                    //}
+
+                }
+          //  });
+
+        });
+
+        // Signup Submit
+
+        $( "#registration-form" ).on( "click", "#uploadProfileImage", function() {
+            var $inputs = $("input");
+            if ( checkRequiredInputs( $inputs ) == 1){
+               // alert("submit the form");
+                $("#registration-form" ).submit();
+            }
+            else {
+               // alert(" fill the required fields " );
+            }
+        });
+
+
+        $( "#registration-form" ).on( "keyup", "input", function() {
+            $( this ).next().html("");
+        });
+
+        function checkRequiredInputs( $inputs ){
+            var status = 1;
+            $.each( $inputs, function( i, item ){
+
+
+                if ( item.type != "submit" ){
+                    var $item = $( item );
+                   // alert("$item.name: " + $item.name);
+                    var required = $item.attr("data-req");
+                    var itemName = $item.attr("name");
+                    var value = $item.val();
+                   // alert( itemName );
+                    if( required == 1 && value.length <= 0 ){
+                        $item.next().html("This is a required field");
+                        status = 0;
+                    }
+                    if ( itemName == "email" && value.length > 0){
+                         if (!validateEmail( value )){
+                            // alert(" check email ");
+                             $item.next().html("This is not a valid email format.").fadeIn();
+                         }
+                    }
+                }
+            })
+            return status;
+        }
+
+    });
+
+
+</script>
+
+<body>
+ <!--   id="stepsPage" -->
+<div class="container signUpPage" id="content-container">
+    <div class="row-fluid">
+
+        <div>
+            <div id="stepsContentContainer">
+                <h4> Account Info</h4>
+                <div>
+                    <form id="registration-form" action="completeRegistration" method="post" enctype="multipart/form-data">
+                       <div class="frow">
+                            <div class="flabel " style="display: none;"> Who are you?</div>
+                            <select class="finputText signup-select" name="userType" id="user-types-select">
+                                <option></option>
+
+                            </select>
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

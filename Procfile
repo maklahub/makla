@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/artistaone  -Dhttp.port=${PORT} -DapplyEvolutions.default=true

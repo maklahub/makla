@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>ArtistaOne @videos</title>
+    <link rel="stylesheet" href="stylesheets/style.css">
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js">  </script>
+  <script type="text/javascript" src="utils/api.js"></script>
+  <script type="text/javascript" src="utils/utils.js"></script>
+</head>
+<body>
+   <div class="headerBar">
+         <h1>ArtistaOne</h1>
+   </div>
+<div id="intro">
+    <!-- <div id="stage">
+         <div id="videoScreen">
+             <iframe id="@artistaVideo" width="800" height="420" src="http://www.youtube.com/embed/2epPy0E0oRw?wmode=opaque&amp;rel=0&amp;autoplay=1&amp;controls=0&amp;showinfo=0&amp;enablejsapi=1&amp;modestbranding=0" frameborder="0"></iframe>
+         </div>
+
+     </div>-->
+
+
+    <h2 id="addVideo"><i class="add-icon"></i> Add Videos</h2>
+    <div id="addVideoScreen">
+        <form action="addVideo" method="post">
+            <div class="frow">
+                <label class="flabel" > Youtube video</label>
+                <input type="text" class="finputText" name="videoLink">
+            </div>  <div class="frow">
+                <label class="flabel" > Video Description</label>
+                <textarea class="finputText" name="videoDescription" rows="5" ></textarea>
+            </div>
+            <div class="frow">
+                <input class="btn" type="button"  id="saveVideo" value="Save">
+            </div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

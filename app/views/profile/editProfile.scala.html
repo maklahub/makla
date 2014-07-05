@@ -1,0 +1,83 @@
+@(profileData: String, personCategories: String, orgCategories: String)
+@headerIn()
+
+
+<script>
+    $(document).ready(function () {
+        //alert(" hi " + new ToolBar().render());
+        var profileData = @Html(profileData);
+        var personCategories = @Html(personCategories);
+        var orgCategories = @Html(orgCategories);
+        var profilePhotos = profileData.photos;
+        var profileVideos = profileData.videos;
+        var systemUser = profileData.systemUser;
+        console.log( systemUser );
+        $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar).render());
+        $("#pImage").attr({'src':encodeURI( systemUser.profileImageUrl), 'data-id': systemUser.profileImageId, title: "Profile Photo"});
+        $("#profilePersonalInfo").html(new ProfilePersonalInfo( systemUser ).html );
+        if ( systemUser.person == null ){
+            $("#profile-edit-form").append( new EditOrganizationProfileForm( systemUser, systemUser.organization , orgCategories ).renderHtml());
+        }
+        else {
+            $("#profile-edit-form").append( new EditPersonProfileForm( systemUser.person.firstName, systemUser.person.lastName,"", personCategories ).renderHtml());
+        }
+
+
+        // On Save
+        $("#saveProfileDate").on("click", function(){
+            //alert(" Save Profile Data");
+
+        });
+
+    });
+</script>
+
+                <div class="container-fluid" id="content-container">
+                    <div class="row-fluid">
+                        @sidemenu.sidemenu()
+                        <div class="span12">
+                            <div class="container-fluid" id="personalInfoContainer">
+                                <div class="span4">
+                                    <div class="artista-img" id="profileImageContainer">
+                                        <img id="pImage" src=""/>
+                                    </div>
+                                </div>
+                                <div class="span8">
+                                    <div id="profilePersonalInfo">
+                                        <div><h2 class="h"> Elhassan Rais</h2></div>
+                                        <div><h4 class="h"> Professional Acrobat</h4></div>
+                                        <div><h5 class="h"> Berkeley, CA</h5></div>
+                                        <div><p><strong> Profession:</strong> Human pyramids, Moroccan Tumbling, Chinese pole and Hnd
+                                            balancing </p></div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="stepsHr">
+
+                <div>
+
+                    <div class="container-fluid" style="width: 400px; margin: auto">
+                        <h2> Edit personal Info</h2>
+                        <form id="profile-edit-form" action="saveProfileData" method="post" enctype="multipart/form-data"></form>
+                    </div>
+
+
+                </div>
+
+
+
+
+                </div>
+
+
+
+
+</body>
+</html>
