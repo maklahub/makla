@@ -1,4 +1,4 @@
-@(menus: String)
+@(menus: String, cartItems: String)
 
 @if(session.get("sessionUser")) {
 @headerIn()
@@ -11,11 +11,15 @@
 
         var documentWidth = $( document).width();
         // alert( $( document).width());
+
         $(function(){
             // create some screens
+
             var menus = @Html(menus);
+            var cartItems =  @Html(cartItems)
             var $container = $(' #artistas-container ');
-            $container.css( 'visibility', 'hidden');
+            var $cartContainer = $(' #cart');
+                $container.css( 'visibility', 'hidden');
 
             $.each( menus , function ( i, element){
                 //alert( element );
@@ -25,7 +29,14 @@
             });
 
 
-                $('#artistas-container .item').css( 'width' , documentWidth -20 + "px");
+            if (cartItems.status != 'empty' ){
+                $.each( cartItems , function ( i, element){
+                    //alert( element );
+                    //console.log( element );
+                    var s1 = new CartItem( element ).render();
+                    $cartContainer.append( s1 );
+                });
+            }
 
 
 
@@ -38,6 +49,41 @@
                             $( this ).addClass( 'grayscale');
                         }
                 );
+                $('.add-to-cart-btn').on('click', function(){
+                    var $this = $( this );
+                    var $parent = $this.parent();
+                    var menuItemId =  $(this).attr('data-id');
+                    var loggedIn = 0;
+                    @if(session.get("sessionUser")){
+                        loggedIn = 1 ;
+                        var uri = "addToCart";
+                        var o = {};
+                        o.id = menuItemId;
+                        o.name = "item name";
+                        ajaxAppendHtml( uri, $("#cart"), o );
+
+
+                        //$parent.parent().fadeOut();
+                       // $parent.parent().css('opacity', 0.8);
+                    };
+                    if (!loggedIn ){
+                        window.location.href="logIntoOrder";
+                    }
+
+
+                });
+
+            });
+
+            $( document ).on('click', '.remove-cart-item', function(){
+                $this = $( this );
+                var cartItemId = $this.attr('data-id');
+                var $cartItemContainer =  $("#" + cartItemId);
+                //alert( cartItemId );
+                var uri = "removeCartItem";
+                var o = {};
+                o.id = cartItemId
+                apiCall(  uri, o , function(){ $cartItemContainer.fadeOut()});
             });
 
         });
@@ -59,7 +105,9 @@
 </div>
 
 
-
+  <div id="cart">
+      <h3>My Cart</h3>
+  </div>
 
 
 </body>

@@ -3,17 +3,18 @@ $.ajaxSetup({ cache: false });
 var url = '';
 
 var o = {name:"hassan", age:33};
-function apiCall(uri) {
+function apiCall(uri, o, callback) {
     // alert(" Go AJax ");
 
     $.ajax({
+        type:'POST',
+        // dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(o),
         url:url + uri,
-        type:'post',
-        data:JSON.stringify(o),
-        dataType:"json",
-        contentType:"application/json",
         success:function (data, textStatus, jqXHR) {
             // var obj = jQuery.parseJSON(jqXHR.responseText);
+            callback();
             console.log(JSON.stringify(data));
             //console.log(textStatus.toString());
         },
@@ -64,7 +65,7 @@ function ajaxReturnJson(uri, callback) {
 }
 
 
-function ajaxAppendHtml(uri, containerToFillIn, o , fObject) {
+function ajaxAppendHtml12(uri, containerToFillIn, o , fObject) {
      //alert(" Go AJax ");
     $.ajax({
         url:url + uri,
@@ -81,6 +82,42 @@ function ajaxAppendHtml(uri, containerToFillIn, o , fObject) {
     });
 
 }
+
+function ajaxAppendHtml(uri, containerToFillIn, o) {
+     //alert(" Go AJax ");
+    $.ajax({
+        url:url + uri,
+        type:'POST',
+       // dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(o),
+        success:function (data, textStatus, jqXHR) {
+            //alert( o );
+            //alert( JSON.stringify(data) );
+           // containerToFillIn.append( $(new  fObject( data ).render()).fadeIn(500)   );
+            containerToFillIn.append( $(new CartItem( data ).render()).fadeIn()  );
+
+        },
+        error:function (data, textStatus, jqXHR) {
+           alert( JSON.stringify(data) );
+
+            alert(textStatus);
+
+        }
+    });
+
+}
+
+
+function CartItem( item ){
+    //alert( item );
+    this.name = '<div id="'+ item.id+'"><div><img style="width: 25px" src="'+ item.cartItemPhoto.url+'" alt=""><span data-id= "'+ item.id+'" class="remove-cart-item"> remove</span> '+ item.name +"</div>";
+    this.price = "<div> "+ item.price +"</div></div>";
+    this.html = this.name + this.price;
+}
+
+CartItem.prototype.render = function(){ return this.html};
+
 function ajaxGetContent(uri, containerToFillIn) {
     // alert(" Go AJax ");
     $.ajax({

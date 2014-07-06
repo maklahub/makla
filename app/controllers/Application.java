@@ -22,25 +22,22 @@ public class Application extends Controller {
         //System.out.print( allArtistas );
         //   return ok(views.html.index.render( artistasAsJson, userTypesAsJson));
        // return ok( menus );
-        return ok( views.html.index.render( menus ) );
+        return ok( views.html.index.render( menus, null ) );
 
 
     }
 
     public static Result index() {
-        /*Person p = new Person("Elhassan", "Rais", "b@b.com");
-        Organization o = new Organization( "American Natural Food and Cafe") ;
-        SystemUser su = new SystemUser( o , "1234", null );
-        su.save();
-
-        Menu m = new Menu( "Moroccan Cuisine ", su);
-        MenuItem mi = new MenuItem( "Tomato a la mode", m, 9.99);
-        MenuItem mi2 = new MenuItem( "Couscouss a la mode", m, 9.99);
-
-        mi.save();
-        mi2.save();
-
-        */
+        String cartItemsAsJson = "{status: 'empty'}";
+        // createMenuDummy();
+        /*
+        Person p = new Person("Elhassan", "Rais", "b@b.com");
+        SystemUser s = new SystemUser( p, "email", null) ;
+        Cart c = new Cart(" new cart", s);
+        Order o = new Order( s );
+        OrderItem oi = new OrderItem(o, " order 1","Moroccan Tajin");
+        c.save();
+        oi.save();
 
       /*  if ( session("sessionUser") != null){
             return redirect( controllers.routes.Application.home() );
@@ -56,59 +53,97 @@ public class Application extends Controller {
             accountTypes = AccountType.getAccountTypes();
         }
 
+        // get all menus
+        String menus = Json.toJson( Menu.getAllMenus() ).toString();
 
-        List<SystemUser> artistas = SystemUser.getSystemUsers();
-        ObjectNode allArtistas = Json.newObject();
-        allArtistas.put("allArtistas", Json.toJson( artistas ) );
+        /*
+        List<SystemUser> customers = SystemUser.getSystemUsers();
+        ObjectNode allCustomers = Json.newObject();
+        allCustomers.put("allCustomers", Json.toJson( customers ) );
+        String artistasAsJson = allCustomers.toString();
+
+         */
 
         String userTypesAsJson = Json.toJson( userTypes ).toString();
-        String artistasAsJson = allArtistas.toString();
-        String menus = Json.toJson( Menu.getAllMenus() ).toString();
-        //System.out.print( allArtistas );
-       return ok(views.html.index.render( menus ));
-      // return ok( menus );
-       // return ok( artistasAsJson );
 
-    }
+        if ( session("sessionUser") != null){ // logged in
+            SystemUser u = SystemUser.findUserById(session("currentUserId"));
+            Cart cart = Cart.findCartBySystemUser( u.getId() );
+            if ( cart == null ){
+                cart = new Cart( "New cart", u);
+                cart.save();
+            }
+            List<CartItem> cartItems = cart.getCartItems();
 
+            cartItemsAsJson = Json.toJson( cartItems ).toString();
+            //if ( cartItemsAsJson == null ){ cartItemsAsJson = "empty";}
+            return ok(views.html.index.render( menus, cartItemsAsJson ));
 
-    public static Result home(){
-        if ( session("sessionUser") == null){
-
-            return  redirect( controllers.routes.Application.index());
         }
-        List<Feed> feeds = Feed.getFeeds();
-        String feedsAsJson =  Json.toJson( feeds ).toString();
-        return ok( views.html.home.home.render(  feedsAsJson ));
-    }
+        else {
+            return ok(views.html.index.render( menus, cartItemsAsJson ));
 
-    public static Result signOut(){
-       // session().remove("sessionUser");
-       // session().remove("currentUserId");
-        session().clear();
-        return redirect("/");
+        }
 
     }
-    /*
-   public static Result artistas() {
-       List<SystemUser1> artistas = SystemUser1.getArtistas();
-       ObjectNode allArtistas = Json.newObject();
-       allArtistas.put("allArtistas", Json.toJson( artistas ));
-       //System.out.print(allArtistas);
-       String artistasAsJson = allArtistas.toString();
-       //return ok( Json.toJson( allArtistas ));
-       //return ok( allArtistas );
-       return ok( views.html.artistas.render( artistasAsJson ) );
-    }
+
+    public static void createMenuDummy(){
+        //Person p = new Person("Elhassan", "Rais", "b@b.com");
+           Organization o = new Organization( "American Natural Food and Cafe") ;
+           SystemUser su = new SystemUser( o , "1234", null );
+           su.save();
+
+           Menu m = new Menu( "Moroccan Cuisine ", su);
+           MenuItem mi = new MenuItem( "Tomato a la mode", m, 9.99);
+           Photo ph1 = new Photo( su, "Tomato", "http://localhost:9000/images/item_824.jpg", null );
+           mi.setMenuItemPhoto( ph1 );
+           MenuItem mi2 = new MenuItem( "Couscouss a la mode", m, 9.99);
+           Photo ph2 = new Photo( su, "Tomato", "http://localhost:9000/images/item_824.jpg", null );
+           mi2.setMenuItemPhoto( ph2 );
+
+           mi.save();
+           mi2.save();
+
+       }
+
+
+       public static Result home(){
+           if ( session("sessionUser") == null){
+
+               return  redirect( controllers.routes.Application.index());
+           }
+           List<Feed> feeds = Feed.getFeeds();
+           String feedsAsJson =  Json.toJson( feeds ).toString();
+           return ok( views.html.home.home.render(  feedsAsJson ));
+       }
+
+       public static Result signOut(){
+          // session().remove("sessionUser");
+          // session().remove("currentUserId");
+           session().clear();
+           return redirect("/");
+
+       }
+       /*
+      public static Result artistas() {
+          List<SystemUser1> artistas = SystemUser1.getArtistas();
+          ObjectNode allArtistas = Json.newObject();
+          allArtistas.put("allArtistas", Json.toJson( artistas ));
+          //System.out.print(allArtistas);
+          String artistasAsJson = allArtistas.toString();
+          //return ok( Json.toJson( allArtistas ));
+          //return ok( allArtistas );
+          return ok( views.html.artistas.render( artistasAsJson ) );
+       }
 
 
 
-    public static Result deleteArtista( Long id){
-        System.out.println( "SystemUser1 Id: " + id);
-         SystemUser1.deleteArtista(id);
-        return redirect( routes.Application.artistas() );
-    }
-     **/
+       public static Result deleteArtista( Long id){
+           System.out.println( "SystemUser1 Id: " + id);
+            SystemUser1.deleteArtista(id);
+           return redirect( routes.Application.artistas() );
+       }
+        **/
 
 
 

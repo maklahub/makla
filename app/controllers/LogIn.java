@@ -44,6 +44,13 @@ public class LogIn extends Controller {
 
     }
 
+
+    public static Result logIntoOrder(){
+
+        return ok( views.html.login.render( " Please log in to Order " ));
+
+    }
+
     public static Result loginToComment( ){
        // String r = request().path();
 

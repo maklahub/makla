@@ -61,36 +61,11 @@ function returnMenuItemsHtml( menuItems){
 }
 
 
-/*
-
-
-
-
- <div class="span6">
- <div class="content bg menu-item">
- <img src="images/item_824.jpg">
- <div class="btn add-to-cart-btn"> Add to cart</div>
-
- </div>
- <div class="item-title">
- <p> JAPANESE SOBA NOODLE SALAD $8</p>
- </div>
- <div class="item-description">
- <p>100% organic: baby spinach, baby kale, banana, kiwi, apple, coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)</p>
-
- </div>
- </div>
-
-
-
- */
-
-
 
 function MenuItem ( menuItem ){
     console.log( menuItem) ;
     this.menuItemwrapperOpener = '<div class="span6">';
-    this.menuItemImageContainer = '<div class="content bg menu-item"><img src="images/item_824.jpg" class="grayscale"><div class="btn add-to-cart-btn"> Add to cart</div></div>';
+    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="images/item_824.jpg" class="grayscale"><div class="btn add-to-cart-btn" data-id="'+menuItem.id+'"> Add to cart</div></div>';
     this.menuItemTitle = '<div class="item-title"><p> JAPANESE SOBA NOODLE SALAD $8</p></div>';
     this.menuItemDescription = '<div class="item-description"><p>100% organic: baby spinach, baby kale, banana, kiwi, apple,' +
     'coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)</p></div>';

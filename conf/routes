@@ -25,8 +25,12 @@ GET     /widget/:userName           controllers.Application.myWidget( userName: 
 POST     /addVideo                  controllers.Register.addVideo()
 POST     /completeRegistration      controllers.Register.completeRegistration()
 POST     /addMyPhotos               controllers.AddPhotos.addMyPhotos()
+POST     /addToCart                 controllers.AddMenuItem.addMenuItemToCart()
+POST     /removeCartItem            controllers.AddMenuItem.removeCartItem()
+
 
 GET      /login                     controllers.LogIn.index()
+GET      /logIntoOrder              controllers.LogIn.logIntoOrder()
 POST      /login                    controllers.LogIn.index()
 POST      /loginToComment           controllers.LogIn.loginToComment()
 GET    /register                    controllers.Register.index()

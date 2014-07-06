@@ -86,7 +86,7 @@ public class Menu extends Model {
     }
 
     public List<MenuItem> getMenuItems() {
-        menuItems = MenuItem.findMenuByMenu( this.getId() );
+        menuItems = MenuItem.findMenuItemsByMenu( this.getId() );
         return menuItems;
     }
 

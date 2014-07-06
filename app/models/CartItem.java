@@ -11,49 +11,60 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "menuitems")
-public class MenuItem extends Model {
+@Table(name = "cartitems")
+public class CartItem extends Model {
     @Id
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     private String reference ;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
-    private Photo menuItemPhoto;
+    private Photo cartItemPhoto;
     private String Description;
     private double price;
     private int quantity;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
-    private Menu menu;
+    private Cart cart;
     private Date createTime;
     private Date closeTime;
     @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    String test;
 
-    public MenuItem( String name, Menu menu, double price ){
-      setName( name );
-      setMenu( menu );
-      setPrice( price );
-      setCreateTime( new Date() );
+
+    public CartItem( String name, Cart cart, double price ){
+        setName( name );
+        setCart( cart );
+        setPrice( price );
+        setCreateTime( new Date() );
     }
 
-    private static Finder< String, MenuItem > find = new Finder<String, MenuItem>( String.class, MenuItem.class );
-
-    public static MenuItem findMenuItemById( String id ){
-        return Ebean.find( MenuItem.class ).where().like( "id" , id).findUnique();
+    public CartItem( Cart cart, MenuItem menuItem){
+        setCart( cart );
+        setName( menuItem.getName() );
+        setDescription( menuItem.getDescription() );
+        setPrice( menuItem.getPrice() );
+        setCartItemPhoto( menuItem.getMenuItemPhoto() );
+        setCreateTime( new Date() );
     }
 
-    public static List<MenuItem> findMenuItemsByMenu( String menuId ){
-        List<MenuItem> menuItems = Ebean.find(MenuItem.class).where().eq("menu.id", menuId).findList();
-        System.out.println("Menu Item : ---> " + menuItems);
-        return menuItems;
+    private static Finder< String, CartItem > find = new Finder<String, CartItem>( String.class, CartItem.class );
+
+    public static CartItem findCartItemById( String id ){
+        return Ebean.find( CartItem.class ).where().like( "id" , id).findUnique();
     }
 
-    public static List<MenuItem> getAllMenuItems() {
-        List<MenuItem> menuItems = Ebean.find(MenuItem.class).findList();
-        System.out.print(" All menu Items>>>>>>>  " + menuItems );
-        return menuItems;
+    public static List<CartItem> findCartItemsByCart( String cartId ){
+        List<CartItem> cartItems = Ebean.find(CartItem.class).where().eq("cart.id", cartId).findList();
+        System.out.println("cart Items : ---> " + cartItems);
+        return cartItems;
+    }
+
+    public static List<CartItem> getAllCartItems() {
+        List<CartItem> cartItems = Ebean.find(CartItem.class).findList();
+        System.out.print(" All cart Items>>>>>>>  " + cartItems );
+        return cartItems;
     }
 
 
@@ -77,20 +88,20 @@ public class MenuItem extends Model {
         this.name = name;
     }
 
-    public Photo getMenuItemPhoto() {
-        return menuItemPhoto;
+    public Photo getCartItemPhoto() {
+        return cartItemPhoto;
     }
 
-    public void setMenuItemPhoto(Photo menuItemPhoto) {
-        this.menuItemPhoto = menuItemPhoto;
+    public void setCartItemPhoto(Photo cartItemPhoto) {
+        this.cartItemPhoto = cartItemPhoto;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public Date getCreateTime() {
@@ -118,7 +129,7 @@ public class MenuItem extends Model {
     }
 
     public String toString(){
-        return "Menu Item: " + getName() +  " Menu: " + getMenu() + " Create time: " + getCreateTime();
+        return "Cart Item: " + getName() +  " Cart: " + getCart() + " Create time: " + getCreateTime();
     }
 
     public String getDescription() {
