@@ -1,31 +1,14 @@
 @(menus: String)
 
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
 @headerOut()
+}
 
 <script type="text/javascript">
     $( document).ready( function(){
 
-
-        $('#user-types-select').change( function(){
-            var $this = $(this);
-            $('#dynamic-create-form').remove();
-            $( "select option:selected" ).each(function() {
-                var $selectionVal = $( this ).val();
-                if ( $selectionVal == "artist"){
-                    $('#who-are-you-container').after( new ArtistaForm().renderHtml().fadeIn( 'slow' ));
-                }
-                else {
-                    if ( $selectionVal != ""){
-                        $('#who-are-you-container').after( new PerformanceForm( $selectionVal ).renderHtml().fadeIn( 'slow' ));
-                    }
-                    else {
-                        $this.siblings().fadeIn();
-                    }
-
-                }
-            });
-
-        });
         var documentWidth = $( document).width();
         // alert( $( document).width());
         $(function(){
@@ -33,42 +16,26 @@
             var menus = @Html(menus);
             var $container = $(' #artistas-container ');
             $container.css( 'visibility', 'hidden');
+
             $.each( menus , function ( i, element){
-                console.log( element );
+                //alert( element );
+                //console.log( element );
                 var s1 = new Menu( element ).render();
                 $container.append( s1 );
             });
 
-//            if ( documentWidth > 480){
-//                // alert( " add class psan 2" );
-//                if ( documentWidth >= 1200){
-//                    $('.item').css( 'width', documentWidth/ 5 - 6 + "px");
-//                }
-//                else if ( documentWidth >=  800){
-//                    $('.item').css( 'width', documentWidth/ 3 - 8 + "px");
-//                }
-//                else {
-//                    $('.item').css( 'width', documentWidth/ 2 -  12  + "px");
-//                }
-//
-//            }
-//            else {
-//                $('#artistas-container .item').css( 'width' , documentWidth+ "px");
-//            }
+
                 $('#artistas-container .item').css( 'width' , documentWidth -20 + "px");
 
 
 
             $container.imagesLoaded( function() {
-                $container.masonry().css('visibility', 'visible');
-                $('#artistas-container .item').hover(
+                $container.css('visibility', 'visible');
+                $('.grayscale').hover(
                         function() {
-                           // console.log( $( this).children(":last"));
-                           // $( this).children(":first").fadeIn();
-                            //$( this).children(":last").delay(1000).fadeIn();
+                            $( this ).removeClass( 'grayscale' );
                         }, function() {
-                          //  $( this).children(":first").fadeOut();
-                          //  $( this).children(":last").fadeOut( );
+                            $( this ).addClass( 'grayscale');
                         }
                 );
             });
@@ -80,44 +47,19 @@
 </script>
 
 <div class="container-fluid" id="content-container">
-    <!--<div id="c">
 
-        <div id="forms">
-            <div id="homeImage">
-                <div class="f ">
-                    <form method="post" action="register">
-                        <div class="frow header">
-                            <div><h2 class="h2">New to ArtistaOne ? Sign up</h2></div>
-                        </div>
-
-                        <div id="who-are-you-container" class="frow"   >
-                            <div   class="flabel "> Who are you?</div>
-                            <select  class="finputText signup-select" name="userType" id="user-types-select">
-                                <option></option>
-
-                            </select>
-                        </div>
-
-
-                        <div class="frow" >
-                            <input class="btn signup-btn" type="submit" value="Sign up for ArtistaOne">
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-
-
-
-        </div>
-
-    </div> !-->
    <h1>Welcome to Makla Hub</h1>
     <div class="btn btn-danger">
        <a href="/saveCard">Save card</a></div>
-    <div id="artistas-container"></div>
+    <div class="check-out">
+          <h2>Checkout</h2>
+    </div>
+    <div id="artistas-container" class="container"></div>
 
 </div>
+
+
+
 
 
 </body>

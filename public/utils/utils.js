@@ -3,6 +3,8 @@
 $( document).ready( function(){
     $( 'body').imagesLoaded( function() {
         grayScaleHtmlPage();
+
+
     });
 
     //unGrayScale(); // put the dom's into normal mode no black and white
@@ -164,7 +166,7 @@ function unGrayScale( ){
 function slideDownMainContent(){
     var $topHeaderBar = $('#header-top-bar');
     var $contentWrapper = $('#content-container');
-    var marginTop =  $topHeaderBar.height() + 3;
+    var marginTop =  $topHeaderBar.height() + 6;
     //alert( marginTop)
 
     //console.log( $contentWrapper );

@@ -1,9 +1,11 @@
 package controllers;
 
 import dataHelpers.SessionUser;
+import models.Menu;
 import models.SystemAccount;
 import models.SystemUser;
 import play.data.DynamicForm;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Controller;
 
@@ -33,7 +35,8 @@ public class LogIn extends Controller {
                     String sessionUserAsJson = play.libs.Json.toJson( sessionUser).toString();
                     session("sessionUser" , sessionUserAsJson );
                     session("currentUserId", systemUser.getId());
-                    return redirect( routes.Application.home() );
+                    String menus = Json.toJson(Menu.getAllMenus()).toString();
+                    return redirect( controllers.routes.Application.index() );
                 }
             }
         }

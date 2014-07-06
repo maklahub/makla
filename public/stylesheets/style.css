@@ -13,11 +13,8 @@ body{
     padding: 0px;
     /*background-color: rgb(230, 224, 224);
     background-color: rgb(246, 239, 240); */
-    background-color:rgb(182, 175, 175);
-    background-image: url("../images/clown.png");
-    background-size: 44px;
-    background-repeat: no-repeat;
-    background-position: 99% 15%;
+    background-color: rgb(255, 255, 255);
+
     /*background-image: url("../images/noise-2.png"); */
 }
 .red{
@@ -968,15 +965,79 @@ div.d {
     font-size: 13pt;
 }
 
-.menu{
-    background: red;
-    border: solid yellow;
-}
 .menuItem{
     background: blue;
     border: solid green;
     width: 600px;
     color: white;
+}
+
+.bg{
+    background-color: rgba(69, 177, 255, 0.42);
+    border: solid thin rgba(134, 134, 134, 0.89);
+    min-height: 400px;
+}
+.menu{
+    border: solid thin rgba(171, 171, 171, 0.54);
+    margin-top: 20px;
+    padding: 10px;
+    position: relative;
+}
+.item-title{
+    color: #E90986;
+    font-weight: 300 !important;
+    line-height: 40px;
+    font-size: 14pt;
+}
+.item-title p{
+    margin: 0;
+}
+.sub-title{
+    color: #FF5C00;
+    margin: 0;
+    padding: 0;
+    display: inline;
+    font-size: 12pt;
+    text-shadow: 0px 1px 1px rgb(177, 175, 175);
+}
+.item-description{
+    color: #555;
+    border-top: thin solid #e1e1e1;
+    padding-top: 8px;
+    font-size: 13pt;
+    font-weight: 300 !important;
+}
+.check-out{
+    border: solid thin rgb(111, 23, 51);
+    position: absolute;
+    right: 11px;
+    background: rgba(202, 0, 49, 0.93);
+    border-radius: 4px;
+    padding: 0px 3px;
+    color: white;
+    text-shadow: 0px 1px 2px rgb(66, 5, 5);
+    font-weight: 300 !important;
+    top: 100px;
+}
+.check-out h2{
+    font-weight: 300 !important;
+    line-height: 25px;
+}
+.add-to-cart-btn{
+    display: inline-block;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: yellow;
+}
+.menu-item{
+    position: relative;
+}
+.row-fluid .span6{
+}
+
+.row-fluid .span6:nth-child(1n+1) {
+    margin-left: 10px;
 }
 
 

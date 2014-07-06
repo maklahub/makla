@@ -16,7 +16,7 @@ public class Application extends Controller {
 
 
 
-    public static Result index(){
+    public static Result index1(){
 
         String menus = Json.toJson( Menu.getAllMenus() ).toString();
         //System.out.print( allArtistas );
@@ -27,19 +27,24 @@ public class Application extends Controller {
 
     }
 
-    public static Result index2() {
-        Person p = new Person("Elhassan", "Rais", "b@b.com");
-        SystemUser su = new SystemUser( p, "1234", null );
+    public static Result index() {
+        /*Person p = new Person("Elhassan", "Rais", "b@b.com");
+        Organization o = new Organization( "American Natural Food and Cafe") ;
+        SystemUser su = new SystemUser( o , "1234", null );
         su.save();
 
-        Menu m = new Menu( "Salad a la mode ", su);
+        Menu m = new Menu( "Moroccan Cuisine ", su);
         MenuItem mi = new MenuItem( "Tomato a la mode", m, 9.99);
+        MenuItem mi2 = new MenuItem( "Couscouss a la mode", m, 9.99);
 
         mi.save();
+        mi2.save();
 
-        if ( session("sessionUser") != null){
+        */
+
+      /*  if ( session("sessionUser") != null){
             return redirect( controllers.routes.Application.home() );
-        }
+        } **/
         List< UserType > userTypes = UserType.getUserTypes();
         List< AccountType > accountTypes = AccountType.getAccountTypes();
         if ( userTypes.size() <=0 ){
@@ -60,8 +65,8 @@ public class Application extends Controller {
         String artistasAsJson = allArtistas.toString();
         String menus = Json.toJson( Menu.getAllMenus() ).toString();
         //System.out.print( allArtistas );
-    //   return ok(views.html.index.render( artistasAsJson, userTypesAsJson));
-       return ok( menus );
+       return ok(views.html.index.render( menus ));
+      // return ok( menus );
        // return ok( artistasAsJson );
 
     }
@@ -232,11 +237,10 @@ public class Application extends Controller {
 
     }
     public static void createUserTypeIfNotExist(){
-        new UserType( "artist", "ut-00001", "Restaurant" ).save();
+        new UserType( "restaurant", "ut-00001", "Restaurant" ).save();
         new UserType( "performance", "ut-00002", "Cafe" ).save();
         new UserType( "festival", "ut-00003", "Whole food" ).save();
         new UserType( "theater", "ut-00004", "Catering" ).save();
-        new UserType( "Gym", "ut-00004", "gym" ).save();
 
     }
 

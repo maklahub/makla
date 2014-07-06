@@ -29,20 +29,20 @@ Screen.prototype.render = function(){
 };
 
 function Menu( m ){
+    console.log( m );
     var name = m.name;
     var menuItems = m.menuItems;
-    var menuPhoto = m.menuPhoto != null ? m.menuPhoto.url : "images/clown.jpg"
-   // this.wrapperOpener = "<a href='/profile/" +  userName +"'> <div class=' item wrapper'>";
-    this.wrapperOpener = '<a href=' + "/profile/" + encodeURI( name )  +'> <div class="item wrapper menu">';
-    this.topBar = "<div class='row topBar'> <b>" +name +"</b></div>";
-    this.secondaryBar = "<div class='row secondaryBar'> Secondary Bar</div>";
-    this.body = '<div class="row screenBody">' + returnMenuItemsHtml( menuItems ) + "</div>";
-    //alert( this.body );
-    this.footer = "<div class='row screenFooter'>  <b>" + name +  "</b></div>";
-    this.wrapperCloser = "</a>";
+
+    this.menuWrapperOpener = '<div class="row-fluid menu">';
+    this.menuHeader = ' <div class="row-fluid"><div class="span8"><h1> '+ name +' <span class="sub-title">By '+ m.owner.fullName +'</span></h1></div></div>';
+    this.menuItems = '<div class="row-fluid"> '+ returnMenuItemsHtml( menuItems ) + '</div>';
+
+    this.menuwrapperCloser = "</div>";
    // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
-    this.screenHtml = this.wrapperOpener + this.topBar + this.body + this.footer; + this.wrapperCloser;
+    this.screenHtml = this.menuWrapperOpener + this.menuHeader + this.menuItems + this.menuwrapperCloser;
+
 }
+
 Menu.prototype.render = function(){
     return  this.screenHtml;
 };
@@ -61,16 +61,41 @@ function returnMenuItemsHtml( menuItems){
 }
 
 
+/*
+
+
+
+
+ <div class="span6">
+ <div class="content bg menu-item">
+ <img src="images/item_824.jpg">
+ <div class="btn add-to-cart-btn"> Add to cart</div>
+
+ </div>
+ <div class="item-title">
+ <p> JAPANESE SOBA NOODLE SALAD $8</p>
+ </div>
+ <div class="item-description">
+ <p>100% organic: baby spinach, baby kale, banana, kiwi, apple, coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)</p>
+
+ </div>
+ </div>
+
+
+
+ */
+
+
 
 function MenuItem ( menuItem ){
     console.log( menuItem) ;
-    this.wrapperOpener = "<div class='menuItem'>";
-    this.topBar = "<div >" + menuItem.name +"</div>";
-    this.secondaryBar = "";
-    this.body = "";
-    this.footer = "";
-    this.wrapperCloser = "</div>";
-    this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body  + this.footer + this.wrapperCloser;
+    this.menuItemwrapperOpener = '<div class="span6">';
+    this.menuItemImageContainer = '<div class="content bg menu-item"><img src="images/item_824.jpg" class="grayscale"><div class="btn add-to-cart-btn"> Add to cart</div></div>';
+    this.menuItemTitle = '<div class="item-title"><p> JAPANESE SOBA NOODLE SALAD $8</p></div>';
+    this.menuItemDescription = '<div class="item-description"><p>100% organic: baby spinach, baby kale, banana, kiwi, apple,' +
+    'coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)</p></div>';
+    this.menuItemWrapperCloser = "</div>";
+    this.screenHtml = this.menuItemwrapperOpener + this.menuItemImageContainer + this.menuItemTitle + this.menuItemDescription  + this.menuItemWrapperCloser;
 }
 
 MenuItem.prototype.render = function(){
