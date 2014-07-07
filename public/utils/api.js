@@ -99,13 +99,50 @@ function ajaxAppendHtml(uri, containerToFillIn, o) {
 
         },
         error:function (data, textStatus, jqXHR) {
-           alert( JSON.stringify(data) );
-
+            alert( JSON.stringify(data) );
             alert(textStatus);
 
         }
     });
 
+}
+
+function Cart ( cart ){
+    var name = cart.name;
+    var cartItems = cart.cartItems;
+    this.cartItems = cartItems;
+    this.cartWrapperOpener = '<div  id="cart-container">';
+    this.cartHeader = ' <div class="row-fluid"><div class="span12"><h1><span class="sub-title">'+ cart.owner.fullName +' Cart</span></h1></div></div>';
+    this.cartItems = '<div class="row-fluid" id="cartItems"> '+ returnCartItems( cartItems ) + '</div>';
+    this.ta = this.calculate( cartItems );
+    console.log(" ta: " + this.ta );
+   // this.footer = "<div class='cart-total-amount'> <span class='badge badge-success'>" +  " " + this.ta.toString() ;
+    this.footer = '<div class="cart-total-amount"><hr class="hr"> <p>Total Amount: </p><span class="cart-ta badge badge-success">' + this.ta +'</span></div>';
+
+    this.cartWrapperCloser = "</div>";
+    // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
+    this.screenHtml = this.cartWrapperOpener + this.cartHeader + this.cartItems +  this.footer +  this.cartWrapperCloser;
+
+}
+Cart.prototype.render = function(){ return this.screenHtml };
+Cart.prototype.calculate = function( cartItems  ){
+       var ta = 0;
+       $.each( cartItems , function( i, e){
+             ta = ta + e.price;
+       });
+    return ta + "";
+};
+
+function returnCartItems( cartItems ){
+    var items = "";
+    $.each( cartItems , function ( i, element){
+        console.log( element );
+        var item = new CartItem( element ).render();
+        // alert( item );
+        items += item ;
+    });
+   // alert( items );
+    return items;
 }
 
 

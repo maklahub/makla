@@ -220,7 +220,7 @@ h4 {
 .hr {
     border-bottom: white;
     border-top: 1px solid #e2e2e2;
-    margin: 0px;
+    margin: 5px;
 }
 .hr-margin{
     border-bottom: white;
@@ -1059,6 +1059,15 @@ div.d {
    color: #54abff;
    text-decoration: underline;
 
+}
+.cart-ta{
+    font-size: 30pt;
+    padding: 14px;
+    margin: auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    text-align: center;
 }
 
 

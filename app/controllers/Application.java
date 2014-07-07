@@ -29,6 +29,7 @@ public class Application extends Controller {
 
     public static Result index() {
         String cartItemsAsJson = "{status: 'empty'}";
+        String cartAsJson = "{status: 'empty'}";
         // createMenuDummy();
         /*
         Person p = new Person("Elhassan", "Rais", "b@b.com");
@@ -76,12 +77,13 @@ public class Application extends Controller {
             List<CartItem> cartItems = cart.getCartItems();
 
             cartItemsAsJson = Json.toJson( cartItems ).toString();
+            cartAsJson = Json.toJson( cart ).toString();
             //if ( cartItemsAsJson == null ){ cartItemsAsJson = "empty";}
-            return ok(views.html.index.render( menus, cartItemsAsJson ));
+            return ok(views.html.index.render( menus, cartAsJson ));
 
         }
         else {
-            return ok(views.html.index.render( menus, cartItemsAsJson ));
+            return ok(views.html.index.render( menus, cartAsJson ));
 
         }
 

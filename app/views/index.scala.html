@@ -1,4 +1,4 @@
-@(menus: String, cartItems: String)
+@(menus: String, cart: String)
 
 @if(session.get("sessionUser")) {
 @headerIn()
@@ -16,7 +16,8 @@
             // create some screens
 
             var menus = @Html(menus);
-            var cartItems =  @Html(cartItems)
+            var cart =  @Html(cart) ;
+            var cartItems = cart.cartItems;
             var $container = $(' #artistas-container ');
             var $cartContainer = $(' #cart');
                 $container.css( 'visibility', 'hidden');
@@ -29,14 +30,18 @@
             });
 
 
-            if (cartItems.status != 'empty' ){
-                $.each( cartItems , function ( i, element){
+            $cartContainer.append( new Cart( cart).render());
+           // if (cartItems.status != 'empty' ){
+
+              //  $.each( cartItems , function ( i, element){
                     //alert( element );
                     //console.log( element );
-                    var s1 = new CartItem( element ).render();
-                    $cartContainer.append( s1 );
-                });
-            }
+               //    var s1 = new CartItem( element ).render();
+               //     $cartContainer.append( s1 );
+               // });
+            //}
+
+
 
 
 
@@ -60,9 +65,7 @@
                         var o = {};
                         o.id = menuItemId;
                         o.name = "item name";
-                        ajaxAppendHtml( uri, $("#cart"), o );
-
-
+                        ajaxAppendHtml( uri, $("#cartItems"), o );
                         //$parent.parent().fadeOut();
                        // $parent.parent().css('opacity', 0.8);
                     };
@@ -106,7 +109,6 @@
 
 
   <div id="cart">
-      <h3>My Cart</h3>
   </div>
 
 
