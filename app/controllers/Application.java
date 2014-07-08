@@ -30,7 +30,7 @@ public class Application extends Controller {
     public static Result index() {
         String cartItemsAsJson = "{status: 'empty'}";
         String cartAsJson = "{status: 'empty'}";
-        // createMenuDummy();
+       // createMenuDummy();
         /*
         Person p = new Person("Elhassan", "Rais", "b@b.com");
         SystemUser s = new SystemUser( p, "email", null) ;

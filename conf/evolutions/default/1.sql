@@ -40,6 +40,7 @@ create table carts (
   id                        varchar(255) not null,
   name                      varchar(255),
   owner_id                  varchar(255),
+  total_amount              double,
   description               varchar(255),
   create_time               datetime,
   close_time                datetime,

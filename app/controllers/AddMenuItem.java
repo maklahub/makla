@@ -43,9 +43,10 @@ public class AddMenuItem extends Controller {
                     cart.save();
                 }
 
+                cart.updateTotalAmount();
 
                // return ok(Json.toJson(menuItemId).toString());
-                return ok( Json.toJson( cartItem ) );
+                return ok( Json.toJson( cart ) );
             }
         }
 
@@ -85,13 +86,16 @@ public class AddMenuItem extends Controller {
                 return badRequest("Missing parameter [id]");
             } else {
                 CartItem cartItem = CartItem.findCartItemById( cartItemId );
+                String cartId = cartItem.getCart().getId();
                 cartItem.setCart( null );
                 cartItem.setCartItemPhoto( null );
                 //cartItem.delete();
                 Ebean.delete( cartItem );
+                Cart cart = Cart.findCartById( cartId);
+                cart.updateTotalAmount();
 
                 // return ok(Json.toJson(cartItem).toString());
-                return ok( "Item has beem removed " + cartItem.getName() );
+                return ok( Json.toJson( cart ) );
             }
         }
 

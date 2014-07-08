@@ -4,6 +4,7 @@ import com.avaje.ebean.Ebean;
 import play.db.ebean.Model;
 
 import javax.persistence.*;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,7 @@ public class Cart extends Model {
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser owner;
+    private double totalAmount;
     private String description;
     @ManyToMany( cascade = CascadeType.ALL )
     private List<CartItem> cartItems;
@@ -38,6 +40,12 @@ public class Cart extends Model {
 
     public static Cart findCartBySystemUser( String ownerId ){
         Cart cart = Ebean.find(Cart.class).where().eq("owner.id", ownerId).findUnique();
+        System.out.println("Cart: ---> " + cart);
+        return cart;
+    }
+
+    public static Cart findCartById( String id ){
+        Cart cart = Ebean.find(Cart.class).where().eq("id", id).findUnique();
         System.out.println("Cart: ---> " + cart);
         return cart;
     }
@@ -110,5 +118,26 @@ public class Cart extends Model {
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public double getTotalAmount() {
+        this.totalAmount = 0;
+        for ( CartItem ci :  getCartItems() ){
+            totalAmount += ci.getPrice();
+        }
+        totalAmount = Double.parseDouble(new DecimalFormat("#0.00").format( totalAmount ));
+        return totalAmount;
+    }
+    public double updateTotalAmount() {
+        this.totalAmount = 0;
+        for ( CartItem ci :  getCartItems() ){
+            totalAmount += ci.getPrice();
+        }
+        totalAmount = Double.parseDouble(new DecimalFormat("#0.00").format( totalAmount ));
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

@@ -30,17 +30,7 @@
             });
 
 
-            $cartContainer.append( new Cart( cart).render());
-           // if (cartItems.status != 'empty' ){
-
-              //  $.each( cartItems , function ( i, element){
-                    //alert( element );
-                    //console.log( element );
-               //    var s1 = new CartItem( element ).render();
-               //     $cartContainer.append( s1 );
-               // });
-            //}
-
+            $cartContainer.append( new Cart( cart ).render());
 
 
 
@@ -65,7 +55,7 @@
                         var o = {};
                         o.id = menuItemId;
                         o.name = "item name";
-                        ajaxAppendHtml( uri, $("#cartItems"), o );
+                        ajaxAppendHtml( uri, $cartContainer , o );
                         //$parent.parent().fadeOut();
                        // $parent.parent().css('opacity', 0.8);
                     };
@@ -86,7 +76,12 @@
                 var uri = "removeCartItem";
                 var o = {};
                 o.id = cartItemId
-                apiCall(  uri, o , function(){ $cartItemContainer.fadeOut()});
+                apiCall(  uri, o , function( d ){
+                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
+                      //alert( JSON.stringify(d) );
+                    $cartContainer.html( $(new Cart( d ).render()).fadeIn()  );
+
+                });
             });
 
         });
@@ -97,12 +92,10 @@
 
 <div class="container-fluid" id="content-container">
 
-   <h1>Welcome to Makla Hub</h1>
+   <h1>Welcome</h1>
     <div class="btn btn-danger">
        <a href="/saveCard">Save card</a></div>
-    <div class="check-out">
-          <h2>Checkout</h2>
-    </div>
+
     <div id="artistas-container" class="container"></div>
 
 </div>
