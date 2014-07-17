@@ -25,18 +25,40 @@ function apiCall(uri, o, callback) {
 
 }
 
+function apiCallGet(uri, o, callback) {
+    // alert(" Go AJax ");
+
+    $.ajax({
+        type:'GET',
+        // dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(o),
+        url:url + uri,
+        success:function (data, textStatus, jqXHR) {
+            // var obj = jQuery.parseJSON(jqXHR.responseText);
+            callback($.parseJSON(data) );
+            console.log(JSON.stringify(data));
+            //console.log(textStatus.toString());
+        },
+        error:function (data, textStatus, jqXHR) {
+            console.log(textStatus);
+        }
+    });
+
+}
+
 function ajaxHtml(uri, containerToFillIn, o) {
-     //alert(" Go AJax ");
+    //alert(" Go AJax ");
     $.ajax({
         url:url + uri,
         type:'POST',
         data:o,
         success:function (data, textStatus, jqXHR) {
             $(containerToFillIn).html( data  );
-           console.log( JSON.stringify( data ) );
-          // $(containerToFillIn).text( JSON.stringify( data ) );
-           // $("#addVideoStep").removeClass("step-active").addClass("step-deactive");
-           // $("#addPhotoStep").removeClass("step-deactive").addClass("step-active");
+            console.log( JSON.stringify( data ) );
+            // $(containerToFillIn).text( JSON.stringify( data ) );
+            // $("#addVideoStep").removeClass("step-active").addClass("step-deactive");
+            // $("#addPhotoStep").removeClass("step-deactive").addClass("step-active");
         },
         error:function (data, textStatus, jqXHR) {
             console.log(textStatus);
@@ -52,8 +74,8 @@ function ajaxReturnJson(uri, callback) {
         url:url + uri,
         type:'GET',
         success:function (data, textStatus, jqXHR) {
-           console.log( JSON.stringify( data ) );
-         //  alert( JSON.stringify( data ) );
+            console.log( JSON.stringify( data ) );
+            //  alert( JSON.stringify( data ) );
             callback( data );
         },
         error:function (data, textStatus, jqXHR) {
@@ -66,7 +88,7 @@ function ajaxReturnJson(uri, callback) {
 
 
 function ajaxAppendHtml12(uri, containerToFillIn, o , fObject) {
-     //alert(" Go AJax ");
+    //alert(" Go AJax ");
     $.ajax({
         url:url + uri,
         type:'POST',
@@ -84,17 +106,17 @@ function ajaxAppendHtml12(uri, containerToFillIn, o , fObject) {
 }
 
 function ajaxAppendHtml(uri, containerToFillIn, o) {
-     //alert(" Go AJax ");
+    //alert(" Go AJax ");
     $.ajax({
         url:url + uri,
         type:'POST',
-       // dataType: 'json',
+        // dataType: 'json',
         contentType: "application/json; charset=utf-8",
         data: JSON.stringify(o),
         success:function (data, textStatus, jqXHR) {
             //alert( o );
             //alert( JSON.stringify(data) );
-           // containerToFillIn.append( $(new  fObject( data ).render()).fadeIn(500)   );
+            // containerToFillIn.append( $(new  fObject( data ).render()).fadeIn(500)   );
             containerToFillIn.html( $(new Cart( data ).render()).fadeIn()  );
 
         },
@@ -135,12 +157,12 @@ function Cart ( cart ){
 }
 Cart.prototype.render = function(){ return this.screenHtml };
 Cart.prototype.calculate = function( cartItems  ){
-       var ta = 0;
+    var ta = 0;
     if ( cartItems ){
 
         $.each( cartItems , function( i, e){
-             ta = ta +  e.price  ;
-       });
+            ta = ta +  e.price  ;
+        });
     }
     return parseFloat(Number( ta ).toPrecision(10));
 };
@@ -162,7 +184,7 @@ function returnCartItems( cartItems ){
 
 
 function CartItem( item ){
-   // alert( item );
+    // alert( item );
     this.name = '<div id="'+ item.id+'"><div><img style="width: 25px" src="'+ item.cartItemPhoto.url+'" alt=""><span data-id= "'+ item.id+'" class="remove-cart-item"> remove</span> '+ item.name +"</div>";
     this.price = "<div> "+ item.price +"</div></div>";
     this.html = this.name + this.price;
@@ -186,22 +208,22 @@ function ajaxGetContent(uri, containerToFillIn) {
 }
 
 /**
-function ajaxImageUplaod(uri, containerToFillIn) {
-     alert(" Go AJax ");
+ function ajaxImageUplaod(uri, containerToFillIn) {
+ alert(" Go AJax ");
 
-    $.ajax({
-        url:url + uri,
-        type:'POST',
-        success:function (data, textStatus, jqXHR) {
-            $(containerToFillIn).html(data);
-            $("#addVideoStep").removeClass("step-active").addClass("step-deactive");
-            $("#addPhotoStep").removeClass("step-active").addClass("step-deactive");
-            $("#finishStep").removeClass("step-deactive").addClass("step-active");
-        },
-        error:function (data, textStatus, jqXHR) {
-            console.log(textStatus);
-        }
-    });
+ $.ajax({
+ url:url + uri,
+ type:'POST',
+ success:function (data, textStatus, jqXHR) {
+ $(containerToFillIn).html(data);
+ $("#addVideoStep").removeClass("step-active").addClass("step-deactive");
+ $("#addPhotoStep").removeClass("step-active").addClass("step-deactive");
+ $("#finishStep").removeClass("step-deactive").addClass("step-active");
+ },
+ error:function (data, textStatus, jqXHR) {
+ console.log(textStatus);
+ }
+ });
 
-}
+ }
  **/
