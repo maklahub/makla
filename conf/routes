@@ -14,7 +14,8 @@ GET     /myprofile                  controllers.Application.myProfile()
 GET     /myphotos                   controllers.Application.myPhotos()
 GET     /myvideos                   controllers.Application.myVideos()
 GET     /search/:q                  controllers.Application.searchArtistas( q: String )
-GET     /saveCard                  controllers.SaveCreditCard.index()
+GET     /order/:q                   controllers.Checkout.getOrder( q: String )
+GET     /usermenus                  controllers.Menus.index()
 
 GET     /widget/:userName           controllers.Application.myWidget( userName: String )
 
@@ -27,6 +28,9 @@ POST     /completeRegistration      controllers.Register.completeRegistration()
 POST     /addMyPhotos               controllers.AddPhotos.addMyPhotos()
 POST     /addToCart                 controllers.AddMenuItem.addMenuItemToCart()
 POST     /removeCartItem            controllers.AddMenuItem.removeCartItem()
+POST     /saveCard                  controllers.SaveCreditCard.index()
+POST     /checkout                  controllers.Checkout.index()
+POST     /pay                       controllers.Checkout.pay()
 
 
 GET      /login                     controllers.LogIn.index()

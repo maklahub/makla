@@ -11,6 +11,8 @@
         var profilePhotos = profileData.photos;
         var profileVideos = profileData.videos;
         var systemUser = profileData.systemUser;
+        var $personalDataContainer = $('#personal-date');
+        var $menusContainer = $('#menus');
         console.log( systemUser );
         $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar).render());
         $("#pImage").attr({'src':encodeURI( systemUser.profileImageUrl), 'data-id': systemUser.profileImageId, title: "Profile Photo"});
@@ -24,9 +26,26 @@
 
 
         // On Save
-        $("#saveProfileDate").on("click", function(){
-            //alert(" Save Profile Data");
+        $("#menus-list-btn").on("click", function(){
 
+            var uri = "usermenus";
+            apiCallGet( uri, "", function( d ){
+                  console.log( "---------> " + d );
+                var userMenus = d;
+                $personalDataContainer.slideUp();
+                $menusContainer.slideDown();
+                $menusContainer.html( "");
+                $.each( userMenus, function( i, e){
+                    //alert( userMenus );
+                    $menusContainer.html( new Menu( e).render() );
+                });
+            });
+
+        });
+
+        $('#edit-myprofile-btn').on('click', function(){
+            $personalDataContainer.slideDown();
+            $menusContainer.slideUp();
         });
 
     });
@@ -61,7 +80,7 @@
                 </div>
                 <hr class="stepsHr">
 
-                <div>
+                <div id="personal-date">
 
                     <div class="container-fluid" style="width: 400px; margin: auto">
                         <h2> Edit personal Info</h2>
@@ -75,6 +94,9 @@
 
 
                 </div>
+
+
+<div id="menus"></div>
 
 
 

@@ -122,12 +122,14 @@ function Cart ( cart ){
         console.log(" ta: " + this.ta );
         // this.footer = "<div class='cart-total-amount'> <span class='badge badge-success'>" +  " " + this.ta.toString() ;
         this.footer = '<div class="cart-total-amount"><hr class="hr"> <p>Total Amount:'+ cart.totalAmount +' </p><span class="cart-ta badge badge-success">$ ' + this.ta +'</span></div>';
-        this.checkOutContainer =  cartItems != null ?'<div class="check-out"><h2>Checkout</h2></div>' : '';
+        this.checkOutContainer =  cartItems != null ?'<div class="check-out"><form style="margin: 0" method="post" action="checkout"><input type="hidden" name="cartId" value="'+cart.id +'"><input type="submit" class="checkout-btn" value="Checkout" id="'+ cart.id +'"></form></div>' : '';
         this.cartWrapperCloser = "</div>";
         // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
         this.screenHtml = this.cartWrapperOpener + this.cartHeader + this.cartItems +  this.footer +  this.cartWrapperCloser + this.checkOutContainer;
 
     }
+
+
 
 
 }

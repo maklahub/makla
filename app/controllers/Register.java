@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.paypal.core.rest.PayPalRESTException;
 import dataHelpers.SessionUser;
 import models.*;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -40,7 +41,10 @@ public class Register extends Controller {
     }
 
 
-    public static Result completeRegistration() throws IOException, EmailException {
+
+
+
+    public static Result completeRegistration() throws IOException, EmailException, PayPalRESTException {
         String baseUrl = request().path();
         DynamicForm requestData = form().bindFromRequest();
         String name = requestData.get("businessName");
@@ -49,9 +53,12 @@ public class Register extends Controller {
         String accountEmail = requestData.get("email");
         String password = requestData.get("password");
         String userName = requestData.get("userName");
-        String personCategory = requestData.get("personCategory");
+       /// String creditCardNumber = requestData.get("creditCardNumber");
+        //String cvv = requestData.get("CVV");
+       // String expirationDate = requestData.get("expirationDate");
+        //String personCategory = requestData.get("personCategory");
         String orgCategory = requestData.get("orgCategory");
-        String sex = requestData.get("sex");
+       // String sex = requestData.get("sex");
         //System.out.println(" Gender: ---> " + sex.trim() );
         String userType = requestData.get("userType" );
         String city = requestData.get( "city" );
@@ -62,7 +69,6 @@ public class Register extends Controller {
         UserType systemUserType = UserType.findUserTypeByName( userType );
 
         SystemUser u = null;
-        System.out.println( "Name: " + name);
         if ( name != null  ){
             OrganizationCategory systemOrgCategory = OrganizationCategory.findOrgCategoryByName( orgCategory );
 
@@ -72,10 +78,12 @@ public class Register extends Controller {
             u = new SystemUser( o, password, systemUserType );
         }
         else {
-            PersonCategory systemPersonCategory = PersonCategory.findPersonCategoryByName( personCategory );
+          //  PersonCategory systemPersonCategory = PersonCategory.findPersonCategoryByName( personCategory );
             Person p = new Person(  firstName, lastName, accountEmail );
             p.setAddressId( address );
-            p.setCategory( systemPersonCategory );
+            /*
+             p.setCategory( systemPersonCategory );
+
             if ( sex.trim().equalsIgnoreCase("female")){
                 p.setGender( Person.Sex.Female );
             }
@@ -85,8 +93,13 @@ public class Register extends Controller {
             else {
                 p.setGender( Person.Sex.Other );
             }
+            **/
             u = new SystemUser( p, password, systemUserType );
         }
+
+        //String result = SaveCreditCard.saveCard( firstName,lastName, creditCardNumber, 11,2018);
+
+       // System.out.println(" Result ------------> " + result );
 
         u.setUserName( userName );
         u.save();
@@ -111,27 +124,13 @@ public class Register extends Controller {
             u.setProfileImageId( profilePhoto.getId());
             u.setProfileImageUrl( profilePhoto.getUrl() );
             String photoUrl = s3File.getUrl().toString();
-            System.out.println( "Photo URL: " + photoUrl);
             Feed feed = new Feed( u, photoUrl , " Text text...") ;
             feed.save();
             profilePhoto.save();
 
             SessionUser sessionUser = new SessionUser( u );
-            System.out.println( "\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Session user: \n" + Json.toJson( sessionUser ).toString() );
             session("sessionUser",Json.toJson( sessionUser ).toString());
             session("currentUserId" , u.getId());
-
-            /*
-            Email email = new SimpleEmail();
-            email.setHostName("smtp.googlemail.com");
-            email.setSmtpPort(465);
-            email.setAuthenticator(new DefaultAuthenticator("artistahub@gmail.com", "acrobat8"));
-            email.setSSLOnConnect(true);
-            email.setFrom("artistahub@gmail.com");
-            email.setSubject("Welcome to ArtistaOne");
-            email.setMsg(" Hello " + u.getFullName());
-            email.addTo( accountEmail );
-            email.send();   **/
             sendHtmlasEmail( u, photoUrl, accountEmail );
 
             return redirect(routes.Application.home());
@@ -235,8 +234,6 @@ public class Register extends Controller {
         boolean result = false;
        // ObjectNode checkResponse = Json.newObject();
         SystemAccount systemAccount= SystemAccount.findSystemAccountByEmail( email );
-       // checkResponse.put("systemAccount" , Json.toJson( systemAccount ));
-        System.out.println(" System acount found: " + Json.toJson( systemAccount));
         return systemAccount != null ? true: false;
     }
 

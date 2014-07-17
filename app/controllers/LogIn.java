@@ -36,7 +36,14 @@ public class LogIn extends Controller {
                     session("sessionUser" , sessionUserAsJson );
                     session("currentUserId", systemUser.getId());
                     String menus = Json.toJson(Menu.getAllMenus()).toString();
-                    return redirect( controllers.routes.Application.index() );
+
+                    if ( systemUser.isItAPerson()){
+                        return redirect( controllers.routes.Application.index() );
+                    }
+                    else {
+                        return redirect( controllers.routes.Application.home() );
+                    }
+
                 }
             }
         }

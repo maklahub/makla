@@ -1,10 +1,12 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.paypal.api.payments.*;
 import com.paypal.core.rest.APIContext;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
-import models.Menu;
+import models.MaklaCreditCard;
+import models.SystemUser;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -17,6 +19,28 @@ import java.util.Map;
 public class SaveCreditCard extends Controller {
 
     public static Result index() throws PayPalRESTException {
+        String cardFirstName;
+        String cardLastName ;
+        String cardType ;
+        String cardNumber ;
+        int cardMonth ;
+        int cardYear ;
+        JsonNode json = request().body().asJson();
+        SystemUser u = SystemUser.findUserById(session("currentUserId"));
+
+        System.out.println("\n Json: >>>>>>>>>>>>>>>> \n" + json);
+
+        if(json == null) {
+            return badRequest("Expecting Json data");
+        } else {
+            cardFirstName = json.findPath("cardFirstName").textValue();
+            cardLastName = json.findPath("cardLastName").textValue();
+            cardType = json.findPath("cardType").textValue();
+            cardNumber = json.findPath("cardNumber").textValue();
+            cardMonth = json.findPath("cardMonth").asInt();
+            cardYear = json.findPath("cardYear").asInt();
+
+        }
 
         // Server Set up  (Live/ Sandbox environment)
         Map<String, String> sdkConfig = new HashMap<String, String>();
@@ -33,15 +57,21 @@ public class SaveCreditCard extends Controller {
 
         // Create/ Save credit Card
         CreditCard creditCard = new CreditCard();
-        creditCard.setType("visa");
-        creditCard.setNumber("4446283280247004");
-        creditCard.setExpireMonth(11);
-        creditCard.setExpireYear(2018);
-        creditCard.setFirstName("James");
-        creditCard.setLastName("Bond");
+        creditCard.setType( cardType );
+        creditCard.setNumber( cardNumber );
+       // creditCard.setNumber("4446283280247004");
+        creditCard.setExpireMonth( cardMonth );
+        creditCard.setExpireYear( cardYear );
+        creditCard.setFirstName( cardFirstName );
+        creditCard.setLastName( cardLastName );
         CreditCard createdCreditCard = creditCard.create(apiContext);
         String cardId = createdCreditCard.getId();
 
+        MaklaCreditCard card = new MaklaCreditCard( u, cardId, createdCreditCard.getNumber() );
+        card.save();
+
+
+        /*
         // Make payment with the saved credit card
         CreditCardToken creditCardToken = new CreditCardToken();
         creditCardToken.setCreditCardId("CARD-6F541200MD035241TKO4FL3Y");
@@ -74,8 +104,40 @@ public class SaveCreditCard extends Controller {
 
         Payment createdPayment = payment.create(apiContext);
         return ok( "Access Token " + accessToken + "\n card Id: " + cardId + "\n" +  " card: " + createdCreditCard + "\n payment: " + createdPayment  );
+        */
+        return ok( createdCreditCard.toJSON() );
 
 
+    }
+
+    public static String saveCard( String firstName, String lastName, String cardNumber, int exMonth, int expYear ) throws PayPalRESTException {
+        // Server Set up  (Live/ Sandbox environment)
+        Map <String, String> sdkConfig = new HashMap<String, String>();
+        sdkConfig.put("mode", "sandbox");
+
+        // Get access Token
+        OAuthTokenCredential response = new OAuthTokenCredential("AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd", "EL1tVxAjhT7cJimnz5-Nsx9k2reTKSVfErNQF-CmrwJgxRtylkGTKlU4RvrX", sdkConfig);
+        System.out.println( "Access token: " + Json.toJson(response));
+        String accessToken = response.getAccessToken();
+
+        // Set access token for Api Requests ( API Context )
+        APIContext apiContext = new APIContext( accessToken );
+        apiContext.setConfigurationMap(sdkConfig);
+
+        // Create/ Save credit Card
+        // Create/ Save credit Card
+        CreditCard creditCard = new CreditCard();
+        creditCard.setType("visa");
+        creditCard.setNumber( cardNumber );
+        creditCard.setExpireMonth( exMonth );
+        creditCard.setExpireYear( expYear );
+        creditCard.setFirstName("James");
+        creditCard.setLastName("Bond");
+        CreditCard createdCreditCard = creditCard.create(apiContext);
+        String cardId = createdCreditCard.getId();
+
+
+       return createdCreditCard.toJSON();
     }
 
 }

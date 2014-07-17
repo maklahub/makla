@@ -8,7 +8,7 @@
         var userTypes = @Html(userTypes);
         var personCategories = @Html(personCategories);
         var orgCategories = @Html(orgCategories);
-        console.log( " Org categoies: ");
+        console.log( " Org categories: ");
         console.log( orgCategories );
         var selectedUserType = "@{ userType }";
         var firstName = "@{ firstName }";
@@ -26,7 +26,7 @@
         if ( selectedUserType.length > 0  ){
             $("#registration-form .flabel").first().hide();
             $("#user-types-select").val( selectedUserType );
-            if ( selectedUserType == "artist"){
+            if ( selectedUserType == "customer"){
                 // $('#who-are-you-container').after( new ArtistaForm().renderHtml().fadeIn( 'slow' ));
                 $("#registration-form").append( new SignUpPersonForm( firstName, lastName, email, personCategories ).renderHtml());
             }
@@ -42,7 +42,7 @@
             $('.dynamic-create-form').html("");
           //  $( "select option:selected" ).each(function() {
                 var $selectionVal = $( this ).val();
-                if ( $selectionVal == "artist"){
+                if ( $selectionVal == "customer"){
                    // $('#who-are-you-container').after( new ArtistaForm().renderHtml().fadeIn( 'slow' ));
                     $("#registration-form").append( new SignUpPersonForm( firstName, lastName, email, personCategories ).renderHtml());
                 }

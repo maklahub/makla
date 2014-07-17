@@ -16,6 +16,8 @@ public class SystemUser extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     @OneToOne(cascade = CascadeType.ALL)
     private Person person;
+    @OneToOne(cascade = CascadeType.ALL)
+    private MaklaCreditCard mainCreditCard;
     private String userName;
     @OneToOne(cascade = CascadeType.ALL)
     private Organization organization;
@@ -213,5 +215,13 @@ public class SystemUser extends Model {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public MaklaCreditCard getMainCreditCard() {
+        return mainCreditCard;
+    }
+
+    public void setMainCreditCard(MaklaCreditCard mainCreditCard) {
+        this.mainCreditCard = mainCreditCard;
     }
 }

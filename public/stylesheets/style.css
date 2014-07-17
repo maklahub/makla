@@ -11,9 +11,10 @@
 body{
     margin: 0px;
     padding: 0px;
+
     /*background-color: rgb(230, 224, 224);
     background-color: rgb(246, 239, 240); */
-    background-color: rgb(255, 255, 255);
+    background-color:rgb(236, 236, 236);
 
     /*background-image: url("../images/noise-2.png"); */
 }
@@ -54,8 +55,9 @@ body{
     margin: 0 auto;
     width: 300px;
 }
-a{
-    color: #222;
+.top h2 a{
+    color: white;
+    text-shadow: 0px 1px 2px #333;
 }
 
 * {
@@ -116,29 +118,29 @@ h1{
     background: linear-gradient(to bottom, rgba(254,255,255,1) 0%,rgba(210,235,249,1) 100%); /* W3C */
 }
 .frow{
-    width: 90%;
+    width: 100%;
     margin-bottom: 5px;
     position: relative;
 }
-input {
-    height: 30px;
-}
+
 .finputText {
     width: 100%;
     border-radius: 4px;
    /* border: solid 1px #ccc;    */
     font-weight: 500;
-    font-size: 13pt;
+    font-size: 16pt !important;
     padding-left: 5px;
     border: solid thin #807F7F !important;
     box-shadow: 0px 0px 1px #5E5959 !important;
+
 }
 .flabel {
     position: absolute;
     top: 9px;
     left: 6px;
-    color: rgb(141, 139, 148);
-    font-size: 11pt;
+    color: #333;
+    font-size: 16pt;
+    line-height: 37px;
 }
 h4 {
     font-size: 17.5px;
@@ -153,6 +155,9 @@ h4 {
 
 .signup-btn{
     color: #333;
+    height: 42px !important;
+    font-size: 14pt;
+    font-weight: 500 !important;
     background-color: #fd9512;
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top,#fedc4d 0,#fd9512 100%);
@@ -459,7 +464,7 @@ ul{
 }
 
 input[type="text"],input[type="password"], select{
-    height: 30px;
+    height: 43px;
     margin-bottom: 0px;
 
 }
@@ -570,7 +575,7 @@ input[type="text"],input[type="password"], select{
 }
 .tool-bar{
     padding: 8px 0px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(228, 226, 226);
 }
 .fc-fotter{
     border-bottom: solid 1px #d6d6d6;
@@ -630,6 +635,13 @@ input[type="text"],input[type="password"], select{
 }
 .window-body{
 }
+
+.window-wrapper{
+    background: rgba(236, 223, 179, 0.17);
+    padding: 5px;
+    border: solid thin #e1e1e1;
+    border-radius: 3px;
+}
 .close-dropDown{
     color: #007699;
     position: absolute;
@@ -639,6 +651,7 @@ input[type="text"],input[type="password"], select{
     cursor: pointer;
 }
 .window-footer{
+    position: relative;
 }
 .span-info{
     color: #fff;
@@ -804,9 +817,10 @@ div#comments-Container .comment-row:first-child {
     padding: 4px 0px;
     text-indent: 5px;
     font-size: 13pt;
-    background-color: rgba(247, 239, 239, 1);
-    border: rgb(196, 196, 196) solid 1px;
+    background-color: rgb(255, 255, 255);
+    border: rgb(238, 182, 39) solid 1px;
     border-radius: 0px 0px 3px 3px;
+    border-radius: 5px;
 }
 #search-result{
     width: 100%;
@@ -862,7 +876,7 @@ div#comments-Container .comment-row:first-child {
 #header-top-bar{
     background-color: #ffffff;
     /**background-image: url("/images/noise-2.png");    **/
-    padding: 0px 0px 3px 0px;
+    padding:0px;
     position: fixed;
     top:0;
     z-index: 1;
@@ -871,7 +885,17 @@ div#comments-Container .comment-row:first-child {
     box-shadow: 0px -3px 21px #333;
 }
 .inner-header{
-    padding: 3px;
+    min-height: 50px;
+    padding: 3px 0px;
+    background-color: #fd9512;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top,#fedc4d 0,#fd9512 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#fedc4d),color-stop(100%,#fd9512));
+    background-image: -webkit-linear-gradient(top,#fedc4d 0,#fd9512 100%);
+    background-image: -ms-linear-gradient(top,#fedc4d 0,#fd9512 100%);
+    background-image: -o-linear-gradient(top,#fedc4d 0,#fd9512 100%);
+    background-image: linear-gradient(top,#fedc4d 0,#fd9512 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fedc4d',endColorstr='#fd9512',GradientType=0);
 }
 
 #user-types-select {
@@ -889,7 +913,7 @@ div#comments-Container .comment-row:first-child {
 .signup-select {
     font-size: 13pt;
     padding-bottom: -21px;
-    height: 39px;
+    height: 49px;
     width: 103%;
 }
 
@@ -1071,6 +1095,60 @@ div.d {
     right: 0;
     text-align: center;
     background-color: #000000;
+}
+.checkout-btn{
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    font-size: 24pt;
+    padding: 11px;
+    background: transparent;
+    border: 0;
+    text-shadow: 0px 1px 2px rgb(66, 5, 5);
+    color: white;
+}
+.checkout-btn:hover{
+    color: #333;
+}
+.select-year{
+    width: 120px !important;
+    font-size: 16pt;
+}
+.select-month{
+    width: 95px !important;
+    font-size: 16pt;
+    margin-left: 10px;
+}
+.expiration-date-title{
+    font-size: 16pt;
+    color: #333;
+}
+.add-credit-card-title{
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 7px;
+    text-shadow: 0px 2px 2px rgb(8, 8, 94);
+}
+.inline-block{
+    display: inline-block;
+}
+.cvv{
+    width: 100px !important;
+}
+.input-info{
+    color: #666;
+    font-size: 9pt;
+    font-style: italic;
+    background-image: url("../images/cvv.png");
+    background-position: 50% 90%;
+    background-repeat: no-repeat;
+    height: 50px;
+    display: inline-block;
+    padding: 0;
+    position: relative;
+    top: -12px;
 }
 
 

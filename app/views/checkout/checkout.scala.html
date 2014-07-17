@@ -1,0 +1,140 @@
+@(creditCards : String, cartId: String, order: String)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var cartId = "@cartId";
+        var creditCards = @Html(creditCards);
+        var order = @Html(order);
+        $body = $( "body");
+        $loadingImage = $( "#loading-image");
+        $addCardContainer = $("#add-credit-card-container");
+        $addCreditCardForm = $("#add-credit-card-form");
+        $orderItemsContainer = $("#order-items-container");
+        if ( creditCards.length > 0 ){
+            $addCardContainer.remove();
+            $orderItemsContainer.append( new Order( order ).render());
+            $orderItemsContainer.css('visibility', 'visible');
+
+        }
+
+
+        $( document).on('click', '#save-credit-card', function(){
+            $loadingImage.fadeIn();
+            var cardFirstName = $("#card-firstName").val();
+            var cardLastName = $("#card-lastName").val();
+            var cardType = $("#card-cardTypes").val();
+            var cardNumber = $("#card-cardNumber").val();
+            var cardMonth = $("#card-month").val();
+            var cardYear = $("#card-year").val();
+            var cardCvv = $("#card-cvv").val();
+            var uri = "saveCard";
+            var o = {};
+            o.cardFirstName = cardFirstName;
+            o.cardLastName = cardLastName;
+            o.cardType = cardType;
+            o.cardNumber = cardNumber;
+            o.cardMonth = cardMonth;
+            o.cardYear = cardYear;
+            o.cardCvv = cardCvv;
+
+            if (cardFirstName){
+                apiCall(  uri, o , function( d ){
+                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
+                    $addCreditCardForm.remove();
+                    $addCardContainer.append(new DropDownWindow("<h1>Credit Card has been added Successfully</h1>", "Success").render()).delay( 3000).fadeOut();
+                    $addCardContainer.remove();
+                    $orderItemsContainer.append( new Order( order ).render());
+                    $orderItemsContainer.css('visibility', 'visible');
+
+                    // print order items
+
+                   // $orderItemsContainer.append( "<h1> test 66qw66673424 </h1>");
+                });
+
+            }
+        });
+
+
+
+    });
+</script>
+
+
+<div class="container-fluid" id="content-container">
+
+    <h1>Welcome</h1>
+
+    <div id="add-credit-card-container" style="width: 500px; margin: auto">
+        <div class="row-fluid" id="add-credit-card-form">
+            <h1 class="add-credit-card-title btn-primary">Add Credit Card </h1>
+
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="frow">
+                    <label class="flabel"> First Name</label>
+                    <input type="text" class="finputText" name="card-firstName" id="card-firstName">
+                </div>
+                <div class="frow">
+                    <label class="flabel"> Last Name</label>
+                    <input type="text" class="finputText" name="card-lastName" id="card-lastName">
+                </div>
+                <div class="frow">
+                    <select  class="signup-select finputText" name="card-cardTypes" id="card-cardTypes">
+                        <option > Card type </option>
+                        <option value="visa" selected=""> Visa</option>
+                    </select>
+                </div>
+                <div class="frow">
+                    <label class="flabel"> Card Number</label>
+                    <input type="text" class="finputText" name="card-cardNumber" id="card-cardNumber" value="4446283280247004">
+                </div>
+                   <div class="frow">
+                       <div class="inline-block"> <h6 class="expiration-date-title inline-block">Expiration Date:</h6></div>
+                       <div class="inline-block">
+                           <select  class="select-month" name="card-month" id="card-month">
+                               <option>Month</option>
+                               <option value="1">1</option>
+                               <option value="2">2</option>
+                               <option value="3" selected="">3</option>
+                           </select>
+                       </div>
+                       <div class="inline-block">
+                           <select class="select-year inline-block" name="card-year" id="card-year" >
+                               <option>Year</option>
+                               <option value="2008">2008</option>
+                               <option value="2009">2009</option>
+                               <option vlaue="2018" selected="">2018</option>
+                           </select>
+                       </div>
+                   </div>
+                <div class="frow">
+                    <label class="flabel"> CVV </label>
+                    <input type="text" class="finputText cvv" name="card-cvv" id="card-cvv">
+                    <span class="input-info"> Security code</span>
+                </div>
+                <div> <input class="btn signup-btn span12" id="save-credit-card" type="button" name="saveCreditCard" value="Save Card"></div>
+                <div id="loading-image" style="display: none;"><img src="/images/loading.gif" alt=""></div>
+            </div>
+        </div>
+       </div>
+
+    </div>
+    <div id="order-items-container" style="visibility: hidden;">
+        <div id="order-Items">
+            <div class="order-item"> Item 1</div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

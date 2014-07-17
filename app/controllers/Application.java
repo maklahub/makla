@@ -30,10 +30,10 @@ public class Application extends Controller {
     public static Result index() {
         String cartItemsAsJson = "{status: 'empty'}";
         String cartAsJson = "{status: 'empty'}";
-       // createMenuDummy();
+        //createMenuDummy();
         /*
         Person p = new Person("Elhassan", "Rais", "b@b.com");
-        SystemUser s = new SystemUser( p, "email", null) ;
+        Sys//temUser s = new SystemUser( p, "email", null) ;
         Cart c = new Cart(" new cart", s);
         Order o = new Order( s );
         OrderItem oi = new OrderItem(o, " order 1","Moroccan Tajin");
@@ -275,9 +275,10 @@ public class Application extends Controller {
     }
     public static void createUserTypeIfNotExist(){
         new UserType( "restaurant", "ut-00001", "Restaurant" ).save();
-        new UserType( "performance", "ut-00002", "Cafe" ).save();
-        new UserType( "festival", "ut-00003", "Whole food" ).save();
-        new UserType( "theater", "ut-00004", "Catering" ).save();
+        new UserType( "cafe", "ut-00002", "Cafe" ).save();
+        new UserType( "whole-food", "ut-00003", "Whole food" ).save();
+        new UserType( "catering", "ut-00004", "Catering" ).save();
+        new UserType( "customer", "ut-00004", "customer" ).save();
 
     }
 

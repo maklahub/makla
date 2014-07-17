@@ -24,6 +24,8 @@ public class OrderItem extends Model {
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Order order;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Photo orderItemPhoto;
     private Date createTime;
     private Date closeTime;
     @Version
@@ -41,6 +43,7 @@ public class OrderItem extends Model {
          setOrder( order );
          setName( cartItem.getName() );
          setDescription( cartItem.getDescription() );
+         setOrderItemPhoto( cartItem.getCartItemPhoto() );
          setAmount( cartItem.getPrice() );
          setCreateTime( new Date() );
     }
@@ -126,5 +129,13 @@ public class OrderItem extends Model {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Photo getOrderItemPhoto() {
+        return orderItemPhoto;
+    }
+
+    public void setOrderItemPhoto(Photo orderItemPhoto) {
+        this.orderItemPhoto = orderItemPhoto;
     }
 }
