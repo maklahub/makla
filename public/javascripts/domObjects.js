@@ -45,7 +45,29 @@ function Menu( m ){
 
 Menu.prototype.render = function(){
     return  this.screenHtml;
-};
+}
+
+
+function MenuAsIcon( m ){
+    console.log( m );
+    var name = m.name;
+    var menuItems = m.menuItems;
+    var menuPhoto =  m.menuPhoto != null ? m.menuPhoto.url : "";
+
+    this.menuWrapperOpener = '<div class="row-fluid menu">';
+    this.menuHeader = ' <div class="row-fluid"><div class="span12"><a href="'+location.href+ "/" +  m.id +'"><h1> '+ name +' <span class="sub-title">By '+ m.owner.fullName +'</span></h1></a> </div></div>';
+   // this.menuItems = '<div class="row-fluid"> '+ returnMenuItemsHtml( menuItems ) + '</div>';
+    this.body = '<div><img src="'+ menuPhoto +'" alt=""></div>';
+    this.menuwrapperCloser = "</div>";
+   // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
+    this.screenHtml = this.menuWrapperOpener + this.menuHeader  + this.body + this.menuwrapperCloser;
+
+}
+
+MenuAsIcon.prototype.render = function(){
+    return  this.screenHtml;
+}
+
 function Order( o ){
     console.log( o );
     var name = o.name;
@@ -181,16 +203,16 @@ FeedsScreen.prototype.render = function (){
     return this.screenHtml;
 };
 
-var toolBarObjects = { myphotosToolBar : [{ name: "Photos", id : "myvideos-btn", link : "", class: "btn"},
+var toolBarObjects = { myphotosToolBar : [{ name: "Photos", id : "myvideos-btn", link : "", class: "btn tool-bar-btn"},
                      {name: "Albums", id : "", link : "",class: "btn"},
-                     {name: "upload Photos", id : "myphotos-upload", link : "",class: "btn btn-success"}],
-                      myvideosToolBar:  [{ name: "Videos", id : "myvideos-btn", link : "", class: "btn"},
-                     {name: "Albums", id : "", link : "",class: "btn"},
-                     {name: "upload Videos", id : "myvideos-upload", link : "",class: "btn btn-success"}],
-                      editProfileToolBar: [{ name: "Profile", id : "edit-myprofile-btn",link : "",class: "btn btn-success" },
-                      { name: "Menus", id : "menus-list-btn",link : "",class: "btn" },
-                      { name: "Preference", id : "edit-profession-btn",link : "",class: "btn" },
-                      {name: "Availability", id : "edit-availability-btn",link : "",class: "btn"}]};
+                     {name: "upload Photos", id : "myphotos-upload", link : "",class: "btn btn-success tool-bar-btn"}],
+                      myvideosToolBar:  [{ name: "Videos", id : "myvideos-btn", link : "", class: "btn tool-bar-btn"},
+                     {name: "Albums", id : "", link : "",class: "btn tool-bar-btn"},
+                     {name: "upload Videos", id : "myvideos-upload", link : "",class: "btn btn-success tool-bar-btn"}],
+                      editProfileToolBar: [{ name: "Profile", id : "edit-myprofile-btn",link : "/myprofile",class: "btn tool-bar-btn" },
+                      { name: "Menus", id : "menus-list-btn",link : "/menus",class: "btn tool-bar-btn" },
+                      { name: "Preference", id : "edit-profession-btn",link : "",class: "btn tool-bar-btn" },
+                      {name: "Availability", id : "edit-availability-btn",link : "",class: "btn tool-bar-btn"}]};
 
 var widgetMenuIcons = function( userName ){
        var iconItems = [{ name: 'myphotos',id:'widget-myphotos-btn', icon:'image-icon my-profile-icon', action: '/widget/' + userName, cssClass: 'widget-menu-icon '},
@@ -206,7 +228,7 @@ function ToolBar( o ){
     var thisContent = this.content;
     $.each ( o, function( i, e){
          //console.log( " e " + e.name );
-         thisContent +=  '<span id="'+ e.id +'" class= "'+ e.class +'"> ' + e.name + '</span>';
+         thisContent +=  '<a href="'+ e.link +'" ><span id="'+ e.id +'" class= "'+ e.class +'"> ' + e.name + '</span></a>';
     });
     this.content = thisContent + "</div>";
     this.innerCLose = "</div>";
@@ -255,6 +277,7 @@ var forms = {};
             '</form></div>';
         return f ;
     }
+
 
 function DropDownWindow( f, title ){
     this.wrapper = "<div class='window-wrapper'>";
@@ -432,6 +455,64 @@ function SignUpPersonForm( firstName, lastName, email, personCategories  ){
      this.footer = $('<div class="frow"><input class="btn signup-btn span12" type="button" value="Complete Registration" id="uploadProfileImage"></div>');
      this.renderHtml = function(){ return this.htmlForm().append(this.footer)};
 }
+
+function CreateMenuForm( firstName, lastName, email, personCategories  ){
+    // console.log( personCategories ) ;
+    this.formFields = { name: { label: "Menu Title", value : "", tag : "input", type: "text", name : "menuTitle","data-req": 1 },
+        description : { label: "Menu Description", value : "", tag : "input", type: "text", name: "menuDescription","data-req": 1 },
+        category : { label: "Category", value : "", tag : "select", type: "select",  name : "menuCategory","data-req": 1 },
+        menuPhoto : { label: "", value : "", tag : "input", type: "file", name: "menuImage","data-req": 1, header: "Menu Photo"}
+    };
+    this.htmlForm = function(){
+        var $container = $("<form method='post' action='/addMenu' enctype='multipart/form-data' class='dynamic-create-form' id='create-menu-form'></div>");
+        $.each( this.formFields , function( i, item){
+            var $frow = $("<div class='frow'></div>");
+            var $label = $("<div class='flabel'></div>").text( item.label );
+            var $span = $("<span class='red'></span>");
+            var req = item["data-req"];
+            if ( item.value ){ $label.css("display","none")};
+            //  var $input = $("<input class='finputText' type='text' name='" + i + "'></input>");
+            if ( item.tag == "input" && item.type != "radio" ){
+                var $input = $("<input class='finputText' data-req='"+ req +"'  value='"+ item.value +"' type='" + item.type + "' name='" + item.name + "'></input>");
+            }
+            else if (  item.type == "radio" ){
+                var $input = $("<label class='radio inline'><input value='"+ item.label +"' class='finputText' data-req='"+ req +"' type='" + item.type + "' name='" + item.name + "'></input> "+item.label+"</label>");
+                $label = "";
+            }
+            else if ( item.type == "select" ){
+                var $input = $("<select class='finputText signup-select' data-req='"+ req +"' name='" + item.name + "'><option></option></select>");
+                if ( personCategories ){
+                    $.each( personCategories, function( i, cat ){
+                        // console.log( ut );
+                        var $e = $('<option>');
+                        $e.attr({ 'value' : cat.name , 'data-ref' : cat.reference});
+                        $e.text( ucFirstAllWords(cat.label) );
+
+                        $input.append( $e );
+                    });
+
+                }
+
+
+
+            }
+            if (  item.header ){
+                console.log( item.header );
+                console.log( $input.parent() );
+                $input.removeClass("finputText");
+                $frow.append("<div><h4>"+ item.header +"</h4></div>");
+            }
+            $frow.append( $label, $input, $span );
+            $container.append( $frow );
+        });
+        return $container;
+    }
+    this.footer = $('<div class="frow"><input class="btn signup-btn span12" type="submit" value="Create" id="create-menu-btn"></div>');
+    this.renderHtml = function(){ return this.htmlForm().append(this.footer)};
+}
+
+
+
 function EditPersonProfileForm( firstName, lastName, email, personCategories  ){
     // console.log( personCategories ) ;
     this.formFields = { firstName: { label: "First Name", value : firstName || "", tag : "input", type: "text", name : "firstName","data-req": 1 },

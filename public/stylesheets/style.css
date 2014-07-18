@@ -1006,6 +1006,8 @@ div.d {
     margin-top: 20px;
     padding: 10px;
     position: relative;
+    background: white;
+    border-radius: 5px;
 }
 .item-title{
     color: #E90986;

@@ -18,6 +18,7 @@ public class Menu extends Model {
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser owner;
+    @OneToOne(cascade = CascadeType.ALL)
     private Photo menuPhoto;
     private String description;
     @ManyToMany( cascade = CascadeType.ALL )

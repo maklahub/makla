@@ -15,7 +15,7 @@ GET     /myphotos                   controllers.Application.myPhotos()
 GET     /myvideos                   controllers.Application.myVideos()
 GET     /search/:q                  controllers.Application.searchArtistas( q: String )
 GET     /order/:q                   controllers.Checkout.getOrder( q: String )
-GET     /usermenus                  controllers.Menus.index()
+GET     /menus                      controllers.Menus.index()
 
 GET     /widget/:userName           controllers.Application.myWidget( userName: String )
 
@@ -31,6 +31,7 @@ POST     /removeCartItem            controllers.AddMenuItem.removeCartItem()
 POST     /saveCard                  controllers.SaveCreditCard.index()
 POST     /checkout                  controllers.Checkout.index()
 POST     /pay                       controllers.Checkout.pay()
+POST     /addMenu                   controllers.Menus.addMenu()
 
 
 GET      /login                     controllers.LogIn.index()

@@ -48,6 +48,12 @@ $(function () {
         }
     });
 
+    $body.on( 'click', '.tool-bar-btn', function(){
+        $this = $( this );
+        $('.tool-bar-btn').removeClass('btn-success');
+        $this.addClass('btn-success');
+    });
+
     //   @videos
    /* $(document).on('click', '#addVideo', function () {
         $("#addVideoScreen").slideDown();

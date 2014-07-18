@@ -46,13 +46,17 @@ public class Order extends Model {
 
     public Order( SystemUser owner ){
         List<Order> o = Ebean.find( Order.class).orderBy().desc("createTime").findList();
-        System.out.println("\n\n\n Orders *****-----> " + o.get( 0) );
-        Order lastInsertedOrder =  o.get( 0 );
         String ref = "";
-        if( lastInsertedOrder.getReference() == null){
-              ref = String.valueOf( 1 );
+
+
+        if ( o.size() == 0){
+            ref = String.valueOf( 1 );
         }
-         ref = String.valueOf( Integer.valueOf(lastInsertedOrder.getReference()) + 1 );
+        else {
+            Order lastInsertedOrder =  o.get( 0 );
+            ref = String.valueOf( Integer.valueOf(lastInsertedOrder.getReference()) + 1 );
+        }
+
         setReference( ref  );
         setOwner(owner);
         setCreateTime(new Date());
