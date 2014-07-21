@@ -29,6 +29,7 @@
         }
 
         $( document ).on('click', '#add-menu-btn', function(){
+            $('#create-menu-form').remove();
             var $this = $(this);
             $this.after( new CreateMenuForm().renderHtml() );
         });

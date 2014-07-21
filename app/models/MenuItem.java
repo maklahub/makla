@@ -38,6 +38,14 @@ public class MenuItem extends Model {
       setCreateTime( new Date() );
     }
 
+    public MenuItem( String name, Menu menu, double price, String description ){
+      setName( name );
+      setMenu( menu );
+      setPrice( price );
+      setDescription( description );
+      setCreateTime( new Date() );
+    }
+
     private static Finder< String, MenuItem > find = new Finder<String, MenuItem>( String.class, MenuItem.class );
 
     public static MenuItem findMenuItemById( String id ){

@@ -55,7 +55,7 @@ function MenuAsIcon( m ){
     var menuPhoto =  m.menuPhoto != null ? m.menuPhoto.url : "";
 
     this.menuWrapperOpener = '<div class="row-fluid menu">';
-    this.menuHeader = ' <div class="row-fluid"><div class="span12"><a href="'+location.href+ "/" +  m.id +'"><h1> '+ name +' <span class="sub-title">By '+ m.owner.fullName +'</span></h1></a> </div></div>';
+    this.menuHeader = ' <div class="row-fluid"><div class="span12"><a href="'+location.href+ "/menu/" +  m.id +'"><h1> '+ name +' <span class="sub-title">By '+ m.owner.fullName +'</span></h1></a> </div></div>';
    // this.menuItems = '<div class="row-fluid"> '+ returnMenuItemsHtml( menuItems ) + '</div>';
     this.body = '<div><img src="'+ menuPhoto +'" alt=""></div>';
     this.menuwrapperCloser = "</div>";
@@ -104,6 +104,17 @@ function returnMenuItemsHtml( menuItems){
     });
     return items;
 }
+
+function returnMenuItemsEditHtml( menuItems){
+    var items = "";
+    $.each( menuItems , function ( i, element){
+        console.log( element );
+        var item = new MenuItemEdit( element ).render();
+       // alert( item );
+        items += item ;
+    });
+    return items;
+}
 function returnOrderItemsHtml( orderItems){
     var items = "";
     $.each( orderItems , function ( i, element){
@@ -119,16 +130,31 @@ function returnOrderItemsHtml( orderItems){
 
 function MenuItem ( menuItem ){
     console.log( menuItem) ;
+    var menuItemPhoto = menuItem.menuItemPhoto.url;
+    this.menuItemwrapperOpener = '<div class="span6 menu-item-container">';
+    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="'+ menuItemPhoto +'"><div class="btn add-to-cart-btn" data-id="'+menuItem.id+'"> Add to cart</div></div>';
+    this.menuItemTitle = '<div class="item-title"><p>  '+ menuItem.name + " $" + menuItem.price +'</p></div>';
+    this.menuItemDescription = '<div class="item-description"><p>' + menuItem.description + '</p></div>';
+    this.menuItemWrapperCloser = "</div>";
+    this.screenHtml = this.menuItemwrapperOpener + this.menuItemImageContainer + this.menuItemTitle + this.menuItemDescription  + this.menuItemWrapperCloser;
+}
+
+function MenuItemEdit ( menuItem ){
+    console.log( menuItem) ;
+    var menuItemPhoto = menuItem.menuItemPhoto.url;
     this.menuItemwrapperOpener = '<div class="span6">';
-    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="images/item_824.jpg"><div class="btn add-to-cart-btn" data-id="'+menuItem.id+'"> Add to cart</div></div>';
-    this.menuItemTitle = '<div class="item-title"><p> JAPANESE SOBA NOODLE SALAD $8</p></div>';
-    this.menuItemDescription = '<div class="item-description"><p>100% organic: baby spinach, baby kale, banana, kiwi, apple,' +
-    'coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)</p></div>';
+    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="'+ menuItemPhoto +'"></div>';
+    this.menuItemTitle = '<div class="item-title"><p> '+ menuItem.name + " $" + menuItem.price +'</p></div>';
+    this.menuItemDescription = '<div class="item-description"><p>' + menuItem.description + '</p></div>';
     this.menuItemWrapperCloser = "</div>";
     this.screenHtml = this.menuItemwrapperOpener + this.menuItemImageContainer + this.menuItemTitle + this.menuItemDescription  + this.menuItemWrapperCloser;
 }
 
 MenuItem.prototype.render = function(){
+    return  this.screenHtml;
+};
+
+MenuItemEdit.prototype.render = function(){
     return  this.screenHtml;
 };
 function OrderItem ( orderItem ){
@@ -456,7 +482,7 @@ function SignUpPersonForm( firstName, lastName, email, personCategories  ){
      this.renderHtml = function(){ return this.htmlForm().append(this.footer)};
 }
 
-function CreateMenuForm( firstName, lastName, email, personCategories  ){
+function CreateMenuForm(  ){
     // console.log( personCategories ) ;
     this.formFields = { name: { label: "Menu Title", value : "", tag : "input", type: "text", name : "menuTitle","data-req": 1 },
         description : { label: "Menu Description", value : "", tag : "input", type: "text", name: "menuDescription","data-req": 1 },
@@ -481,19 +507,78 @@ function CreateMenuForm( firstName, lastName, email, personCategories  ){
             }
             else if ( item.type == "select" ){
                 var $input = $("<select class='finputText signup-select' data-req='"+ req +"' name='" + item.name + "'><option></option></select>");
-                if ( personCategories ){
-                    $.each( personCategories, function( i, cat ){
-                        // console.log( ut );
-                        var $e = $('<option>');
-                        $e.attr({ 'value' : cat.name , 'data-ref' : cat.reference});
-                        $e.text( ucFirstAllWords(cat.label) );
+//                if ( personCategories ){
+//                    $.each( personCategories, function( i, cat ){
+//                        // console.log( ut );
+//                        var $e = $('<option>');
+//                        $e.attr({ 'value' : cat.name , 'data-ref' : cat.reference});
+//                        $e.text( ucFirstAllWords(cat.label) );
+//
+//                        $input.append( $e );
+//                    });
+//
+//                }
 
-                        $input.append( $e );
-                    });
-
-                }
 
 
+            }
+            if (  item.header ){
+                console.log( item.header );
+                console.log( $input.parent() );
+                $input.removeClass("finputText");
+                $frow.append("<div><h4>"+ item.header +"</h4></div>");
+            }
+            $frow.append( $label, $input, $span );
+            $container.append( $frow );
+        });
+        return $container;
+    }
+    this.footer = $('<div class="frow"><input class="btn signup-btn span12" type="submit" value="Create" id="create-menu-btn"></div>');
+    this.renderHtml = function(){ return this.htmlForm().append(this.footer)};
+}
+
+function CreateMenuItemForm( menu ){
+    // console.log( personCategories ) ;
+    this.formFields = { name: { label: "Menu Title", value : "", tag : "input", type: "text", name : "menuItemTitle","data-req": 1 },
+        price : { label: "Item Price", value : "", tag : "input", type: "text", name: "menuItemPrice","data-req": 1 },
+        description : { label: "Menu Description", value : "", tag : "textarea", type: "textarea", name: "menuItemDescription","data-req": 1 },
+        menu : { label: "Menu Description", value : menu.id , tag : "input", type: "hidden", name: "menuId","data-req": 1 },
+        category : { label: "Category", value : "", tag : "select", type: "select",  name : "menuItemCategory","data-req": 1 },
+        menuPhoto : { label: "", value : "", tag : "input", type: "file", name: "menuItemImage","data-req": 1, header: "Menu Item Photo"}
+    };
+    this.htmlForm = function(){
+        var $container = $("<form method='post' action='/addItemToMenu' enctype='multipart/form-data' class='dynamic-create-form' id='create-menu-form'></div>");
+        $.each( this.formFields , function( i, item){
+            var $frow = $("<div class='frow'></div>");
+            var $label = $("<div class='flabel'></div>").text( item.label );
+            var $span = $("<span class='red'></span>");
+            var req = item["data-req"];
+            if ( item.value ){ $label.css("display","none")};
+            //  var $input = $("<input class='finputText' type='text' name='" + i + "'></input>");
+            if ( item.tag == "input" && item.type != "radio" ){
+                var $input = $("<input class='finputText' data-req='"+ req +"'  value='"+ item.value +"' type='" + item.type + "' name='" + item.name + "'></input>");
+            }
+            else if (  item.type == "radio" ){
+                var $input = $("<label class='radio inline'><input value='"+ item.label +"' class='finputText' data-req='"+ req +"' type='" + item.type + "' name='" + item.name + "'></input> "+item.label+"</label>");
+                $label = "";
+            }
+            else if ( item.type == "select" ){
+                var $input = $("<select class='finputText signup-select' data-req='"+ req +"' name='" + item.name + "'><option></option></select>");
+//                if ( personCategories ){
+//                    $.each( personCategories, function( i, cat ){
+//                        // console.log( ut );
+//                        var $e = $('<option>');
+//                        $e.attr({ 'value' : cat.name , 'data-ref' : cat.reference});
+//                        $e.text( ucFirstAllWords(cat.label) );
+//
+//                        $input.append( $e );
+//                    });
+//
+//                }
+
+            }
+            else if ( item.type == "textarea"  ){
+                var $input = $("<textarea class='finputText data-req='"+ req +"' name='" + item.name + "'></textarea>");
 
             }
             if (  item.header ){

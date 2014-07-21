@@ -1,0 +1,65 @@
+@(menu: String )
+@headerIn()
+
+
+<script>
+    $(document).ready(function () {
+        var menu = @Html(menu);
+        var menuItems = menu.menuItems;
+        var $menuItemsContainer = $('#menu-items-container');
+
+        if ( menuItems.length > 0){
+                $menuItemsContainer.append( returnMenuItemsEditHtml( menuItems ) );
+        }
+
+        $( document).on( 'click', '#add-menu-item', function(){
+            $('#create-menu-form').remove();
+            var $this = $(this);
+            $this.after( new CreateMenuItemForm( menu ).renderHtml( ) );
+        });
+    });
+</script>
+
+                <div class="container-fluid" id="content-container">
+                    <div class="row-fluid">
+                        @sidemenu.sidemenu()
+                        <div class="span12">
+                            <div class="container-fluid" id="personalInfoContainer">
+                                <div class="span4">
+                                    <div class="artista-img" id="profileImageContainer">
+                                        <img id="pImage" src=""/>
+                                    </div>
+                                </div>
+                                <div class="span8">
+                                    <div id="profilePersonalInfo">
+                                        <div><h2 class="h"> Elhassan Rais</h2></div>
+                                        <div><h4 class="h"> Professional Acrobat</h4></div>
+                                        <div><h5 class="h"> Berkeley, CA</h5></div>
+                                        <div><p><strong> Profession:</strong> Human pyramids, Moroccan Tumbling, Chinese pole and Hnd
+                                            balancing </p></div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="stepsHr">
+
+
+
+
+
+<div class="row-fluid" id="menu-items-container" style="width: 1000px; margin: auto">
+    <div id="add-menu-item" class="btn"> Add an item</div>
+    <h1>My Menus Items</h1>
+</div>
+
+
+
+
+</body>
+</html>

@@ -9,6 +9,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,5 +63,52 @@ public class Menus extends Controller {
         }
 
         return redirect( routes.Menus.index() );
+    }
+
+
+    public static Result getMenuItems( String menuId ){
+           List<MenuItem> menuItems = MenuItem.findMenuItemsByMenu( menuId );
+           Menu menu = Menu.findMenuById( menuId );
+           System.out.print( "Menu Items for the menu" + menuId + "   ----> "  + menuItems );
+           String menusItemsAsJson = Json.toJson( menuItems ).toString();
+          String menuAsJson = Json.toJson( menu ).toString();
+
+        return ok( views.html.menus.menuItems.render( menuAsJson) ) ;
+    }
+
+
+    public static Result addMenuItemToMenu() throws IOException {
+        System.out.println( "\n URI: " + request().uri());
+        System.out.println( "\n Path: " + request().path());
+        SystemUser u = SystemUser.findUserById(session("currentUserId"));
+        String fileName = "";
+        Http.MultipartFormData b = request().body().asMultipartFormData();
+        DynamicForm requestData = form().bindFromRequest();
+        String menuId = requestData.get("menuId");
+        Menu menu = Menu.findMenuById(menuId);
+        String menuItemTitle= requestData.get("menuItemTitle");
+        Double menuItemPrice = Double.valueOf(requestData.get("menuItemPrice"));
+        String menuItemDescription = requestData.get("menuItemDescription");
+        Http.MultipartFormData.FilePart picture = b.getFile("menuItemImage");
+        MenuItem menuItem = new MenuItem( menuItemTitle, menu,  menuItemPrice, menuItemDescription );
+
+        if ( session("sessionUser") != null ){
+
+            if (picture != null) {
+                S3File s3File = new S3File();
+                s3File.name = picture.getFilename();
+                s3File.file = picture.getFile();
+                s3File.save();
+                // MyPhoto myphoto = new MyPhoto(imageUrl, fileName, u);
+                Photo photo = new Photo(u, menuItemTitle , s3File.getUrl().toString(), null);
+                photo.save();
+                menuItem.setMenuItemPhoto( photo );
+                menuItem.save();
+            }
+
+        }
+
+        return redirect( "/menus/menu/" + menuId );
+
     }
 }

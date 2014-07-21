@@ -102,24 +102,5 @@ public class AddMenuItem extends Controller {
     }
 
 
-    public static Result addMenuItemToMenu() throws IOException {
 
-        SystemUser u = SystemUser.findUserById(session("currentUserId"));
-        String fileName = "";
-        Http.MultipartFormData b = request().body().asMultipartFormData();
-        DynamicForm requestData = form().bindFromRequest();
-        String photoTitle= requestData.get("photo-title");
-        FilePart picture = b.getFile("myphotos-upload");
-        if (picture != null) {
-            S3File s3File = new S3File();
-            s3File.name = picture.getFilename();
-            s3File.file = picture.getFile();
-            s3File.save();
-            // MyPhoto myphoto = new MyPhoto(imageUrl, fileName, u);
-            Photo photo = new Photo(u, photoTitle , s3File.getUrl().toString(), null);
-            photo.save();
-        }
-        return redirect( routes.Application.myPhotos() );
-
-    }
 }

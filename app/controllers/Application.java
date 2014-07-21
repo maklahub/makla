@@ -97,6 +97,7 @@ public class Application extends Controller {
 
            Menu m = new Menu( "Moroccan Cuisine ", su);
            MenuItem mi = new MenuItem( "Tomato a la mode", m, 9.99);
+           mi.setDescription("00% organic: baby spinach, baby kale, banana, kiwi, apple,coconut palm sugar, japanese matcha green tea. by livblends (~90 cal per serving)");
            Photo ph1 = new Photo( su, "Tomato", "http://localhost:9000/images/item_824.jpg", null );
            mi.setMenuItemPhoto( ph1 );
            MenuItem mi2 = new MenuItem( "Couscouss a la mode", m, 9.99);

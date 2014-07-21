@@ -45,6 +45,9 @@ public class Menu extends Model {
 
     private static Finder< String, Menu > find = new Finder<String, Menu>( String.class, Menu.class );
 
+    public static Menu findMenuById( String id){
+        return  Ebean.find( Menu.class).where().like( "id", id).findUnique();
+    }
     public static List<Menu> findMenuByOrganization( String ownerId ){
         List<Menu> menus = Ebean.find(Menu.class).where().eq("owner.id", ownerId).findList();
         System.out.println("Menus: ---> " + menus);

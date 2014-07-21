@@ -996,10 +996,12 @@ div.d {
     color: white;
 }
 
-.bg{
+.bg {
     background-color: rgba(69, 177, 255, 0.42);
     border: solid thin rgba(134, 134, 134, 0.89);
-    min-height: 400px;
+    max-height: 300px;
+    min-height: 300px;
+    overflow: hidden;
 }
 .menu{
     border: solid thin rgba(171, 171, 171, 0.54);
@@ -1151,6 +1153,10 @@ div.d {
     padding: 0;
     position: relative;
     top: -12px;
+}
+
+.menu-item-container{
+    height: 435px;
 }
 
 
