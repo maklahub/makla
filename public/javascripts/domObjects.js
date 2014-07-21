@@ -34,7 +34,7 @@ function Menu( m ){
     var menuItems = m.menuItems;
 
     this.menuWrapperOpener = '<div class="row-fluid menu">';
-    this.menuHeader = ' <div class="row-fluid"><div class="span8"><h1> '+ name +' <span class="sub-title">By '+ m.owner.fullName +'</span></h1></div></div>';
+    this.menuHeader = ' <div class="row-fluid"><div class="span12"><h1 class="menu-title"> '+ name +'<a href="'+ location.href + "profile/" + m.owner.userName + '"> <span class="sub-title">By '+ m.owner.fullName +'</span></a></h1></div></div>';
     this.menuItems = '<div class="row-fluid"> '+ returnMenuItemsHtml( menuItems ) + '</div>';
 
     this.menuwrapperCloser = "</div>";
