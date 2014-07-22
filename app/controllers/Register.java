@@ -133,7 +133,12 @@ public class Register extends Controller {
             session("currentUserId" , u.getId());
             sendHtmlasEmail( u, photoUrl, accountEmail );
 
-            return redirect(routes.Application.home());
+            if ( u.isItAPerson()){
+                return redirect( controllers.routes.Application.index() );
+            }
+            else {
+                return redirect( controllers.routes.Application.home() );
+            }
         } else {
             System.out.print("Missing file");
             flash("error", "Missing file");

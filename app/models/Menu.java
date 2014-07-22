@@ -43,6 +43,13 @@ public class Menu extends Model {
       setCreateTime( new Date() );
     }
 
+    public Menu( String name, String description, SystemUser user ){
+      setName( name );
+        setDescription( description );
+      setOwner( user );
+      setCreateTime( new Date() );
+    }
+
     private static Finder< String, Menu > find = new Finder<String, Menu>( String.class, Menu.class );
 
     public static Menu findMenuById( String id){

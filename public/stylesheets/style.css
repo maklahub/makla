@@ -1,12 +1,14 @@
 
-.grayscale{
-    filter: url("data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'><filter%20id='grayscale'><feColorMatrix%20type='matrix'%20values='0.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200%200%200%201%200'/></filter></svg>#grayscale"); /* Firefox 3.5+ */
-    filter: gray; /* IE6+ */
-    filter: grayscale(100%); /* Current draft standard */
-    -webkit-filter: grayscale(100%); /* New WebKit */
+.grayscale{/*
+    filter: url("data:image/svg+xml;utf8,<svg%20xmlns='http://www.w3.org/2000/svg'><filter%20id='grayscale'><feColorMatrix%20type='matrix'%20values='0.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200.3333%200.3333%200.3333%200%200%200%200%200%201%200'/></filter></svg>#grayscale");
+    filter: gray;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
     -moz-filter: grayscale(100%);
     -ms-filter: grayscale(100%);
     -o-filter: grayscale(100%);
+     */
+
 }
 body{
     margin: 0px;
@@ -18,8 +20,29 @@ body{
 
     /*background-image: url("../images/noise-2.png"); */
 }
+form{
+    margin: 0 !important;
+}
 .red{
     color: #f2005f;
+}
+.menu-add-bar{
+    background: rgb(248, 248, 248);
+    padding: 10px;
+    border-radius: 5px 5px 0px 0px;
+    margin-bottom: -24px;
+    z-index: 99;
+    position: relative;
+    border: solid thin #e1e1e1;
+    background-image: url("../images/noise-2.png");
+}
+th{
+    font-size: 20px;
+    font-weight: 500 !important;
+}
+.order-amount{
+    font-size: 24px;
+    padding: 10px;
 }
 #artistas-container{
 
@@ -129,10 +152,14 @@ h1{
    /* border: solid 1px #ccc;    */
     font-weight: 500;
     font-size: 16pt !important;
-    padding-left: 5px;
+    padding: 0px !important;
+    text-indent: 5px;
     border: solid thin #807F7F !important;
     box-shadow: 0px 0px 1px #5E5959 !important;
 
+}
+#form-menu-container{
+    margin-top: 10px;
 }
 .flabel {
     position: absolute;
@@ -154,6 +181,7 @@ h4 {
 }
 
 .signup-btn{
+    width: 100% !important;
     color: #333;
     height: 42px !important;
     font-size: 14pt;
@@ -468,6 +496,7 @@ input[type="text"],input[type="password"], select{
     margin-bottom: 0px;
 
 }
+
 .row{
     margin-left: 0px;
 }
@@ -475,18 +504,18 @@ input[type="text"],input[type="password"], select{
     background-color: #222;
     min-height: 600px;
 }
-#profilePersonalInfo{
+#profilePersonalInfo, #menuInfo{
     position: relative;
     color: white;
     text-shadow: 1px 1px 1px #333;
 }
-#profilePersonalInfo > div{
+#profilePersonalInfo > div , #menuInfo > div{
     padding-left: 5px;
 }
-#profilePersonalInfo div p > strong{
+#profilePersonalInfo div p > strong , #menuInfo div p > strong{
     color: #0A0A0A;
 }
-#profilePersonalInfo div > .h{
+#profilePersonalInfo div > .h, #menuInfo div > .h{
     margin: 1px;
 }
 #profileImageContainer{
@@ -603,8 +632,16 @@ input[type="text"],input[type="password"], select{
     background: white;
 
 }
+#order-items-container{
+    max-width: 900px;
+    margin: auto;
+    border: solid rgb(216, 216, 216) 1px;
+    background: white;
+    padding: 9px;
+    border-radius: 5px;
+}
 
-.artista-img img, .artista-video img {
+.artista-img img, .artista-video img, .menu-item img {
     width: 100%;
     height: auto;
     position: absolute;
@@ -814,13 +851,13 @@ div#comments-Container .comment-row:first-child {
     margin: auto;
 }
 #search-artistas {
-    padding: 4px 0px;
     text-indent: 5px;
     font-size: 13pt;
     background-color: rgb(255, 255, 255);
     border: rgb(238, 182, 39) solid 1px;
     border-radius: 0px 0px 3px 3px;
     border-radius: 5px;
+    height: 36px !important;
 }
 #search-result{
     width: 100%;
@@ -885,8 +922,7 @@ div#comments-Container .comment-row:first-child {
     box-shadow: 0px -3px 21px #333;
 }
 .inner-header{
-    min-height: 50px;
-    padding: 3px 0px;
+    padding: 5px 0px;
     background-color: #fd9512;
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top,#fedc4d 0,#fd9512 100%);
@@ -914,7 +950,7 @@ div#comments-Container .comment-row:first-child {
     font-size: 13pt;
     padding-bottom: -21px;
     height: 49px;
-    width: 103%;
+    width: 100%;
 }
 
 .img-title{
@@ -1078,11 +1114,16 @@ div.d {
 .row-fluid .span6:nth-child(1n+1) {
     margin-left: 10px;
 }
+#cart-container{
+    padding: 0px 19px 17px 19px;
+    background: rgba(235, 235, 235, 0.35);
+    text-align: left;
+}
 
 #cart{
     position: fixed;
     top: 180px;
-    background: rgb(240, 237, 243);
+    background: rgb(252, 249, 255);
     right: 10px;
     z-index: 99;
     min-height: 100px;

@@ -5,8 +5,12 @@
 <script>
     $(document).ready(function () {
         var menu = @Html(menu);
+        var menuPhotoUrl= menu.menuPhoto != null ?  menu.menuPhoto.url : "";
         var menuItems = menu.menuItems;
         var $menuItemsContainer = $('#menu-items-container');
+
+        $("#pImage").attr({'src':encodeURI( menuPhotoUrl ), 'data-id': menu.id, title: menu.name});
+        $("#menuInfo").html(new MenuInfo( menu ).html );
 
         if ( menuItems.length > 0){
                 $menuItemsContainer.append( returnMenuItemsEditHtml( menuItems ) );
@@ -31,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="span8">
-                                    <div id="profilePersonalInfo">
+                                    <div id="menuInfo">
                                         <div><h2 class="h"> Elhassan Rais</h2></div>
                                         <div><h4 class="h"> Professional Acrobat</h4></div>
                                         <div><h5 class="h"> Berkeley, CA</h5></div>

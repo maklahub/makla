@@ -20,7 +20,7 @@
             var cartItems = cart.cartItems;
             var $container = $(' #artistas-container ');
             var $cartContainer = $(' #cart');
-                $container.css( 'visibility', 'hidden');
+               $container.css( 'visibility', 'hidden');
 
             $.each( menus , function ( i, element){
                 //alert( element );
@@ -30,20 +30,14 @@
             });
 
 
-            $cartContainer.append( new Cart( cart ).render());
+            $cartContainer.append( $(new Cart( cart ).render()).fadeIn() );
 
 
 
 
             $container.imagesLoaded( function() {
                 $container.css('visibility', 'visible');
-                $('.grayscale').hover(
-                        function() {
-                            $( this ).removeClass( 'grayscale' );
-                        }, function() {
-                            $( this ).addClass( 'grayscale');
-                        }
-                );
+
                 $('.add-to-cart-btn').on('click', function(){
                     var $this = $( this );
                     var $parent = $this.parent();
@@ -95,8 +89,9 @@
    <h1>Welcome</h1>
 
 
-    <div id="artistas-container" class="container"></div>
+    <div id="artistas-container" class="container">
 
+    </div>
 </div>
 
 

@@ -42,10 +42,11 @@ public class Menus extends Controller {
         Http.MultipartFormData b = request().body().asMultipartFormData();
         DynamicForm requestData = form().bindFromRequest();
         String menuTitle= requestData.get("menuTitle");
+        String menuDescription = requestData.get("menuDescription");
         Http.MultipartFormData.FilePart picture = b.getFile("menuImage");
         if ( session("sessionUser") != null ){
 
-            Menu menu = new Menu( menuTitle, u );
+            Menu menu = new Menu( menuTitle, menuDescription,  u );
 
             if (picture != null) {
                 S3File s3File = new S3File();

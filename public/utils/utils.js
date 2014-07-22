@@ -29,6 +29,7 @@ $(function () {
         $(this).hide().siblings().focus();
     });
 
+    /*
     $body.on('click', '.finputText', function () {
         $finputText = $('.finputText');
         $.each($finputText, function (i, element) {
@@ -37,6 +38,8 @@ $(function () {
         });
         $(this).focus().siblings().hide();
     });
+
+    */
 
     $body.on('focus', '.finputText, #comment-text-area', function () {
         $(this).siblings().hide();
