@@ -47,7 +47,8 @@ public class SaveCreditCard extends Controller {
         sdkConfig.put("mode", "sandbox");
 
         // Get access Token
-        OAuthTokenCredential response = new OAuthTokenCredential("AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd", "EL1tVxAjhT7cJimnz5-Nsx9k2reTKSVfErNQF-CmrwJgxRtylkGTKlU4RvrX", sdkConfig);
+       // OAuthTokenCredential response = new OAuthTokenCredential("AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd", "EL1tVxAjhT7cJimnz5-Nsx9k2reTKSVfErNQF-CmrwJgxRtylkGTKlU4RvrX", sdkConfig);
+        OAuthTokenCredential response = new OAuthTokenCredential("AUFjWxDEBZ1HqK-eV6_f5sGFT7TbmuFTg3xHucqDiqTVMt-JBPXJIRxWf8G-", "EFjBgBBQbl2f2gZZSYBc_eQqJo0syHNZMan_tMdZsunpp4qDsnCB264g_tXM", sdkConfig);
         System.out.println( "Access token: " + Json.toJson( response ));
         String accessToken = response.getAccessToken();
 
@@ -116,7 +117,7 @@ public class SaveCreditCard extends Controller {
         sdkConfig.put("mode", "sandbox");
 
         // Get access Token
-        OAuthTokenCredential response = new OAuthTokenCredential("AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd", "EL1tVxAjhT7cJimnz5-Nsx9k2reTKSVfErNQF-CmrwJgxRtylkGTKlU4RvrX", sdkConfig);
+        OAuthTokenCredential response = new OAuthTokenCredential("AUFjWxDEBZ1HqK-eV6_f5sGFT7TbmuFTg3xHucqDiqTVMt-JBPXJIRxWf8G-", "EFjBgBBQbl2f2gZZSYBc_eQqJo0syHNZMan_tMdZsunpp4qDsnCB264g_tXM", sdkConfig);
         System.out.println( "Access token: " + Json.toJson(response));
         String accessToken = response.getAccessToken();
 

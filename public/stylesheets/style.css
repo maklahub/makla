@@ -97,6 +97,7 @@ h1{
 #c{
     position: relative;
     border-radius: 4px;
+    margin-top: 40px;
 }
 .form-background{
     background-color: rgb(182, 175, 175) !important;
@@ -110,12 +111,25 @@ h1{
     left: 0;
     min-width: 50%;
 }
+
+.or-signup-container {
+    text-align: center;
+    line-height: 59px;
+}
+
+.or-signup-btn {
+    width: 100% !important;
+    /* height: 32px; */
+    font-size: 18pt;
+    padding: 12px 0px;
+    color: #333;
+    text-shadow: 0px 1px 0px rgb(136, 220, 236);
+    font-weight: 400 !important;
+}
+
 .f2{
     /*box-shadow: -1px 3px 20px #222;
     background-color: rgb(231, 221, 221);   */
-    position: absolute;
-    top: 60px;
-    right: 0px;
     left: 0px;
     margin: 0px auto;
     max-width: 400px;
@@ -762,9 +776,11 @@ div#comments-Container .comment-row:first-child {
     margin: auto;
 }
 #do-comment {
-    padding: 0px 5px;
+    adding: 10px 5px;
     margin-bottom: 5px;
-    height: 26px;
+    width: 100% !important;
+    font-size: 16pt;
+    text-shadow: 0px 1px 2px rgb(18, 18, 36);
 }
 .commenter-name{
     margin: -3px 0px;
@@ -975,7 +991,7 @@ div#comments-Container .comment-row:first-child {
 }
 
 .boundery-bottom-bar{
-    background-color: rgb(229, 229, 229);
+   /* background-color: rgb(229, 229, 229);*/
     padding: 5px 0px;
     bottom: 0;
     width: 100%;

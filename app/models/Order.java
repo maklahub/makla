@@ -141,24 +141,24 @@ public class Order extends Model {
     public double getTotalAmount() {
         this.totalAmount = 0;
         for ( OrderItem oi :  getOrderItems() ){
-            totalAmount += oi.getAmount();
+            totalAmount += Double.valueOf(new DecimalFormat("#0.00").format( oi.getAmount() ));
         }
-        totalAmount = Double.parseDouble(new DecimalFormat("#0.00").format( totalAmount ));
+        totalAmount = Double.valueOf(new DecimalFormat("#0.00").format( totalAmount ));
         this.save();
         return totalAmount;
     }
     public double updateTotalAmount() {
         this.totalAmount = 0;
         for ( OrderItem oi :  getOrderItems() ){
-            totalAmount += oi.getAmount();
+            totalAmount += Double.valueOf(new DecimalFormat("#0.00").format( oi.getAmount() ));
         }
-        totalAmount = Double.parseDouble(new DecimalFormat("#0.00").format( totalAmount ));
+        totalAmount = Double.valueOf(new DecimalFormat("#0.00").format( totalAmount ));
         this.save();
         return totalAmount;
     }
 
     public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
+        this.totalAmount = Double.valueOf(new DecimalFormat("#0.00").format( totalAmount ));
     }
 
     public List<OrderItem> getOrderItems() {

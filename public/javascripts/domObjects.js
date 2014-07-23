@@ -268,7 +268,13 @@ function ToolBar( o ){
     var thisContent = this.content;
     $.each ( o, function( i, e){
          //console.log( " e " + e.name );
-         thisContent +=  '<a href="'+ e.link +'" ><span id="'+ e.id +'" class= "'+ e.class +'"> ' + e.name + '</span></a>';
+        if ( e.link ){
+            thisContent +=  '<a href="'+ e.link +'" ><span id="'+ e.id +'" class= "'+ e.class +'"> ' + e.name + '</span></a>';
+        }
+        else {
+            thisContent +=  '<span id="'+ e.id +'" class= "'+ e.class +'"> ' + e.name + '</span>';
+
+        }
     });
     this.content = thisContent + "</div>";
     this.innerCLose = "</div>";
@@ -503,8 +509,10 @@ function CreateMenuForm(  ){
         category : { label: "Category", value : "", tag : "select", type: "select",  name : "menuCategory","data-req": 1 },
         menuPhoto : { label: "", value : "", tag : "input", type: "file", name: "menuImage","data-req": 1, header: "Menu Photo"}
     };
+    var $btnCreate = $('<div class="frow"><input class="btn signup-btn span12" type="submit" value="Create" id="create-menu-btn"></div>');
     this.htmlForm = function(){
-        var $container = $("<div id='form-menu-container'><form method='post' action='/addMenu' enctype='multipart/form-data' class='dynamic-create-form' id='create-menu-form'></div>");
+        var $container = $("<div id='form-menu-container'>");
+        var $form = $("<form method='post' action='/addMenu' enctype='multipart/form-data' class='dynamic-create-form' id='create-menu-form'></form>");
         $.each( this.formFields , function( i, item){
             var $frow = $("<div class='frow'></div>");
             var $label = $("<div class='flabel'></div>").text( item.label );
@@ -536,12 +544,15 @@ function CreateMenuForm(  ){
                 $frow.append("<div><h4>"+ item.header +"</h4></div>");
             }
             $frow.append( $label, $input, $span );
-            $container.append( $frow );
+            $form.append( $frow );
         });
+        $form.append( $btnCreate );
+
+        $container.append( $form );
+
         return $container;
     }
-    this.footer = $('<div class="frow"><input class="btn signup-btn span12" type="submit" value="Create" id="create-menu-btn"></div></div>');
-    this.renderHtml = function(){ return this.htmlForm().append(this.footer)};
+    this.renderHtml = function(){ return this.htmlForm()};
 }
 
 function CreateMenuItemForm( menu ){

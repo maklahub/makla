@@ -13,6 +13,7 @@ import play.mvc.Result;
 
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +67,7 @@ public class Checkout extends Controller {
         sdkConfig.put("mode", "sandbox");
 
         // Get access Token
-        OAuthTokenCredential response = new OAuthTokenCredential("AQkquBDf1zctJOWGKWUEtKXm6qVhueUEMvXO_-MCI4DQQ4-LWvkDLIN2fGsd", "EL1tVxAjhT7cJimnz5-Nsx9k2reTKSVfErNQF-CmrwJgxRtylkGTKlU4RvrX", sdkConfig);
+        OAuthTokenCredential response = new OAuthTokenCredential("AUFjWxDEBZ1HqK-eV6_f5sGFT7TbmuFTg3xHucqDiqTVMt-JBPXJIRxWf8G-", "EFjBgBBQbl2f2gZZSYBc_eQqJo0syHNZMan_tMdZsunpp4qDsnCB264g_tXM", sdkConfig);
         System.out.println( "Access token: " + Json.toJson( response ));
         String accessToken = response.getAccessToken();
 
@@ -99,7 +100,7 @@ public class Checkout extends Controller {
 
                     Amount amount = new Amount();
                     amount.setCurrency("USD");
-                    amount.setTotal( Double.toString( order.getTotalAmount() ));
+                    amount.setTotal( ( new DecimalFormat("#0.00").format( order.getTotalAmount() ) ));
 
                     Transaction transaction = new Transaction();
                     transaction.setDescription("New Order: " + orderId + " creating a payment with saved credit card ");

@@ -93,7 +93,8 @@
 
         });
 
-        $('body').on('click', '#do-comment', function () {
+        $( document ).on('click', '#do-comment', function () {
+
             var $commentTextArea = $('#comment-text-area') ;
             var $commentContainer = $('#comments-Container');
             var comment = stripTagsFromHtml($commentTextArea.val());
@@ -102,6 +103,9 @@
             var dataType = $(this).attr('data-type');
             var o = {dataType:dataType, dataId:dataId, comment:comment};
             if (comment) {
+
+              //  alert( ' do comment ' );
+
                 ajaxAppendHtml('/addComment', $commentContainer, o, CommentObject);
             }
         });

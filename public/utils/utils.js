@@ -207,6 +207,7 @@ function displayPhotoMediaFrame( $this, loggedIn ){
     var $bounderTopBar = $("<div class='container-fluid boundery-top-bar ' > <h3 class='img-title'>"+ imgTitle +"</h3></div>");
     var $bounderBottomBar = $("<div class='container-fluid boundery-bottom-bar' >");
     var $imgPreview = $("<div id='media-preview'>");
+    var $signInBtn = $('<div>');
     $imgWrapper.append( $bounderTopBar, $imgPreview );
     $imgWrapper.css({ 'max-width': '600px','z-index' : 5, height: 'auto', display: 'block'});
     //$imgPreview.html("");
@@ -237,7 +238,6 @@ function displayPhotoMediaFrame( $this, loggedIn ){
     if ( loggedIn ) {
         $imgPreview.append(forms.submitMyphotoComment(dataId, dataType));
     } else {
-        var $signInBtn = $('<div>');
         $signInBtn.attr({'class':'btn btn-primary' , id: 'comment-signing-btn'});
         $signInBtn.css({'position':'absolute', 'left':0, 'right':0 });
         $signInBtn.text(" Please sign in to leave a comment");
