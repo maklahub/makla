@@ -630,6 +630,10 @@ input[type="text"],input[type="password"], select{
     padding: 5px;
     overflow: hidden;
 }
+.padding10px{
+    padding: 10px 5px;
+    overflow: hidden;
+}
 .home-sideMenu{
     position: fixed;
 }
@@ -1088,6 +1092,33 @@ div.d {
     font-size: 12pt;
     text-shadow: 0px 1px 1px rgb(177, 175, 175);
 }
+
+.cart-title{
+    color: #0A0A0A;
+    margin: 0;
+    padding: 0px 10px;
+    font-size: 12pt;
+    text-shadow: 0px 1px 1px rgb(177, 175, 175);
+    background: rgb(235, 235, 235);
+    border-bottom: solid #C5C4C4 thin;
+    font-weight: 400 !important;
+    border-radius: 5px 5px 0px 0px;
+}
+.cart-item-li{
+    padding: 0px;
+    background: rgb(231, 226, 221);
+    border-bottom: solid thin #c4c4c4;
+    border-top: solid thin white;
+}
+.cart-item-desc{
+    padding-left: 3px;
+}
+
+.cart-total-amount {
+    background: white;
+    text-align: center;
+    padding-bottom: 11px;
+}
 .item-description{
     color: #555;
     border-top: thin solid #e1e1e1;
@@ -1131,7 +1162,7 @@ div.d {
     margin-left: 10px;
 }
 #cart-container{
-    padding: 0px 19px 17px 19px;
+    padding: 0px;
     background: rgba(235, 235, 235, 0.35);
     text-align: left;
 }
@@ -1139,7 +1170,7 @@ div.d {
 #cart{
     position: fixed;
     top: 180px;
-    background: rgb(252, 249, 255);
+    background: #A7A7A7;
     right: 10px;
     z-index: 99;
     min-height: 100px;
@@ -1149,6 +1180,20 @@ div.d {
 .remove-cart-item{
     color: #54abff;
     cursor: pointer;
+    background-image: url("../images/icons/close_button.png");
+    display: inline-block;
+    background-repeat: no-repeat;
+    text-indent: -999px;
+    width: 16px;
+    background-position: 50%;
+    background-color: rgb(255, 236, 239);
+    background-size: 160%;
+}
+.order-orderItem-icon{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: solid thin #e1e1e1;
 }
 
 .remove-cart-item:hover{
@@ -1163,7 +1208,27 @@ div.d {
     left: 0;
     right: 0;
     text-align: center;
-    background-color: #000000;
+    background-color: #E5A51C;
+    text-shadow: 0px 1px 2px #333;
+}
+
+.cart-item-img-desc{
+    float: left;
+    padding-right: 10px;
+    max-width: 235px;
+}
+.cart-item-img{
+    width: 35px;
+    border-radius: 50%;
+    height: 35px;
+    border: solid thin #e1e1e1;
+}
+
+.cart-item-price{
+    float: right;
+    font-weight: 500 !important;
+    line-height: 30px;
+    color: #F58813;
 }
 .checkout-btn{
     width: 100%;

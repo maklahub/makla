@@ -76,7 +76,7 @@ function Order( o ){
     this.orderWrapperOpener = '<table class="table table-bordered"> <span class="badge badge-important">Order #: ' + o.reference + " -- "+ o.status + '</span>';
     this.orderHeader = ' <div class="row-fluid"><div class="span8"><h1>Order <span class="sub-title">By '+ o.owner.fullName +'</span></h1></div></div>';
     this.orderItems = ' <thead><tr> <th>Item</th><th>Price</th><th>Quantity</th><th> Cost Amount </th></tr></thead>'+ returnOrderItemsHtml( orderItems ) ;
-    this.footer = '<tr><td></td><td></td><td>Total Amount: </td><td><span class="badge badge-important order-amount">  $ '+ o.totalAmount +'</span></td></tr>';
+    this.footer = '<tr><td></td><td></td><td>Total Amount: </td><td><span class="badge badge-important order-amount">  $'+ o.totalAmount +'</span></td></tr>';
     this.subfooter = '<tr><td></td><td></td><td></td><td><div><form method="post" action="/pay"> <input type="hidden" name="orderId" value="'+ o.id+'">' +
         '<input type="submit" data-id = "'+ o.id +'"class="btn signup-btn " value="Pay"></input>' +
         '</form></div></td></tr>';
@@ -160,7 +160,7 @@ MenuItemEdit.prototype.render = function(){
 function OrderItem ( orderItem ){
     console.log( orderItem) ;
     this.orderItemwrapperOpener = '<tr>';
-    this.orderItemTitle = '<td><div><img src="'+ orderItem.orderItemPhoto.url +'" width="40px"> <span> '+ orderItem.name +'</span></div></td>';
+    this.orderItemTitle = '<td><div><img class="order-orderItem-icon" src="'+ orderItem.orderItemPhoto.url +'" width="40px"> <span> '+ orderItem.name +'</span></div></td>';
     //this.orderItemDescription = '<td>'+ orderItem.description+'</td>';
     this.orderItemPrice = '<td>'+ orderItem.amount +'</td>';
     this.orderItemQuantity = '<td>'+ orderItem.quantity+'</td>';
@@ -441,7 +441,7 @@ function SignUpPersonForm( firstName, lastName, email, personCategories  ){
     this.formFields = { firstName: { label: "First Name", value : firstName || "", tag : "input", type: "text", name : "firstName","data-req": 1 },
                     lastName : { label: "Last Name", value : lastName || "", tag : "input", type: "text", name: "lastName","data-req": 1 },
                     email : { label: "Email", value : email || "", tag : "input", type: "text", name: "email","data-req": 1 },
-                   // userName : { label: "User Name", value : firstName && lastName ? firstName + "." + lastName : "", tag : "input", type: "text",  name : "userName","data-req": 1 },
+                    userName : { label: "User Name", value : firstName && lastName ? firstName + "." + lastName : "", tag : "input", type: "text",  name : "userName","data-req": 1 },
                   //  category : { label: "Category", value : "", tag : "select", type: "select",  name : "personCategory","data-req": 1 },
                     password: { label: "Password", value : "", tag : "input", type: "password", name: "password","data-req": 1 },
                    // creditCard: { label: "Credit Card Number", value : "", tag : "input", type: "text", name: "creditCardNumber","data-req": 1 },

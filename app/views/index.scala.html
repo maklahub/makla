@@ -73,7 +73,7 @@
                 apiCall(  uri, o , function( d ){
                     //$cartContainer.html( new Cart( d ).render().fadeIn() )
                       //alert( JSON.stringify(d) );
-                    $cartContainer.html( $(new Cart( d ).render()).fadeIn()  );
+                    $cartContainer.html( $(new Cart( d ).render()).fadeIn( "fast" )  );
 
                 });
             });
