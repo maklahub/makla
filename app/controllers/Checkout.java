@@ -80,8 +80,6 @@ public class Checkout extends Controller {
             orderId = requestData.get("orderId");
             Order order = Order.findOrderById( orderId );
 
-
-
                     // Make payment with the saved credit card
                     CreditCardToken creditCardToken = new CreditCardToken();
                     String creditCardId = u.getMainCreditCard().getPayPalCreditCardId();
@@ -119,18 +117,33 @@ public class Checkout extends Controller {
 
             if ( paymentStatus.equalsIgnoreCase( "approved" )){
                         System.out.println("\n\n\n order: ---->" + order );
+                Cart cart = Cart.findCartBySystemUser( u.getId() );
+                List<CartItem> cartItems = CartItem.findCartItemsByCart(  cart.getId() );
+                for( CartItem cartItem:  cartItems){
+                    cartItem.setCartItemPhoto( null );
+                    cartItem.setCart( null );
+                    cartItem.delete();
+
+                }
+                cart.save();
+
 
                         order.setStatus( Order.OrderStatus.paid );
                         order.update();
-                    }
-                    return ok("\n payment: " + createdPayment  );
-
-
-
-                    }
-                    else {
-                        return redirect("/");
-                    }
+                      //  return ok("\n Approved Order - payment: " + createdPayment  );
+                        return ok(" Your order has been complete.\n\n\n\n " + Json.toJson( order ).toString() );
+                 }
+            else {
+                return ok("\n payment not approved : " + createdPayment  );
             }
+
+
+
+
+          }
+        else {
+            return redirect("/");
+        }
+    }
 
 }

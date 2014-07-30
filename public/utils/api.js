@@ -3,7 +3,7 @@ $.ajaxSetup({ cache: false });
 var url = '';
 
 var o = {name:"hassan", age:33};
-function apiCall(uri, o, callback) {
+function apiCall(uri, o, successCallback, errorCallBack) {
     // alert(" Go AJax ");
 
     $.ajax({
@@ -14,12 +14,15 @@ function apiCall(uri, o, callback) {
         url:url + uri,
         success:function (data, textStatus, jqXHR) {
             // var obj = jQuery.parseJSON(jqXHR.responseText);
-            callback( data );
-            console.log(JSON.stringify(data));
-            //console.log(textStatus.toString());
+            successCallback( data );
+          //  console.log(JSON.stringify(data));
+            console.log(textStatus.toString());
         },
         error:function (data, textStatus, jqXHR) {
-            console.log(textStatus);
+            errorCallBack( textStatus, data );
+           // console.log(data);
+           // console.log(textStatus);
+           // console.log(jqXHR);
         }
     });
 

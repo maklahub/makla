@@ -18,6 +18,7 @@
         $addCardContainer = $("#add-credit-card-container");
         $addCreditCardForm = $("#add-credit-card-form");
         $orderItemsContainer = $("#order-items-container");
+        $messageContainer = $("#message-server-container");
         if ( creditCards.length > 0 ){
             $addCardContainer.remove();
             $orderItemsContainer.append( new Order( order ).render());
@@ -27,6 +28,7 @@
 
 
         $( document).on('click', '#save-credit-card', function(){
+            $messageContainer.html("");
             $loadingImage.fadeIn();
             var cardFirstName = $("#card-firstName").val();
             var cardLastName = $("#card-lastName").val();
@@ -45,19 +47,23 @@
             o.cardYear = cardYear;
             o.cardCvv = cardCvv;
 
+            var successCallBack = function( d ){
+                console.log( d );
+                $addCreditCardForm.remove();
+                $addCardContainer.append(new DropDownWindow("<h1>Credit Card has been added Successfully</h1>", "Success").render()).delay( 3000).fadeOut();
+               // $addCardContainer.remove();
+                $orderItemsContainer.append( new Order( order ).render());
+                $orderItemsContainer.css('visibility', 'visible');
+            }
+            var errorCallBack = function( textstatus, data){
+                $loadingImage.hide('fast');
+                console.log( textstatus );
+                console.log( data );
+                $messageContainer.html( textstatus).addClass("red");
+            }
+
             if (cardFirstName){
-                apiCall(  uri, o , function( d ){
-                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
-                    $addCreditCardForm.remove();
-                    $addCardContainer.append(new DropDownWindow("<h1>Credit Card has been added Successfully</h1>", "Success").render()).delay( 3000).fadeOut();
-                    $addCardContainer.remove();
-                    $orderItemsContainer.append( new Order( order ).render());
-                    $orderItemsContainer.css('visibility', 'visible');
-
-                    // print order items
-
-                   // $orderItemsContainer.append( "<h1> test 66qw66673424 </h1>");
-                });
+                apiCall(  uri, o , successCallBack , errorCallBack );
 
             }
         });
@@ -118,13 +124,14 @@
                            </select>
                        </div>
                    </div>
-                <div class="frow">
+               <!-- <div class="frow">
                     <label class="flabel"> CVV </label>
                     <input type="text" class="finputText cvv" name="card-cvv" id="card-cvv">
                     <span class="input-info"> Security code</span>
-                </div>
+                </div>   -->
                 <div> <input class="btn signup-btn span12" id="save-credit-card" type="button" name="saveCreditCard" value="Save Card"></div>
                 <div id="loading-image" style="display: none;"><img src="/images/loading.gif" alt=""></div>
+                <div id="message-server-container"></div>
             </div>
         </div>
        </div>
@@ -134,6 +141,7 @@
         <div id="order-Items">
         </div>
     </div>
+
 
 </div>
 

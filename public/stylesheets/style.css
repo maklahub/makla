@@ -823,10 +823,11 @@ div#comments-Container .comment-row:first-child {
 }
 #profile-ul{
     list-style: none;
-    float: right;
     margin: 0px;
     padding-right: 15px;
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 #profile-ul > li{
     display: inline-block;
@@ -1091,6 +1092,14 @@ div.d {
     display: inline;
     font-size: 12pt;
     text-shadow: 0px 1px 1px rgb(177, 175, 175);
+}
+#add-credit-card-container{
+    width: 500px;
+    margin: auto;
+    background: whitesmoke;
+    padding: 32px;
+    border: solid thin #BEBDBD;
+    box-shadow: 0px 0px 8px #ACACAC;
 }
 
 .cart-title{
