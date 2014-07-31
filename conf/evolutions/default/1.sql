@@ -190,9 +190,6 @@ create table persons (
   birth_date                datetime,
   gender                    varchar(6),
   category_id               varchar(255),
-  address_id                varchar(255),
-  billing_address_id        varchar(255),
-  shipping_address_id       varchar(255),
   create_time               datetime,
   update_time               timestamp not null,
   constraint ck_persons_gender check (gender in ('Male','Female','Other')),
@@ -257,6 +254,8 @@ create table systemusers (
   user_type_id              varchar(255),
   profile_image_id          varchar(255),
   profile_image_url         varchar(255),
+  address_id                varchar(255),
+  billing_address_id        varchar(255),
   create_time               datetime,
   update_time               timestamp not null,
   constraint pk_systemusers primary key (id))
@@ -327,6 +326,12 @@ create table persons_organizations (
   organizations_id               varchar(255) not null,
   constraint pk_persons_organizations primary key (persons_id, organizations_id))
 ;
+
+create table systemusers_address (
+  systemusers_id                 varchar(255) not null,
+  address_id                     varchar(255) not null,
+  constraint pk_systemusers_address primary key (systemusers_id, address_id))
+;
 alter table albums add constraint fk_albums_owner_1 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
 create index ix_albums_owner_1 on albums (owner_id);
 alter table carts add constraint fk_carts_owner_2 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
@@ -369,30 +374,28 @@ alter table organizations add constraint fk_organizations_shippingAddress_20 for
 create index ix_organizations_shippingAddress_20 on organizations (shipping_address_id);
 alter table persons add constraint fk_persons_category_21 foreign key (category_id) references personcategories (id) on delete restrict on update restrict;
 create index ix_persons_category_21 on persons (category_id);
-alter table persons add constraint fk_persons_address_22 foreign key (address_id) references address (id) on delete restrict on update restrict;
-create index ix_persons_address_22 on persons (address_id);
-alter table persons add constraint fk_persons_billingAddress_23 foreign key (billing_address_id) references address (id) on delete restrict on update restrict;
-create index ix_persons_billingAddress_23 on persons (billing_address_id);
-alter table persons add constraint fk_persons_shippingAddress_24 foreign key (shipping_address_id) references address (id) on delete restrict on update restrict;
-create index ix_persons_shippingAddress_24 on persons (shipping_address_id);
-alter table photos add constraint fk_photos_album_25 foreign key (album_id) references albums (id) on delete restrict on update restrict;
-create index ix_photos_album_25 on photos (album_id);
-alter table photos add constraint fk_photos_owner_26 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
-create index ix_photos_owner_26 on photos (owner_id);
-alter table systemaccounts add constraint fk_systemaccounts_systemUser_27 foreign key (system_user_id) references systemusers (id) on delete restrict on update restrict;
-create index ix_systemaccounts_systemUser_27 on systemaccounts (system_user_id);
-alter table systemusers add constraint fk_systemusers_person_28 foreign key (person_id) references persons (id) on delete restrict on update restrict;
-create index ix_systemusers_person_28 on systemusers (person_id);
-alter table systemusers add constraint fk_systemusers_mainCreditCard_29 foreign key (main_credit_card_id) references creditcards (id) on delete restrict on update restrict;
-create index ix_systemusers_mainCreditCard_29 on systemusers (main_credit_card_id);
-alter table systemusers add constraint fk_systemusers_organization_30 foreign key (organization_id) references organizations (id) on delete restrict on update restrict;
-create index ix_systemusers_organization_30 on systemusers (organization_id);
-alter table systemusers add constraint fk_systemusers_userType_31 foreign key (user_type_id) references usertypes (id) on delete restrict on update restrict;
-create index ix_systemusers_userType_31 on systemusers (user_type_id);
-alter table videos add constraint fk_videos_album_32 foreign key (album_id) references albums (id) on delete restrict on update restrict;
-create index ix_videos_album_32 on videos (album_id);
-alter table videos add constraint fk_videos_owner_33 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
-create index ix_videos_owner_33 on videos (owner_id);
+alter table photos add constraint fk_photos_album_22 foreign key (album_id) references albums (id) on delete restrict on update restrict;
+create index ix_photos_album_22 on photos (album_id);
+alter table photos add constraint fk_photos_owner_23 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
+create index ix_photos_owner_23 on photos (owner_id);
+alter table systemaccounts add constraint fk_systemaccounts_systemUser_24 foreign key (system_user_id) references systemusers (id) on delete restrict on update restrict;
+create index ix_systemaccounts_systemUser_24 on systemaccounts (system_user_id);
+alter table systemusers add constraint fk_systemusers_person_25 foreign key (person_id) references persons (id) on delete restrict on update restrict;
+create index ix_systemusers_person_25 on systemusers (person_id);
+alter table systemusers add constraint fk_systemusers_mainCreditCard_26 foreign key (main_credit_card_id) references creditcards (id) on delete restrict on update restrict;
+create index ix_systemusers_mainCreditCard_26 on systemusers (main_credit_card_id);
+alter table systemusers add constraint fk_systemusers_organization_27 foreign key (organization_id) references organizations (id) on delete restrict on update restrict;
+create index ix_systemusers_organization_27 on systemusers (organization_id);
+alter table systemusers add constraint fk_systemusers_userType_28 foreign key (user_type_id) references usertypes (id) on delete restrict on update restrict;
+create index ix_systemusers_userType_28 on systemusers (user_type_id);
+alter table systemusers add constraint fk_systemusers_address_29 foreign key (address_id) references address (id) on delete restrict on update restrict;
+create index ix_systemusers_address_29 on systemusers (address_id);
+alter table systemusers add constraint fk_systemusers_billingAddress_30 foreign key (billing_address_id) references address (id) on delete restrict on update restrict;
+create index ix_systemusers_billingAddress_30 on systemusers (billing_address_id);
+alter table videos add constraint fk_videos_album_31 foreign key (album_id) references albums (id) on delete restrict on update restrict;
+create index ix_videos_album_31 on videos (album_id);
+alter table videos add constraint fk_videos_owner_32 foreign key (owner_id) references systemusers (id) on delete restrict on update restrict;
+create index ix_videos_owner_32 on videos (owner_id);
 
 
 
@@ -419,6 +422,10 @@ alter table persons_personcategories add constraint fk_persons_personcategories_
 alter table persons_organizations add constraint fk_persons_organizations_persons_01 foreign key (persons_id) references persons (id) on delete restrict on update restrict;
 
 alter table persons_organizations add constraint fk_persons_organizations_organizations_02 foreign key (organizations_id) references organizations (id) on delete restrict on update restrict;
+
+alter table systemusers_address add constraint fk_systemusers_address_systemusers_01 foreign key (systemusers_id) references systemusers (id) on delete restrict on update restrict;
+
+alter table systemusers_address add constraint fk_systemusers_address_address_02 foreign key (address_id) references address (id) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -475,6 +482,8 @@ drop table s3file;
 drop table systemaccounts;
 
 drop table systemusers;
+
+drop table systemusers_address;
 
 drop table usertypes;
 

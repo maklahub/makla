@@ -73,22 +73,41 @@ function Order( o ){
     var name = o.name;
     var orderItems = o.orderItems;
 
-    this.orderWrapperOpener = '<table class="table table-bordered"> <span class="badge badge-important">Order #: ' + o.reference + " -- "+ o.status + '</span>';
-    this.orderHeader = ' <div class="row-fluid"><div class="span8"><h1>Order <span class="sub-title">By '+ o.owner.fullName +'</span></h1></div></div>';
-    this.orderItems = ' <thead><tr> <th>Item</th><th>Price</th><th>Quantity</th><th> Cost Amount </th></tr></thead>'+ returnOrderItemsHtml( orderItems ) ;
+    this.orderWrapperOpener = ' <div class="row-fluid"><div class="span6"><span class="badge badge-important"><h1>Order # ' + o.reference + ' </h1></div><div class="span6" style="text-align: right"><span class="badge btn-info"><h1>Status: '+ o.status +'</h1></span></div></div>';
+    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Requestor: '+ o.owner.fullName+'</h1></div></div>';
+    this.orderItems = '<table class="table table-bordered"> <thead><tr> <th>Item</th><th>Price</th><th>Quantity</th><th> Cost Amount </th></tr></thead>'+ returnOrderItemsHtml( orderItems ) ;
     this.footer = '<tr><td></td><td></td><td>Total Amount: </td><td><span class="badge badge-important order-amount">  $'+ o.totalAmount +'</span></td></tr>';
     this.subfooter = '<tr><td></td><td></td><td></td><td><div><form method="post" action="/pay"> <input type="hidden" name="orderId" value="'+ o.id+'">' +
         '<input type="submit" data-id = "'+ o.id +'"class="btn signup-btn " value="Pay"></input>' +
         '</form></div></td></tr>';
     this.orderWrapperCloser = "</table>";
    // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
-    this.screenHtml = this.orderWrapperOpener + this.orderHeader + this.orderItems + this.footer + this.subfooter +  this.orderWrapperCloser;
+    this.screenHtml = this.orderWrapperOpener + this.mainHeader + this.orderItems + this.footer + this.subfooter +  this.orderWrapperCloser;
 
 }
 
 
 
 Order.prototype.render = function(){
+    return  this.screenHtml;
+};
+
+function PaidOrder( o ){
+    console.log( o );
+    var name = o.name;
+    var orderItems = o.orderItems;
+
+    this.orderWrapperOpener = ' <div class="row-fluid"><div class="span6"><span class="badge badge-important"><h1>Order # ' + o.reference + ' </h1></div><div class="span6" style="text-align: right"><span class="badge btn-success"><h1>Status: '+ o.status +'</h1></span></div></div>';
+    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Requestor: '+ o.owner.fullName+'</h1></div></div>';
+
+   // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
+    this.screenHtml = this.orderWrapperOpener + this.mainHeader ;
+
+}
+
+
+
+PaidOrder.prototype.render = function(){
     return  this.screenHtml;
 };
 

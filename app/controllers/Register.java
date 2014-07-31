@@ -71,16 +71,13 @@ public class Register extends Controller {
         SystemUser u = null;
         if ( name != null  ){
             OrganizationCategory systemOrgCategory = OrganizationCategory.findOrgCategoryByName( orgCategory );
-
             Organization o = new Organization( name, accountEmail );
             o.setCategory( systemOrgCategory );
-            o.setAddress( address );
             u = new SystemUser( o, password, systemUserType );
         }
         else {
           //  PersonCategory systemPersonCategory = PersonCategory.findPersonCategoryByName( personCategory );
             Person p = new Person(  firstName, lastName, accountEmail );
-            p.setAddressId( address );
             /*
              p.setCategory( systemPersonCategory );
 
@@ -100,7 +97,7 @@ public class Register extends Controller {
         //String result = SaveCreditCard.saveCard( firstName,lastName, creditCardNumber, 11,2018);
 
        // System.out.println(" Result ------------> " + result );
-
+        u.setAddress( address );
         u.setUserName( userName );
         u.save();
 
@@ -177,16 +174,16 @@ public class Register extends Controller {
         String city = requestData.get( "city" );
         String state = requestData.get( "state" );
         String country = requestData.get( "country" );
-
+        currentUser.getAddress().setCity(city);
+        currentUser.getAddress().setState(state);
+        currentUser.getAddress().setCountry( country );
         if ( currentUser.isItAPerson() ){
              PersonCategory personCategory = PersonCategory.findPersonCategoryByName( selectedPersonCategory );
              currentUser.getPerson().setCategory( personCategory );
              currentUser.getPerson().setFirstName( firstName );
              currentUser.getPerson().setLastName(lastName);
              currentUser.setUserName(userName);
-             currentUser.getPerson().getAddressId().setCity(city);
-             currentUser.getPerson().getAddressId().setState(state);
-             currentUser.getPerson().getAddressId().setCountry( country );
+
 
         }
         else {
@@ -194,10 +191,6 @@ public class Register extends Controller {
             currentUser.getOrganization().setCategory( orgCategory  );
             currentUser.getOrganization().setName( name );
             currentUser.setUserName( userName );
-            currentUser.getOrganization().getAddress().setCity( city );
-            currentUser.getOrganization().getAddress().setState(state);
-            currentUser.getOrganization().getAddress().setCountry( country );
-
         }
 
 

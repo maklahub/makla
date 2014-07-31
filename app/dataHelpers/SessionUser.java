@@ -30,7 +30,7 @@ public class SessionUser {
        setUserName( systemUser.getUserName());
 
        setActiveProfileImage( SystemUser.getActiveProfilePhoto( systemUser.getId() ) );
-       setLocation( systemUser.getLocation() );
+       setLocation( systemUser.getAddress() );
     }
 
 

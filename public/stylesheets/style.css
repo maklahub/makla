@@ -650,13 +650,19 @@ input[type="text"],input[type="password"], select{
     background: white;
 
 }
-#order-items-container{
+#order-items-container, #order-paid-order{
     max-width: 900px;
     margin: auto;
     border: solid rgb(216, 216, 216) 1px;
     background: white;
     padding: 9px;
     border-radius: 5px;
+}
+div#counter {
+    margin: auto;
+    width: 22px;
+    padding: 20px;
+    font-size: 47px;
 }
 
 .artista-img img, .artista-video img, .menu-item img {

@@ -1,0 +1,44 @@
+@(order: String)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var order = @Html(order);
+        $body = $( "body");
+        $loadingImage = $( "#loading-image");
+        $addCardContainer = $("#add-credit-card-container");
+        $addCreditCardForm = $("#add-credit-card-form");
+        $paidOrderContainer = $("#order-paid-order");
+        $messageContainer = $("#message-server-container");
+        $counter = $("#counter");
+        $paidOrderContainer.append( new PaidOrder( order ).render());
+
+
+    });
+</script>
+
+
+<div class="container-fluid" id="content-container">
+    <div id="order-paid-order">
+
+    </div>
+    <div id="counter" class="counter btn-success">0</div>
+
+</div>
+
+<script type="text/javascript">
+    var i = 0;
+    setTimeout( function(){ document.location.href = "/";}, 10000);
+    setInterval( function(){  $counter.html( i = i +1)}, 1000);
+</script>
+
+</body>
+</html>

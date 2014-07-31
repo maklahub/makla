@@ -5,6 +5,9 @@ import com.paypal.core.rest.APIContext;
 import com.paypal.core.rest.OAuthTokenCredential;
 import com.paypal.core.rest.PayPalRESTException;
 import models.*;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import play.data.DynamicForm;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -13,6 +16,8 @@ import play.mvc.Result;
 
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,7 +65,7 @@ public class Checkout extends Controller {
     }
 
 
-    public static Result pay() throws PayPalRESTException {
+    public static Result pay() throws PayPalRESTException, MalformedURLException, EmailException {
         String orderId ="";
         // Server Set up  (Live/ Sandbox environment)
         Map<String, String> sdkConfig = new HashMap<String, String>();
@@ -116,7 +121,10 @@ public class Checkout extends Controller {
                     String paymentStatus = createdPayment.getState();
 
             if ( paymentStatus.equalsIgnoreCase( "approved" )){
-                        System.out.println("\n\n\n order: ---->" + order );
+                 // Send EMail Confirmation to requestor
+                SystemAccount systemAccount = SystemAccount.findSystemAccountBySystemUserId( u.getId() );
+                String messagetoRequestor = "MaklaHub: Than you for your Order # " + order.getReference();
+                sendHtmlasEmail( messagetoRequestor, u, systemAccount.getAccountEmail(), order);
                 Cart cart = Cart.findCartBySystemUser( u.getId() );
                 List<CartItem> cartItems = CartItem.findCartItemsByCart(  cart.getId() );
                 for( CartItem cartItem:  cartItems){
@@ -126,13 +134,12 @@ public class Checkout extends Controller {
 
                 }
                 cart.save();
-
-
-                        order.setStatus( Order.OrderStatus.paid );
-                        order.update();
+                order.setStatus( Order.OrderStatus.paid );
+                order.update();
+                String orderAsJson =  Json.toJson( order ).toString();
                       //  return ok("\n Approved Order - payment: " + createdPayment  );
-                        return ok(" Your order has been complete.\n\n\n\n " + Json.toJson( order ).toString() );
-                 }
+                return ok( views.html.checkout.orderPaid.render(  orderAsJson  ) );
+            }
             else {
                 return ok("\n payment not approved : " + createdPayment  );
             }
@@ -145,5 +152,35 @@ public class Checkout extends Controller {
             return redirect("/");
         }
     }
+
+
+    public static void sendHtmlasEmail( String message, SystemUser u, String accountEmail,  Order order ) throws EmailException, MalformedURLException {
+        // Create the email message
+        HtmlEmail email = new HtmlEmail();
+        email.setHostName("smtp.googlemail.com");
+        email.setSmtpPort(465);
+        email.setAuthenticator(new DefaultAuthenticator("artistahub@gmail.com", "acrobat8"));
+        email.setSSLOnConnect(true);
+        email.setFrom("artistahub@gmail.com");
+        email.setSubject( message );
+        String baseUrl = request().host();
+
+
+        // embed the image and get the content id
+       // URL url = new URL( photoUrl );
+        //  String cid = email.embed(url, u.getFullName());
+
+        // set the html message
+        //email.setHtmlMsg("<html><h1>Welcome to ArtistaOne</h1>   <img src=\"cid:"+cid+"\">  <hr><hr></html>");
+        email.setHtmlMsg(" Thank you for your Order : " + order.getReference());
+
+        // set the alternative message
+        email.setTextMsg("Your email client does not support HTML messages");
+        //  email.addTo( "berberacrobat@gmail.com" );
+        email.addTo( accountEmail );
+        // send the email
+        email.send();
+    }
+
 
 }

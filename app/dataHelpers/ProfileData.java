@@ -21,7 +21,7 @@ public class ProfileData {
         setSystemUser(systemUser);
       //  setProfileImage( systemUser.getActiveProfileImage() );
         if ( systemUser != null ){
-            setLocation( systemUser.getLocation() );
+            setLocation( systemUser.getAddress() );
         }
         else {
            System.out.println("system user not set on ProfileData");

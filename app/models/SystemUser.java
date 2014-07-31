@@ -27,6 +27,12 @@ public class SystemUser extends Model {
    // private Photo activeProfileImage;
     private String profileImageId;
     private String profileImageUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address billingAddress;
+    @ManyToMany( cascade = CascadeType.ALL )
+    private List<Address> shippingAddresses;
     private Date createTime;
     @Version
     @Column(columnDefinition = "timestamp")
@@ -142,13 +148,6 @@ public class SystemUser extends Model {
         return this.getOrganization().getName();
 
     }
-    public Address getLocation(){
-        if ( this.isItAPerson() ){
-            return this.getPerson().getAddressId() ;
-        }
-        return this.getOrganization().getAddress();
-
-    }
 
     private SystemAccount createSystemAccount( String email, String password ){
         SystemAccount systemAccount = new SystemAccount( this, email, password );
@@ -223,5 +222,29 @@ public class SystemUser extends Model {
 
     public void setMainCreditCard(MaklaCreditCard mainCreditCard) {
         this.mainCreditCard = mainCreditCard;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
+    }
+
+    public List<Address> getShippingAddresses() {
+        return shippingAddresses;
+    }
+
+    public void setShippingAddresses(List<Address> shippingAddresses) {
+        this.shippingAddresses = shippingAddresses;
     }
 }
