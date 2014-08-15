@@ -18,9 +18,11 @@ public class OrderItem extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     private String reference ;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String Description;
+    private double price;
     private double amount;
-    private int quantity;
+    private int quantity = 1;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Order order;
@@ -40,11 +42,12 @@ public class OrderItem extends Model {
     }
 
     public OrderItem( Order order, CartItem cartItem){
+         setQuantity( cartItem.getQuantity() );
          setOrder( order );
          setName( cartItem.getName() );
          setDescription( cartItem.getDescription() );
          setOrderItemPhoto( cartItem.getCartItemPhoto() );
-         setAmount( cartItem.getPrice() );
+         setPrice( cartItem.getPrice() );
          setCreateTime( new Date() );
     }
 
@@ -84,7 +87,7 @@ public class OrderItem extends Model {
     }
 
     public double getAmount() {
-        return amount;
+        return  getQuantity() * getPrice();
     }
 
     public void setAmount(double amount) {
@@ -137,5 +140,13 @@ public class OrderItem extends Model {
 
     public void setOrderItemPhoto(Photo orderItemPhoto) {
         this.orderItemPhoto = orderItemPhoto;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

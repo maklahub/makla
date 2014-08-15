@@ -18,6 +18,8 @@ public class PersonCategory extends Model {
     private String reference;
     private String name;
     private String label;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @ManyToMany( mappedBy = "categories", cascade = CascadeType.ALL )
     public List< Person > persons;
     private Date createTime;
@@ -85,5 +87,13 @@ public class PersonCategory extends Model {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -17,6 +17,8 @@ public class OrganizationCategory extends Model {
     private String reference;
     private String name;
     private String label;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @ManyToMany( mappedBy = "categories", cascade = CascadeType.ALL )
     public List< Organization > organizations;
     @Version
@@ -74,5 +76,13 @@ public class OrganizationCategory extends Model {
 
     public String toString(){
         return "Org Category: " + getName() + " " + getLabel() + " " + getReference() ;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

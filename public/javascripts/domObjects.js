@@ -68,29 +68,84 @@ MenuAsIcon.prototype.render = function(){
     return  this.screenHtml;
 }
 
+
+
 function Order( o ){
-    console.log( o );
+    //alert("order");
     var name = o.name;
     var orderItems = o.orderItems;
-
-    this.orderWrapperOpener = ' <div class="row-fluid"><div class="span6"><span class="badge badge-important"><h1>Order # ' + o.reference + ' </h1></div><div class="span6" style="text-align: right"><span class="badge btn-info"><h1>Status: '+ o.status +'</h1></span></div></div>';
-    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Requestor: '+ o.owner.fullName+'</h1></div></div>';
-    this.orderItems = '<table class="table table-bordered"> <thead><tr> <th>Item</th><th>Price</th><th>Quantity</th><th> Cost Amount </th></tr></thead>'+ returnOrderItemsHtml( orderItems ) ;
-    this.footer = '<tr><td></td><td></td><td>Total Amount: </td><td><span class="badge badge-important order-amount">  $'+ o.totalAmount +'</span></td></tr>';
-    this.subfooter = '<tr><td></td><td></td><td></td><td><div><form method="post" action="/pay"> <input type="hidden" name="orderId" value="'+ o.id+'">' +
+    var requestor = o.requestor;
+    var provider = o.provider;
+    var shippingAddresses = requestor.shippingAddresses || "";
+    this.header = '<form method="post" action="/pay"><div class="row-fluid order-top-bar"><div class="span6 col"> Order # '+ o.reference +'</div><div class="span6 col"> Status: '+ o.status +'</div></div>';
+    this.body = '<div class="row-fluid order-body"><div class="row-fluid order-body-row"><div class="span4 makla-label"> Requestor</div>' +
+        '<div class="span8 makla-label-value">'+ ucFirstAllWords( requestor.fullName ) +'</div></div>' +
+        '<div class="row-fluid order-body-row"><div class="span4 makla-label"> Order Date</div><div class="span8 makla-label-value"> '+ new Date(o.createTime).toString("M/d/yyyy HH:mm tt") +'</div></div>' +
+        '<div class="row-fluid order-body-row"><div class="span4 makla-label"> Shipping Address</div> ' +
+        '<div class="span8 makla-label-value"> '+ returnShippingAddresses( shippingAddresses).prop('outerHTML') +'<div class="btn"> add new Address</div></div></div></div>';
+    this.orderItemsHeader = '<div class="row-fluid order-order-items-container"><div class="span12">' +
+        '<table class="table table-bordered"><tr><th class="order-item-icon"><div >Item</div></th><th><div>Item Name</div></th><th><div>QTY</div></th><th><div>Cost</div></th><tr/>'
+    this.orderItems = returnOrderItemsHtml( orderItems );
+    this.subTotal = '<tr> <td colspan="3" style="text-align: right" ><strong>Sub-Total: </strong></td> <td >$'+ o.totalAmount +' </td></tr>';
+    this.tax = '<tr> <td colspan="3" style="text-align: right" ><strong>Tax: </strong></td> <td >$'+ o.totalTaxAmount +' </td></tr>';
+    this.delivery = '<tr> <td colspan="3" style="text-align: right" ><strong>Delivery: </strong></td> <td >$'+ o.delivery * 1.00 +' </td></tr>';
+    this.footer = '<tr> <td colspan="3" style="text-align: right" ><strong>Total: </strong></td> <td >$'+ o.totalAmountWithTaxAndDelivery +' </td></tr>';
+    this.subfooter = '<tr><td colspan="3"></td><td><div> <input type="hidden" name="orderId" value="'+ o.id+'">' +
         '<input type="submit" data-id = "'+ o.id +'"class="btn signup-btn " value="Pay"></input>' +
-        '</form></div></td></tr>';
-    this.orderWrapperCloser = "</table>";
-   // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
-    this.screenHtml = this.orderWrapperOpener + this.mainHeader + this.orderItems + this.footer + this.subfooter +  this.orderWrapperCloser;
+        '</div></td></tr>';
+    this.orderItemsCloser = '</table></div></div></form>';
+    this.screenHtml = this.header + this.body + this.orderItemsHeader + this.orderItems + this.subTotal + this.tax + this.delivery + this.footer + this.subfooter + this.orderItemsCloser;
+
 
 }
 
 
-
-Order.prototype.render = function(){
+    Order.prototype.render = function(){
     return  this.screenHtml;
 };
+
+function returnOrderItemsHtml( orderItems){
+
+    var items = "";
+    $.each( orderItems , function ( i, element){
+        console.log( element );
+        var item = new OrderItem( element ).render();
+
+        items += item ;
+    });
+ //   alert( items );
+    return items;
+}
+
+ function OrderItem ( orderItem ){
+    console.log( orderItem) ;
+    this.orderItemwrapperOpener = '<tr>';
+    this.orderItemTitle = '<td><div><img class="order-item-img" src="'+ orderItem.orderItemPhoto.url +'"></div></td><td><div> '+ orderItem.name +'</div></td>';
+    this.orderItemDescription = '<td>'+ orderItem.description+'</td>';
+    this.orderItemPrice = '<td>$'+ orderItem.price +'</td>';
+    this.orderItemQuantity = '<td><div> '+ orderItem.quantity+'</div> </td>';
+    this.orderItemCost= '<td><div> $'+ orderItem.amount +'<div> </td>';
+    this.orderItemWrapperCloser = "</tr>";
+    this.screenHtml = this.orderItemwrapperOpener +  this.orderItemTitle + this.orderItemQuantity + this.orderItemCost + this.orderItemWrapperCloser;
+}
+
+
+OrderItem.prototype.render = function(){
+    return  this.screenHtml;
+};
+
+function returnShippingAddresses( addresses ){
+    var $selectInput = $("<select class='order-shipping-address-select'  name='orderShippingAddress'>");
+    $.each( addresses , function ( i, element){
+        var $selectOption = $("<option>");
+        $selectOption.val( element.id );
+        $selectOption.text( element.addressText );
+        $selectOption.attr('data-id', element.id) ;
+        $selectInput.append( $selectOption );
+    });
+    console.log( $selectInput );
+    return $selectInput;
+}
 
 function PaidOrder( o ){
     console.log( o );
@@ -98,10 +153,12 @@ function PaidOrder( o ){
     var orderItems = o.orderItems;
 
     this.orderWrapperOpener = ' <div class="row-fluid"><div class="span6"><span class="badge badge-important"><h1>Order # ' + o.reference + ' </h1></div><div class="span6" style="text-align: right"><span class="badge btn-success"><h1>Status: '+ o.status +'</h1></span></div></div>';
-    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Requestor: '+ o.owner.fullName+'</h1></div></div>';
+    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Requestor: '+ o.requestor.fullName+'</h1></div></div>';
+    this.mainHeader = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Shipping Address: '+ o.address.addressText+'</h1></div>';
+    this.body = ' <div class="row-fluid"><div class="span8"><h1 class="h1">Delivery Time:'+ o.formatedDeliveryTime+'</h1></div></div></div>';
 
    // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
-    this.screenHtml = this.orderWrapperOpener + this.mainHeader ;
+    this.screenHtml = this.orderWrapperOpener + this.mainHeader + this.body;
 
 }
 
@@ -134,16 +191,7 @@ function returnMenuItemsEditHtml( menuItems){
     });
     return items;
 }
-function returnOrderItemsHtml( orderItems){
-    var items = "";
-    $.each( orderItems , function ( i, element){
-        console.log( element );
-        var item = new OrderItem( element ).render();
-       // alert( item );
-        items += item ;
-    });
-    return items;
-}
+
 
 
 
@@ -151,7 +199,7 @@ function MenuItem ( menuItem ){
     console.log( menuItem) ;
     var menuItemPhoto = menuItem.menuItemPhoto.url;
     this.menuItemwrapperOpener = '<div class="span6 menu-item-container">';
-    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="'+ menuItemPhoto +'"><div class="btn add-to-cart-btn" data-id="'+menuItem.id+'"> Add to cart</div></div>';
+    this.menuItemImageContainer = '<div class="content bg menu-item" data-id="'+menuItem.id+'"><img src="'+ menuItemPhoto +'"><div class="menu-item-qty-container">QTY<input class="menu-item-qty" type="text" name="qty" placeholder= "1"></div><div class="btn add-to-cart-btn" data-id="'+menuItem.id+'"> Add to cart</div></div>';
     this.menuItemTitle = '<div class="item-title"><p>  '+ menuItem.name + " $" + menuItem.price +'</p></div>';
     this.menuItemDescription = '<div class="item-description"><p>' + menuItem.description + '</p></div>';
     this.menuItemWrapperCloser = "</div>";
@@ -176,23 +224,9 @@ MenuItem.prototype.render = function(){
 MenuItemEdit.prototype.render = function(){
     return  this.screenHtml;
 };
-function OrderItem ( orderItem ){
-    console.log( orderItem) ;
-    this.orderItemwrapperOpener = '<tr>';
-    this.orderItemTitle = '<td><div><img class="order-orderItem-icon" src="'+ orderItem.orderItemPhoto.url +'" width="40px"> <span> '+ orderItem.name +'</span></div></td>';
-    //this.orderItemDescription = '<td>'+ orderItem.description+'</td>';
-    this.orderItemPrice = '<td>'+ orderItem.amount +'</td>';
-    this.orderItemQuantity = '<td>'+ orderItem.quantity+'</td>';
-    this.orderItemCost= '<td>'+ orderItem.amount +'</td>';
-    this.orderItemWrapperCloser = "</tr>";
-    this.screenHtml = this.orderItemwrapperOpener +  this.orderItemTitle + this.orderItemPrice + this.orderItemQuantity + this.orderItemCost + this.orderItemWrapperCloser;
-}
 
 
 
-OrderItem.prototype.render = function(){
-    return  this.screenHtml;
-};
 
 function ProfilePersonalInfo( systemUser ){
    // alert( " from profile p i function" );
@@ -466,8 +500,11 @@ function SignUpPersonForm( firstName, lastName, email, personCategories  ){
                    // creditCard: { label: "Credit Card Number", value : "", tag : "input", type: "text", name: "creditCardNumber","data-req": 1 },
                    // CVV: { label: "CVV", value : "", tag : "input", type: "text", name: "CVV","data-req": 1 },
                    // ExpirationDate: { label: "Expiration Date", value : "", tag : "input", type: "text", name: "expirationDate","data-req": 1 },
-                    city : { label: "City", value : "", tag : "input", type: "text", name : "city" },
-                    state : { label: "State", value : "", tag : "input", type: "text", name: "state" },
+                    address : { label: "Address line one", value : "", tag : "input", type: "text", name : "address", "data-req": 1},
+                    subAddress : { label: "Address line two", value : "", tag : "input", type: "text", name : "subAddress" },
+                    city : { label: "City", value : "", tag : "input", type: "text", name : "city", "data-req": 1 },
+                    zip : { label: "Zip Code", value : "", tag : "input", type: "text", name : "zipCode" },
+                    state : { label: "State", value : "", tag : "input", type: "text", name: "state",  "data-req": 1 },
                     country : { label: "Country", value : "", tag : "input", type: "text", name: "country","data-req": 1 },
                    // sex : { label: "Female", value : "female", tag : "input", type: "radio", name: "sex"},
                    // sex2 : { label: "Male", value : "male", tag : "input", type: "radio", name: "sex"},
@@ -641,8 +678,11 @@ function EditPersonProfileForm( firstName, lastName, email, personCategories  ){
         lastName : { label: "Last Name", value : lastName || "", tag : "input", type: "text", name: "lastName","data-req": 1 },
         userName : { label: "User Name", value : firstName && lastName ? firstName + "." + lastName : "", tag : "input", type: "text",  name : "userName","data-req": 1 },
         category : { label: "Category", value : "", tag : "select", type: "select",  name : "personCategory","data-req": 1 },
+        address : { label: "Address line one", value : "", tag : "input", type: "text", name : "address", "data-req": 1},
+        subAddress : { label: "Address line two", value : "", tag : "input", type: "text", name : "subAddress" },
         city : { label: "City", value : "", tag : "input", type: "text", name : "city" },
         state : { label: "State", value : "", tag : "input", type: "text", name: "state" },
+        zip : { label: "Zip Code", value : "", tag : "input", type: "text", name : "zipCode" },
         country : { label: "Country", value : "", tag : "input", type: "text", name: "country","data-req": 1 },
         sex : { label: "Female", value : "female", tag : "input", type: "radio", name: "sex"},
         sex2 : { label: "Male", value : "male", tag : "input", type: "radio", name: "sex"},
@@ -703,8 +743,11 @@ function SignUpOrganizationForm( name, email, orgCategories  ){
        // creditCard: { label: "Credit Card Number", value : "", tag : "input", type: "text", name: "creditCardNumber","data-req": 1 },
        // CVV: { label: "CVV", value : "", tag : "input", type: "text", name: "CVV","data-req": 1 },
        // ExpirationDate: { label: "Expiration Date", value : "", tag : "input", type: "text", name: "expirationDate","data-req": 1 },
+        address : { label: "Address line one", value : "", tag : "input", type: "text", name : "address", "data-req": 1},
+        subAddress : { label: "Address line two", value : "", tag : "input", type: "text", name : "subAddress" },
         city : { label: "City", value : "", tag : "input", type: "text", name : "city" },
         state : { label: "State", value : "", tag : "input", type: "text", name: "state" },
+        zip : { label: "Zip Code", value : "", tag : "input", type: "text", name : "zipCode" },
         country : { label: "Country", value : "", tag : "input", type: "text", name: "country","data-req": 1 },
         profilePhoto : { label: "", value : "", tag : "input", type: "file", name: "profileImage","data-req": 1, header: "Profile Photo"}
     };
@@ -760,9 +803,12 @@ function EditOrganizationProfileForm( systemUser,  org,  orgCategories ){
     this.formFields = { name: { label: "Name", value : org.name || "", tag : "input", type: "text", name : "businessName","data-req": 1 },
         userName : { label: "User Name", value : systemUser.userName ? systemUser.userName : "", tag : "input", type: "text",  name : "userName","data-req": 1 },
         category : { label: "Category", value : org.category.name ? org.category.name : "", tag : "select", type: "select",  name : "orgCategory","data-req": 1 },
-        city : { label: "City", value : org.address.city ? org.address.city : "", tag : "input", type: "text", name : "city" },
-        state : { label: "State", value : org.address.state ? org.address.state : "", tag : "input", type: "text", name: "state" },
-        country : { label: "Country", value : org.address.country ? org.address.country : "", tag : "input", type: "text", name: "country","data-req": 1 },
+        address : { label: "Address line one", value : "", tag : "input", type: "text", name : "address", "data-req": 1},
+        subAddress : { label: "Address line two", value : "", tag : "input", type: "text", name : "subAddress" },
+        city : { label: "City", value : systemUser.address.city ? systemUser.address.city : "", tag : "input", type: "text", name : "city" },
+        state : { label: "State", value : systemUser.address.state ? systemUser.address.state : "", tag : "input", type: "text", name: "state" },
+        zip : { label: "Zip Code", value : "", tag : "input", type: "text", name : "zipCode" },
+        country : { label: "Country", value : systemUser.address.country ? systemUser.address.country : "", tag : "input", type: "text", name: "country","data-req": 1 },
         profilePhoto : { label: "", value : "", tag : "input", type: "file", name: "profileImage","data-req": 1, header: "Profile Photo"}
     };
     this.htmlForm = function(){

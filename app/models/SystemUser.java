@@ -177,7 +177,7 @@ public class SystemUser extends Model {
     }
 
     public String toString(){
-        return " SystemUser: " + getId() + " Name: " + getPerson() + " " + getUserName() + " Email: " ;
+        return " SystemUser: " + getId() + " Name: " + getFullName() + " " + getUserName() + " Email: " ;
     }
 
     public UserType getUserType() {

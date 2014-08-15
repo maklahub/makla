@@ -20,6 +20,7 @@ public class Menu extends Model {
     private SystemUser owner;
     @OneToOne(cascade = CascadeType.ALL)
     private Photo menuPhoto;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToMany( cascade = CascadeType.ALL )
     private List<MenuItem> menuItems;

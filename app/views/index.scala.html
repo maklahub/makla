@@ -40,6 +40,8 @@
 
                 $('.add-to-cart-btn').on('click', function(){
                     var $this = $( this );
+                    var $qty = $this.prev().find(  '.menu-item-qty' );
+                  //  alert( $qty.val() );
                     var $parent = $this.parent();
                     var menuItemId =  $(this).attr('data-id');
                     var loggedIn = 0;
@@ -49,6 +51,7 @@
                         var o = {};
                         o.id = menuItemId;
                         o.name = "item name";
+                        o.qty = $qty.val() || 1;
                         ajaxHtml( uri, $cartContainer , o, Cart );
                         //$parent.parent().fadeOut();
                        // $parent.parent().css('opacity', 0.8);
@@ -85,8 +88,6 @@
 </script>
 
 <div class="container-fluid" id="content-container">
-
-   <h1>Welcome</h1>
 
 
     <div id="artistas-container" class="container">

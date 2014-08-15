@@ -16,6 +16,7 @@ public class Comment extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser commenter;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToOne( cascade = CascadeType.ALL  )
     private Photo photo;

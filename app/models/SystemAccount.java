@@ -13,6 +13,9 @@ public class SystemAccount extends Model {
 
     @Id
     private String id = UUID.randomUUID().toString().replaceAll("-", "");
+    private String name;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser systemUser;
     private String accountEmail;
@@ -24,7 +27,13 @@ public class SystemAccount extends Model {
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     public enum AccountType {

@@ -156,7 +156,7 @@ function  Cart ( cart ){
 
         var name = cart.name;
         var cartItems = cart.cartItems || null;
-        var cartOwner = cart.owner != null?  cart.owner.fullName : "";
+        var cartOwner = cart.requestor != null?  cart.requestor.fullName : "";
         this.cartItems = cartItems;
 
         this.cartWrapperOpener = '<div  id="cart-container">';
@@ -165,16 +165,13 @@ function  Cart ( cart ){
         this.ta = this.calculate( cartItems );
         console.log(" ta: " + this.ta );
         // this.footer = "<div class='cart-total-amount'> <span class='badge badge-success'>" +  " " + this.ta.toString() ;
-        this.footer = '<div class="cart-total-amount"> <p>Total Amount:'+ cart.totalAmount +' </p><span class="cart-ta badge badge-success">$' + this.ta +'</span></div>';
+        this.footer = '<div class="cart-total-amount"> <p style="font-weight: 600 !important;"> Tax: $'+ cart.totalTaxAmount +'</p><span class="cart-ta badge badge-success">$' + cart.totalAmountWithTax +'</span></div>';
         this.checkOutContainer =  cartItems != null ?'<div class="check-out"><form style="margin: 0" method="post" action="checkout"><input type="hidden" name="cartId" value="'+cart.id +'"><input type="submit" class="checkout-btn" value="Checkout" id="'+ cart.id +'"></form></div>' : '';
         this.cartWrapperCloser = "</div>";
         // this.screenHtml = this.wrapperOpener + this.topBar + this.secondaryBar + this.body + this.footer; + this.wrapperCloser;
         this.screenHtml = this.cartWrapperOpener + this.cartHeader + this.cartItems +  this.footer +  this.cartWrapperCloser + this.checkOutContainer;
 
     }
-
-
-
 
 }
 Cart.prototype.render = function(){ return this.screenHtml };
@@ -183,7 +180,7 @@ Cart.prototype.calculate = function( cartItems  ){
     if ( cartItems ){
 
         $.each( cartItems , function( i, e){
-            ta = ta +  e.price  ;
+            ta = ta +  e.amount ;
         });
     }
     return parseFloat(Number( ta ).toPrecision(10));
@@ -209,8 +206,9 @@ function returnCartItems( cartItems ){
 function CartItem( item ){
     // alert( item );
     this.itemOpener = '<li class="cart-item-li">';
-    this.name = '<div class="padding10px"><div class="cart-item-img-desc"><span data-id= "'+ item.id+'" class="remove-cart-item"> remove</span> <img class="cart-item-img" src="'+ item.cartItemPhoto.url+'" alt=""><span class="cart-item-desc">'+ item.name +"</span></div>";
-    this.price = "<div class='cart-item-price'> $"+ item.price +"</div><div class='clearfix'></div></div>";
+    this.name = '<div class="padding5px"><div class="cart-item-img-desc"><span data-id= "'+ item.id+'" class="remove-cart-item" title="Remove Item"> remove</span> <span class="cart-item-qty">'+ item.quantity +
+        'X</span><img class="cart-item-img" src="'+ item.cartItemPhoto.url+'" alt=""><span class="cart-item-desc">'+ item.name +"</span>";
+    this.price = "<span class='cart-item-price'> $"+ item.amount +"</span><div class='clearfix'></div></div></div>";
     this.itemCloser = '</li>';
     this.html = this.itemOpener +  this.name + this.price + this.itemCloser;
 }

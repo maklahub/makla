@@ -19,6 +19,7 @@ public class MenuItem extends Model {
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
     private Photo menuItemPhoto;
+    @Column(columnDefinition = "TEXT")
     private String Description;
     private double price;
     private int quantity;

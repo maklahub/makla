@@ -15,6 +15,8 @@ GET     /myphotos                   controllers.Application.myPhotos()
 GET     /myvideos                   controllers.Application.myVideos()
 GET     /search/:q                  controllers.Application.searchArtistas( q: String )
 GET     /order/:q                   controllers.Checkout.getOrder( q: String )
+GET     /order/:q/preconfirm        controllers.Checkout.preConfirmOrder( q: String )
+
 GET     /menus                      controllers.Menus.index()
 GET     /menus/menu/:q              controllers.Menus.getMenuItems( q: String )
 
@@ -23,7 +25,7 @@ GET     /widget/:userName           controllers.Application.myWidget( userName: 
 
 
 
-
+POST    /order/:q/confirm           controllers.Checkout.confirmOrder( q: String )
 POST     /addVideo                  controllers.Register.addVideo()
 POST     /completeRegistration      controllers.Register.completeRegistration()
 POST     /addMyPhotos               controllers.AddPhotos.addMyPhotos()

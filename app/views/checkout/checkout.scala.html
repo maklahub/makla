@@ -10,9 +10,12 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
         var cartId = "@cartId";
         var creditCards = @Html(creditCards);
         var order = @Html(order);
+
+
         $body = $( "body");
         $loadingImage = $( "#loading-image");
         $addCardContainer = $("#add-credit-card-container");
@@ -76,8 +79,6 @@
 
 <div class="container-fluid" id="content-container">
 
-    <h1>Welcome</h1>
-
     <div id="add-credit-card-container" style="width: 500px; margin: auto">
         <div class="row-fluid" id="add-credit-card-form">
             <h1 class="add-credit-card-title btn-primary">Add Credit Card </h1>
@@ -137,14 +138,18 @@
        </div>
 
     </div>
-    <div id="order-items-container" style="visibility: hidden;">
 
-        <div id="order-Items">
+    <div class="container-makla">
+        <div id="order-items-container" style="visibility: hidden;">
         </div>
+
     </div>
 
 
+
 </div>
+
+
 
 </body>
 </html>

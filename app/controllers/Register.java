@@ -61,11 +61,14 @@ public class Register extends Controller {
        // String sex = requestData.get("sex");
         //System.out.println(" Gender: ---> " + sex.trim() );
         String userType = requestData.get("userType" );
+        String address = requestData.get( "address" );
+        String subAddress = requestData.get( "subAddress" );
         String city = requestData.get( "city" );
+        String zip = requestData.get( "zipCode" );
         String state = requestData.get( "state" );
         String country = requestData.get( "country" );
 
-        Address address = new Address( city ,state, country );
+        Address systemUserAddress = new Address(address, subAddress, city ,zip, state, country );
         UserType systemUserType = UserType.findUserTypeByName( userType );
 
         SystemUser u = null;
@@ -97,7 +100,13 @@ public class Register extends Controller {
         //String result = SaveCreditCard.saveCard( firstName,lastName, creditCardNumber, 11,2018);
 
        // System.out.println(" Result ------------> " + result );
-        u.setAddress( address );
+        systemUserAddress.setSystemUser( u );
+        systemUserAddress.save();
+        u.setAddress( systemUserAddress );
+
+        List<Address> shippingAddresses = u.getShippingAddresses();
+        shippingAddresses.add( systemUserAddress );
+
         u.setUserName( userName );
         u.save();
 
@@ -171,11 +180,17 @@ public class Register extends Controller {
         String sex = requestData.get("sex");
         //System.out.println(" Gender: ---> " + sex.trim() );
        // String userType = requestData.get("userType" );
+        String address = requestData.get( "address" );
+        String subAddress = requestData.get( "subAddress" );
+        String zip = requestData.get( "zipCode" );
         String city = requestData.get( "city" );
         String state = requestData.get( "state" );
         String country = requestData.get( "country" );
-        currentUser.getAddress().setCity(city);
-        currentUser.getAddress().setState(state);
+        currentUser.getAddress().setAddress( address );
+        currentUser.getAddress().setSubAddress( subAddress );
+        currentUser.getAddress().setCity( city );
+        currentUser.getAddress().setState( state );
+        currentUser.getAddress().setZip( zip );
         currentUser.getAddress().setCountry( country );
         if ( currentUser.isItAPerson() ){
              PersonCategory personCategory = PersonCategory.findPersonCategoryByName( selectedPersonCategory );

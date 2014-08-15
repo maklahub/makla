@@ -17,6 +17,7 @@ public class Feed extends Model {
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser systemUser;
     private String url;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @Version
     @Column(columnDefinition = "timestamp")

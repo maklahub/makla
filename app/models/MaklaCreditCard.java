@@ -23,6 +23,7 @@ public class MaklaCreditCard extends Model {
     @JsonBackReference
     private SystemUser owner;
     private String payPalCreditCardId;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String creditCardNumber;
     private Date createTime;

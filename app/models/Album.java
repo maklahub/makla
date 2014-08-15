@@ -23,6 +23,7 @@ public class Album extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     private String reference;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference

@@ -20,30 +20,32 @@ public class AddMenuItem extends Controller {
     public static Result addMenuItemToCart() {
         CartItem cartItem = null;
         JsonNode json = request().body().asJson();
-        SystemUser u = SystemUser.findUserById(session("currentUserId"));
+        SystemUser requestor = SystemUser.findUserById(session("currentUserId"));
 
         if(json == null) {
             return badRequest("Expecting Json data");
         } else {
             String menuItemId = json.findPath("id").textValue();
+            int menuItemQty= json.findPath("qty").asInt();
             if(menuItemId== null) {
                 return badRequest("Missing parameter [id]");
             } else {
                 MenuItem menuItem = MenuItem.findMenuItemById( menuItemId );
-                Cart cart = Cart.findCartBySystemUser( u.getId() );
+                Cart cart = Cart.findCartBySystemUser( requestor.getId() );
                 if ( cart == null ){
-                    cart = new Cart( "New cart", u);
-                    cartItem = new CartItem( cart, menuItem );
+                    cart = new Cart( "New cart", requestor );
+                    cartItem = new CartItem( cart, menuItem , menuItemQty );
                     cartItem.save();
-                    cart.save();
+
                 }
                 else {
-                    cartItem = new CartItem( cart, menuItem );
+                    cartItem = new CartItem( cart, menuItem, menuItemQty );
                     cartItem.save();
-                    cart.save();
                 }
-
-                cart.updateTotalAmount();
+                System.out.println("\n\n\nProvider: ----------------->\n\n\n " +  menuItem.getMenu().getOwner());
+                cart.setProvider( menuItem.getMenu().getOwner() );
+                cart.save();
+               // cart.updateTotalAmount();
 
                // return ok(Json.toJson(menuItemId).toString());
                 return ok( Json.toJson( cart ) );
@@ -89,6 +91,7 @@ public class AddMenuItem extends Controller {
                 String cartId = cartItem.getCart().getId();
                 cartItem.setCart( null );
                 cartItem.setCartItemPhoto( null );
+                cartItem.setOwner( null );
                 //cartItem.delete();
                 Ebean.delete( cartItem );
                 Cart cart = Cart.findCartById( cartId);

@@ -12,6 +12,29 @@
     $(document).ready(function () {
 
         var order = @Html(order);
+        var orderAddress = order.address.addressText;
+
+        $("#map").gmap3({
+                    marker:{
+                        address: orderAddress
+                    },
+                    map:{
+                        options:{
+                            zoom: 16
+                        }
+                    }//,
+//                     infowindow:{
+//                         address: orderAddress,
+//                         options:{
+//                         content: orderAddress
+//                         },
+//                         events:{
+//                                closeclick: function(infowindow){
+//                                  alert("closing : " + infowindow.getContent());
+//                         }
+//                         }
+//                     }
+                } );
         $body = $( "body");
         $loadingImage = $( "#loading-image");
         $addCardContainer = $("#add-credit-card-container");
@@ -26,18 +49,19 @@
 </script>
 
 
-<div class="container-fluid" id="content-container">
+<div class="container-fluid container-makla" id="content-container">
     <div id="order-paid-order">
 
     </div>
-    <div id="counter" class="counter btn-success">0</div>
+    <div id="counter" class="counter btn-success">10</div>
+    <div id="map" style="width: 100%; height: 600px"></div>
 
 </div>
 
 <script type="text/javascript">
-    var i = 0;
+    var i = 10;
     setTimeout( function(){ document.location.href = "/";}, 10000);
-    setInterval( function(){  $counter.html( i = i +1)}, 1000);
+    setInterval( function(){  $counter.html( i = i - 1)}, 1000);
 </script>
 
 </body>
