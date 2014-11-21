@@ -5,6 +5,7 @@ import play.db.ebean.Model;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,18 +20,29 @@ public class Order extends Model {
     private String reference ;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
-    private SystemUser owner;
+    private SystemUser requestor;
+    @OneToOne(cascade = CascadeType.ALL)
+    private SystemUser provider;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private double totalAmount;
     @ManyToMany( cascade = CascadeType.ALL )
     private List<OrderItem> orderItems;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.draft;
+    private OrderStatus status = OrderStatus.Draft;
+    private final double taxRate = 10;
+    private final double delivery = Double.valueOf(new DecimalFormat("#0.00").format( 4.00 ));
+    private double totalTaxAmount;
+    private Date deliveryTime;
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
+
 
     public OrderStatus getStatus() {
         return status;
@@ -40,11 +52,67 @@ public class Order extends Model {
         this.status = status;
     }
 
-    public enum OrderStatus {
-        draft, paid, confirmed, complete;
+    public Address getAddress() {
+        return address;
     }
 
-    public Order( SystemUser owner ){
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public double getTaxRate() {
+        return taxRate;
+    }
+    public double getTotalAmountWithTax(){
+        return Double.valueOf(new DecimalFormat("#0.00").format( getTotalAmount() + getTotalTaxAmount() ));
+    }
+
+    public double getTotalAmountWithTaxAndDelivery(){
+        return Double.valueOf(new DecimalFormat("#0.00").format( getTotalAmount() + getTotalTaxAmount() + getDelivery() ));
+    }
+
+    public double getTotalTaxAmount() {
+        totalTaxAmount = (getTaxRate()/100) * getTotalAmount();
+        return Double.valueOf(new DecimalFormat("#0.00").format( totalTaxAmount ));
+    }
+
+    public void setTotalTaxAmount(double totalTaxAmount) {
+        this.totalTaxAmount = totalTaxAmount;
+    }
+
+    public SystemUser getRequestor() {
+        return requestor;
+    }
+
+    public void setRequestor(SystemUser requestor) {
+        this.requestor = requestor;
+    }
+
+    public SystemUser getProvider() {
+        return provider;
+    }
+
+    public void setProvider(SystemUser provider) {
+        this.provider = provider;
+    }
+
+    public double getDelivery() {
+        return delivery;
+    }
+
+    public Date getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(Date t) {
+        this.deliveryTime = t;
+    }
+
+    public enum OrderStatus {
+        Draft,Precessing,Paid, Confirmed, Complete;
+    }
+
+    public Order( SystemUser requestor ){
         List<Order> o = Ebean.find( Order.class).orderBy().desc("createTime").findList();
         String ref = "";
 
@@ -58,13 +126,14 @@ public class Order extends Model {
         }
 
         setReference( ref  );
-        setOwner(owner);
+        setRequestor(requestor);
         setCreateTime(new Date());
     }
 
     public Order( Cart cart, SystemUser owner ){
         List<Order> o = Ebean.find( Order.class).orderBy().desc("createTime").findList();
         System.out.println("\n\n\n Orders *****-----> " + o.get( 0) );
+
         Order lastInsertedOrder =  o.get( 0 );
         String ref = "";
         if( lastInsertedOrder.getReference() == null){
@@ -72,7 +141,7 @@ public class Order extends Model {
         }
         ref = String.valueOf( Integer.valueOf(lastInsertedOrder.getReference()) + 1 );
         setReference( ref  );
-        setOwner(owner);
+        setRequestor(requestor);
         setCreateTime(new Date());
     }
 
@@ -83,6 +152,7 @@ public class Order extends Model {
             // orderItem.save();
              orderItems.add( orderItem );
         }
+        this.setProvider( cart.getProvider() );
         this.save();
       //  System.out.println("OrderItems: ------> " + orderItems);
       return orderItems;
@@ -95,8 +165,8 @@ public class Order extends Model {
         return order;
     }
 
-    public static List<Order> findOrdersBySystemUser( String ownerId ){
-        List<Order> orders  = Ebean.find(Order.class).where().eq("owner.id", ownerId).findList();
+    public static List<Order> findOrdersBySystemUser( String requestorId ){
+        List<Order> orders  = Ebean.find(Order.class).where().eq("requestor.id", requestorId).findList();
         System.out.println("Orders: ---> " + orders);
         return orders;
     }
@@ -122,13 +192,6 @@ public class Order extends Model {
         this.name = name;
     }
 
-    public SystemUser getOwner() {
-        return owner;
-    }
-
-    public void setOwner(SystemUser owner) {
-        this.owner = owner;
-    }
 
     public String getDescription() {
         return description;
@@ -172,6 +235,19 @@ public class Order extends Model {
 
     public Date getCreateTime() {
         return createTime;
+    }
+
+    public String getFormatedCreateTime(){
+        String date = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").format( getCreateTime() );
+        return date;
+    }
+    public String getFormatedDeliveryTime(){
+        String date = "";
+        if( getDeliveryTime() != null ){
+            date = new SimpleDateFormat("MM/dd/yyyy h:mm:ss a").format( getDeliveryTime( ) );
+        }
+
+        return date;
     }
 
     public void setCreateTime(Date createTime) {

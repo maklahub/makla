@@ -16,11 +16,12 @@ public class LogIn extends Controller {
 
     public static Result index(){
         DynamicForm requestData = form().bindFromRequest();
-        String email = requestData.get("email");
+        String email = requestData.get( "email" );
         String password = requestData.get( "password" );
+        String fromUrl = requestData.get( "fromUrl" );
         if ( session("sessionUser") == null ){
             if ( email == null || email.isEmpty() || password == null || password.isEmpty() ){
-                return  ok( views.html.login.render( "test" ));
+                return  ok( views.html.login.render( "" ));
             }
             else{
                // SystemUser systemUser = SystemUser.findUserByEmailAndPass(email, password);
@@ -36,13 +37,16 @@ public class LogIn extends Controller {
                     session("sessionUser" , sessionUserAsJson );
                     session("currentUserId", systemUser.getId());
                     String menus = Json.toJson(Menu.getAllMenus()).toString();
-
+                    System.out.println(  "------------------------------> " + fromUrl );
+                    return redirect( fromUrl );
+                    /*
                     if ( systemUser.isItAPerson()){
                         return redirect( controllers.routes.Application.index() );
                     }
                     else {
                         return redirect( controllers.routes.Application.home() );
                     }
+                    */
 
                 }
             }
@@ -63,7 +67,7 @@ public class LogIn extends Controller {
 
        // System.out.println("----------------------- request Url" + r);
         DynamicForm requestData = form().bindFromRequest();
-        String url = requestData.get("cuttentUrl");
+        String url = requestData.get("currentUrl");
         String email = requestData.get("email");
         String password = requestData.get( "password" );
         if ( session("sessionUser") == null ){

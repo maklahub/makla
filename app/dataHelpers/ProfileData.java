@@ -21,11 +21,11 @@ public class ProfileData {
         setSystemUser(systemUser);
       //  setProfileImage( systemUser.getActiveProfileImage() );
         if ( systemUser != null ){
-            setLocation( systemUser.getLocation() );
+            setLocation( systemUser.getAddress() );
         }
         else {
            System.out.println("system user not set on ProfileData");
-            setLocation( new Address("","",""));
+            setLocation( new Address("","","",""));
         }
 
     }
@@ -81,7 +81,7 @@ public class ProfileData {
 
     public void setLocation(Address location) {
         if ( location == null){
-           location = new Address("","","");
+           location = new Address("","","","");
         }
         this.location = location;
     }

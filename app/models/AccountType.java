@@ -18,9 +18,10 @@ public class AccountType extends Model {
     private String reference;
     private String name;
     private String label;
-    @Version
-    @Column(columnDefinition = "timestamp")
     private Date createTime;
+    public String test;
+    @Version
+    public long version;
 
     public AccountType( String name , String ref , String label){
          setName( name );

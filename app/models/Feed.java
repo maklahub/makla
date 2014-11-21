@@ -17,10 +17,12 @@ public class Feed extends Model {
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser systemUser;
     private String url;
+    @Column(columnDefinition = "TEXT")
     private String description;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date createTime;
+    @Version
+    public long version;
 
     public Feed( SystemUser systemUser, String url, String description){
         setUrl(url);

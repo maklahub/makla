@@ -17,12 +17,15 @@ public class OrganizationCategory extends Model {
     private String reference;
     private String name;
     private String label;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @ManyToMany( mappedBy = "categories", cascade = CascadeType.ALL )
     public List< Organization > organizations;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date createTime;
     public static int count = 0;
+    @Version
+    public long version;
 
     public OrganizationCategory(){
          setReference( "org-cat-" + count++ );
@@ -74,5 +77,13 @@ public class OrganizationCategory extends Model {
 
     public String toString(){
         return "Org Category: " + getName() + " " + getLabel() + " " + getReference() ;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

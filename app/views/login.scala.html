@@ -1,5 +1,16 @@
 @(title: String)
 @headerOut()
+
+<script type="text/javascript">
+    $( document ).ready( function(){
+        var $referrerUrlField = $("#fromUrl");
+        $referrerUrlField.val( document.referrer );
+
+    });
+
+
+
+</script>
 <body>
    <div class="container-fluid" id="content-container">
        <div id="c">
@@ -8,8 +19,8 @@
                <div class="f2 ">
                    <form method="post" action="login">
                        <div class=" header">
-                           @title
-                           <div><h1 class="h1" style="padding: 0; color: white; text-shadow: 1px 1px 2px #222"> Sign in </h1></div>
+                          <span class="red"> @title  </span>
+                           <div><h1 class="h1" style="padding: 0; color: white; text-shadow: 1px 1px 2px #222"></h1></div>
 
                        </div>
 
@@ -22,16 +33,18 @@
                            <div class="flabel "> Password</div>
                            <input class="finputText" type="password" name="password">
                        </div>
+                       <input id="fromUrl" class="finputText" type="hidden" name="fromUrl">
 
                        <div class="frow" >
-                           <input class="btn signup-btn" type="submit" value="Sign in to ArtistaOne">
+                           <input class="btn signup-btn" type="submit" value="Sign in">
                        </div>
                    </form>
                </div>
 
                <div class="or-signup-container">
-                   <h1>Or</h1>
-                   <a href="/register"> <div class="or-signup-btn btn btn-info">  Sign up </div>    </a>
+                   <hr>
+                   <a href="/register"> <div class="or-signup-btn btn">  Sign up </div>    </a>
+                   <a href="/setUpMerchantAccount"> <div class=" btn btn-primary or-signup-btn">  Create Merchant Account </div>    </a>
                </div>
 
 

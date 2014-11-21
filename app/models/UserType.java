@@ -17,9 +17,13 @@ public class UserType extends Model {
     private String reference;
     private String name;
     private String label;
-    @Version
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @Column(columnDefinition = "timestamp")
+    private Date updateTime;
     private Date createTime;
+    @Version
+    public long version;
 
     public UserType(String name,  String ref, String label){
         setName( name );
@@ -74,5 +78,17 @@ public class UserType extends Model {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
     }
 }

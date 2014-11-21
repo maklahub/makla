@@ -32,9 +32,10 @@ public class Organization extends Model {
     @OneToOne(cascade = CascadeType.ALL)
     private Address shippingAddress;
     private Date createTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
     private static Finder<String , Organization> find = new Finder<String, Organization>(String.class, Organization.class);
 

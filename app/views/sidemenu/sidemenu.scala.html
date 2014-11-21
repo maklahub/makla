@@ -1,4 +1,14 @@
+<script type="text/javascript">
+    $( document).ready( function(){
+        var $sideMenu = $(".home-sideMenu");
+        var documentWidth = $( document).width();
+        var windowWidth = $( window).width();
 
+        if ( windowWidth < 1010 ){
+            $sideMenu.hide();
+        }
+    });
+</script>
 <div class="span1 home-sideMenu">
     <div class="sideMenu-row"> <a class="my-profile-icon edit-icon"  href="/myprofile" ></a></div>
     <div class="sideMenu-row"> <a class="my-profile-icon image-icon" href="/myphotos" ></a></div>

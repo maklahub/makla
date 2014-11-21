@@ -4,9 +4,10 @@
 <script>
         $( document).ready( function(){
             //alert(" hi " + new ToolBar().render());
+            var u = @Html(session.get("sessionUser"));
             var myvideos = @Html( myvideos );
             var $myvideosContainer = $("#artista-videos-container");
-           $('#tool-bar').html( new ToolBar( toolBarObjects.myvideosToolBar ).render());
+           $('#tool-bar').html( new ToolBar( toolBarObjects.myvideosToolBar, u ).render());
 
             $.each( myvideos, function( i, e){
                  //console.log( JSON.stringify(e));
@@ -35,7 +36,7 @@
                 $dropDownShadow.attr('class', "dropDownShadow");
                 $dropDownContainer.attr({'id' : "dropDownContainer", 'class': "div-absolute-center form-background" });
                 $dropDownShadow.css({'z-index':1, 'position':'absolute', 'backgroundColor':'rgb(6, 1, 8)', height:"100%", width:"100%", 'top':0, 'opacity':0.8});
-                $dropDownContainer.css({'position' :'absolute', 'width' : $bodyWidth/2,'top' : "-400px","min-width" : "300px", "max-width" :"500px", padding: "10px"});
+                $dropDownContainer.css({'position' :'absolute', 'width' : "100%",'top' : "-400px","min-width" : "300px", "max-width" :"600px", padding: "10px", "background-color" : "#e1e1e1"});
                 $body.append( $dropDownShadow );
                 // var wHtml = new DropDownWindow().render();
                 $dropDownContainer.html( new DropDownWindow( forms.uploadMyvideos, "Add Videos" ).render() );

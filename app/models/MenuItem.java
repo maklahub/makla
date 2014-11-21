@@ -19,6 +19,7 @@ public class MenuItem extends Model {
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
     private Photo menuItemPhoto;
+    @Column(columnDefinition = "TEXT")
     private String Description;
     private double price;
     private int quantity;
@@ -27,9 +28,10 @@ public class MenuItem extends Model {
     private Menu menu;
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
     public MenuItem( String name, Menu menu, double price ){
       setName( name );

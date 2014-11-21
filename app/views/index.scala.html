@@ -1,4 +1,4 @@
-@(menus: String, cart: String)
+@(organizations: List[SystemUser])
 
 @if(session.get("sessionUser")) {
 @headerIn()
@@ -9,76 +9,21 @@
 <script type="text/javascript">
     $( document).ready( function(){
 
+        //$('#tool-bar').html("<h1>Test</h1>");
+        var $container = $('#orgs-container');
+        var $loading = $('#loading');
+        var feedPageWidth = $container.width();
         var documentWidth = $( document).width();
-        // alert( $( document).width());
-
-        $(function(){
-            // create some screens
-
-            var menus = @Html(menus);
-            var cart =  @Html(cart) ;
-            var cartItems = cart.cartItems;
-            var $container = $(' #artistas-container ');
-            var $cartContainer = $(' #cart');
-               $container.css( 'visibility', 'hidden');
-
-            $.each( menus , function ( i, element){
-                //alert( element );
-                //console.log( element );
-                var s1 = new Menu( element ).render();
-                $container.append( s1 );
-            });
-
-
-            $cartContainer.append( $(new Cart( cart ).render()).fadeIn() );
-
-
-
-
-            $container.imagesLoaded( function() {
-                $container.css('visibility', 'visible');
-
-                $('.add-to-cart-btn').on('click', function(){
-                    var $this = $( this );
-                    var $parent = $this.parent();
-                    var menuItemId =  $(this).attr('data-id');
-                    var loggedIn = 0;
-                    @if(session.get("sessionUser")){
-                        loggedIn = 1 ;
-                        var uri = "addToCart";
-                        var o = {};
-                        o.id = menuItemId;
-                        o.name = "item name";
-                        ajaxHtml( uri, $cartContainer , o, Cart );
-                        //$parent.parent().fadeOut();
-                       // $parent.parent().css('opacity', 0.8);
-                    };
-                    if (!loggedIn ){
-                        window.location.href="logIntoOrder";
-                    }
-
-
-                });
-
-            });
-
-            $( document ).on('click', '.remove-cart-item', function(){
-                $this = $( this );
-                var cartItemId = $this.attr('data-id');
-                var $cartItemContainer =  $("#" + cartItemId);
-                //alert( cartItemId );
-                var uri = "removeCartItem";
-                var o = {};
-                o.id = cartItemId
-                apiCall(  uri, o , function( d ){
-                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
-                      //alert( JSON.stringify(d) );
-                    $cartContainer.html( $(new Cart( d ).render()).fadeIn( "fast" )  );
-
-                });
-            });
-
+        $container.hide();
+        $container.imagesLoaded( function() {
+            $loading.hide();
+            console.log("----> " + $loading);
+            $container.show().masonry();
         });
+
+        //$('.feed-item').css( 'width', 400 + "px");
+
+
     });
 
 
@@ -86,17 +31,21 @@
 
 <div class="container-fluid" id="content-container">
 
-   <h1>Welcome</h1>
-
-
-    <div id="artistas-container" class="container">
-
+    <div id="loading"><img src="/images/loader.gif" alt=""></div>
+    <div id="orgs-container" class="">
+        @for( org <- organizations ) {
+       <a class='span4 feed-item' href="/@org.getUserType().getLabel()/@org.getReference()/menus">
+       <div class="fc"><div class="padding5px"><div class="row-fluid"><h2 class="sub-title h1"> @org.getFullName</h2></div>
+       <div class="row-fluid"> <div class="span12"><img style="width: 100%" src="@org.getProfileImageUrl()"></div></div></div>
+      <!-- <div class="fc-fotter padding5px"> Footer</div>
+       <div class="fc-comments padding5px"> Comments</div>  -->
+       </div></a>
+        }
     </div>
 </div>
 
 
-  <div id="cart">
-  </div>
+
 
 
 </body>

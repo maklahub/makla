@@ -23,6 +23,7 @@ public class Album extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     private String reference;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
@@ -31,7 +32,6 @@ public class Album extends Model {
     @JsonIgnore
     private List<Photo> photos;
     private Date createTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
     @Enumerated(value=EnumType.ORDINAL)
@@ -40,6 +40,8 @@ public class Album extends Model {
     public enum AlbumType {
         profile, other;
     }
+    @Version
+    public long version;
 
     public Album( SystemUser owner, String title, String description, AlbumType albumType ){
         setOwner( owner );

@@ -1,0 +1,104 @@
+@(menus: String, cart: String)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+<script type="text/javascript">
+    $( document).ready( function(){
+
+        var documentWidth = $( document).width();
+        // alert( $( document).width());
+
+        $(function(){
+            // create some screens
+
+            var menus = @Html(menus);
+            var cart =  @Html(cart) ;
+            var cartItems = cart.cartItems;
+            var $container = $(' #artistas-container ');
+            var $cartContainer = $(' #cart');
+               $container.css( 'visibility', 'hidden');
+
+            $.each( menus , function ( i, element){
+                //alert( element );
+                //console.log( element );
+                var s1 = new Menu( element ).render();
+                $container.append( s1 );
+            });
+
+
+            $cartContainer.append( $(new Cart( cart ).render()).fadeIn() );
+
+
+
+
+            $container.imagesLoaded( function() {
+                $container.css('visibility', 'visible');
+
+                $('.add-to-cart-btn').on('click', function(){
+                    var $this = $( this );
+                    var $qty = $this.prev().find(  '.menu-item-qty' );
+                  //  alert( $qty.val() );
+                    var $parent = $this.parent();
+                    var menuItemId =  $(this).attr('data-id');
+                    var loggedIn = 0;
+                    @if(session.get("sessionUser")){
+                        loggedIn = 1 ;
+                        var uri = "addToCart";
+                        var o = {};
+                        o.id = menuItemId;
+                        o.name = "item name";
+                        o.qty = $qty.val() || 1;
+                        ajaxHtml( uri, $cartContainer , o, Cart );
+                        //$parent.parent().fadeOut();
+                       // $parent.parent().css('opacity', 0.8);
+                    };
+                    if (!loggedIn ){
+                        window.location.href="logIntoOrder";
+                    }
+
+
+                });
+
+            });
+
+            $( document ).on('click', '.remove-cart-item', function(){
+                $this = $( this );
+                var cartItemId = $this.attr('data-id');
+                var $cartItemContainer =  $("#" + cartItemId);
+                //alert( cartItemId );
+                var uri = "/removeCartItem";
+                var o = {};
+                o.id = cartItemId
+                apiCall(  uri, o , function( d ){
+                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
+                      //alert( JSON.stringify(d) );
+                    $cartContainer.html( $(new Cart( d ).render()).fadeIn( "fast" )  );
+
+                });
+            });
+
+        });
+    });
+
+
+</script>
+
+<div class="container-fluid" id="content-container">
+
+
+    <div id="artistas-container" class="container">
+
+    </div>
+</div>
+
+
+  <div id="cart">
+  </div>
+
+
+</body>
+</html>

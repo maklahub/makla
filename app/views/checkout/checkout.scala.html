@@ -10,23 +10,31 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
+
+
+
         var cartId = "@cartId";
         var creditCards = @Html(creditCards);
         var order = @Html(order);
+
+
         $body = $( "body");
         $loadingImage = $( "#loading-image");
         $addCardContainer = $("#add-credit-card-container");
         $addCreditCardForm = $("#add-credit-card-form");
+        $maklaContainer = $("#makla-container");
         $orderItemsContainer = $("#order-items-container");
+        $messageContainer = $("#message-server-container");
         if ( creditCards.length > 0 ){
             $addCardContainer.remove();
             $orderItemsContainer.append( new Order( order ).render());
-            $orderItemsContainer.css('visibility', 'visible');
+            $maklaContainer.css('visibility', 'visible');
 
         }
 
 
         $( document).on('click', '#save-credit-card', function(){
+            $messageContainer.html("");
             $loadingImage.fadeIn();
             var cardFirstName = $("#card-firstName").val();
             var cardLastName = $("#card-lastName").val();
@@ -45,36 +53,56 @@
             o.cardYear = cardYear;
             o.cardCvv = cardCvv;
 
+            var successCallBack = function( d ){
+                console.log( d );
+                $addCreditCardForm.remove();
+                $addCardContainer.append(new DropDownWindow("<h1>Credit Card has been added Successfully</h1>", "Success").render()).delay( 3000).fadeOut();
+               // $addCardContainer.remove();
+                $orderItemsContainer.append( new Order( order ).render());
+                $maklaContainer.css('visibility', 'visible');
+            }
+            var errorCallBack = function( textstatus, data){
+                $loadingImage.hide('fast');
+                console.log( textstatus );
+                console.log( data );
+                $messageContainer.html( textstatus).addClass("red");
+            }
+
             if (cardFirstName){
-                apiCall(  uri, o , function( d ){
-                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
-                    $addCreditCardForm.remove();
-                    $addCardContainer.append(new DropDownWindow("<h1>Credit Card has been added Successfully</h1>", "Success").render()).delay( 3000).fadeOut();
-                    $addCardContainer.remove();
-                    $orderItemsContainer.append( new Order( order ).render());
-                    $orderItemsContainer.css('visibility', 'visible');
-
-                    // print order items
-
-                   // $orderItemsContainer.append( "<h1> test 66qw66673424 </h1>");
-                });
+                apiCall(  uri, o , successCallBack , errorCallBack );
 
             }
         });
 
 
+        $( document).on( 'click', '#order-pay-btn', function(){
+            // $( this).preventDefault();
+            startLoadingScreen();
+        });
+
+
+
 
     });
+
+
+    function startLoadingScreen(){
+        var $shadowDiv = $("#shadow-container");
+        var $loadingImgDiv = $("<div id='loading-img-container'><span>Processing...</span></div>");
+        var $img = $("<img>");
+            $img.attr('src', '/images/loader.gif');
+            $loadingImgDiv.append( $img );
+            $shadowDiv.append( $loadingImgDiv );
+            $shadowDiv.show();
+    }
 </script>
 
 
 <div class="container-fluid" id="content-container">
 
-    <h1>Welcome</h1>
-
-    <div id="add-credit-card-container" style="width: 500px; margin: auto">
+    <div id="add-credit-card-container">
         <div class="row-fluid" id="add-credit-card-form">
-            <h1 class="add-credit-card-title btn-primary">Add Credit Card </h1>
+            <h1 class="add-credit-card-title">Add Credit Card </h1>
 
 
         <div class="row-fluid">
@@ -90,12 +118,17 @@
                 <div class="frow">
                     <select  class="signup-select finputText" name="card-cardTypes" id="card-cardTypes">
                         <option > Card type </option>
-                        <option value="visa" selected=""> Visa</option>
+                        <option value="visa"> Visa</option>
+                        <option value="mastercard" > Mastercard</option>
+                        <option value="discover"> Discover</option>
+                        <option value="amex" > Amex</option>
+
                     </select>
                 </div>
                 <div class="frow">
                     <label class="flabel"> Card Number</label>
-                    <input type="text" class="finputText" name="card-cardNumber" id="card-cardNumber" value="4446283280247004">
+                    <input type="text" class="finputText" name="card-cardNumber" id="card-cardNumber">
+                    <input type="hidden" class="" name="test" id="test" value="4446283280247004">
                 </div>
                    <div class="frow">
                        <div class="inline-block"> <h6 class="expiration-date-title inline-block">Expiration Date:</h6></div>
@@ -104,38 +137,67 @@
                                <option>Month</option>
                                <option value="1">1</option>
                                <option value="2">2</option>
-                               <option value="3" selected="">3</option>
-                               <option value="3" >6</option>
+                               <option value="3">3</option>
+                               <option vlaue="4">4</option>
+                               <option value="5" >5</option>
+                               <option value="6" >6</option>
+                               <option value="7" >7</option>
+                               <option value="8" >8</option>
+                               <option value="9" >9</option>
+                               <option value="10" >10</option>
+                               <option value="11" >11</option>
+                               <option value="12" >12</option>
                            </select>
                        </div>
                        <div class="inline-block">
                            <select class="select-year inline-block" name="card-year" id="card-year" >
                                <option>Year</option>
-                               <option value="2008">2008</option>
-                               <option value="2009">2009</option>
-                               <option vlaue="2018" selected="">2018</option>
-                               <option vlaue="2018" >2019</option>
+                               <option value="2014">2014</option>
+                               <option value="2015">2015</option>
+                               <option vlaue="2016" >2016</option>
+                               <option vlaue="2017" >2017</option>
+                               <option vlaue="2018" >2018</option>
+                               <option vlaue="2019" >2019</option>
+                               <option vlaue="2020" >2020</option>
+                               <option vlaue="2021" >2021</option>
+                               <option vlaue="2022" >2022</option>
+                               <option vlaue="2023" >2023</option>
+                               <option vlaue="2024" >2024</option>
+                               <option vlaue="2025" >2025</option>
+                               <option vlaue="2026" >2026</option>
+                               <option vlaue="2027" >2027</option>
+                               <option vlaue="2028" >2028</option>
+                               <option vlaue="2028" >2029</option>
+                               <option vlaue="2028" >2030</option>
                            </select>
                        </div>
                    </div>
-                <div class="frow">
+               <!-- <div class="frow">
                     <label class="flabel"> CVV </label>
                     <input type="text" class="finputText cvv" name="card-cvv" id="card-cvv">
                     <span class="input-info"> Security code</span>
-                </div>
+                </div>   -->
                 <div> <input class="btn signup-btn span12" id="save-credit-card" type="button" name="saveCreditCard" value="Save Card"></div>
                 <div id="loading-image" style="display: none;"><img src="/images/loading.gif" alt=""></div>
+                <div id="message-server-container"></div>
             </div>
         </div>
        </div>
 
     </div>
-    <div id="order-items-container" style="visibility: hidden;">
-        <div id="order-Items">
+
+    <div class="container-makla" id="makla-container" style="visibility: hidden;">
+        <div id="order-items-container" >
         </div>
+
     </div>
 
+
+
 </div>
+
+<div id="shadow-container"></div>
+
 
 </body>
 </html>

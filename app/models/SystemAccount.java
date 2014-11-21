@@ -5,6 +5,7 @@ import play.db.ebean.Model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +14,9 @@ public class SystemAccount extends Model {
 
     @Id
     private String id = UUID.randomUUID().toString().replaceAll("-", "");
+    private String name;
+    @Column(columnDefinition = "TEXT")
+    private String description;
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser systemUser;
     private String accountEmail;
@@ -20,11 +24,18 @@ public class SystemAccount extends Model {
     @Enumerated(EnumType.STRING)
     private AccountType accountType = AccountType.free;
     private Date createTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     public enum AccountType {
@@ -47,6 +58,10 @@ public class SystemAccount extends Model {
 
     public static SystemAccount findSystemAccountByEmail( String email ){
         return Ebean.find(SystemAccount.class).where().like( "account_email" , email).findUnique();
+    }
+
+    public static List<SystemAccount> findSystemAccountsListByEmail( String email ){
+        return Ebean.find(SystemAccount.class).where().like( "account_email" , email).findList();
     }
 
     public static SystemAccount findSystemAccountByEmailAndPass( String email, String password ){

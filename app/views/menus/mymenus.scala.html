@@ -11,9 +11,10 @@
         var profileVideos = profileData.videos;
         var systemUser = profileData.systemUser;
         var $personalDataContainer = $('#personal-date');
-        var $menusContainer = $('#menus');
-        console.log( systemUser );
-        $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar).render());
+        var $menusContainer = $('#menus-container');
+        var u = @Html(session.get("sessionUser"));
+
+        $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar, u).render());
         $('#menus-list-btn').addClass( 'btn-success' );
         $("#pImage").attr({'src':encodeURI( systemUser.profileImageUrl), 'data-id': systemUser.profileImageId, title: "Profile Photo"});
         $("#profilePersonalInfo").html(new ProfilePersonalInfo( systemUser ).html );
@@ -104,10 +105,10 @@
 
 
 
-<div class="row-fluid" id="menus" style="max-width: 600px; margin: auto">
-    <h1>My Menus</h1>
+<div class="row-fluid " id="menus-container" >
+    <h1></h1>
     <div class="row-fluid menu-add-bar">
-        <div id="add-menu-btn" class="btn btn-danger "> Add a Menu</div>
+        <div id="add-menu-btn" class="btn btn-danger "> Add a Menu Section</div>
     </div>
 </div>
 

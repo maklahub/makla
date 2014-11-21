@@ -16,14 +16,17 @@ public class Comment extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     @OneToOne(cascade = CascadeType.ALL)
     private SystemUser commenter;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToOne( cascade = CascadeType.ALL  )
     private Photo photo;
     @OneToOne(cascade = CascadeType.ALL)
     private Video video;
-  //  @Version
     @Column(columnDefinition = "timestamp")
     private Date createTime;
+    private Date updateTime;
+    @Version
+    public long version;
 
 
     public Comment( Photo photo,  SystemUser commenter, String comment){
@@ -102,5 +105,9 @@ public class Comment extends Model {
 
     public String toString(){
         return "Comment: " + getDescription() + " " +  getCommenter() + ""  + getDateCreated();
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
     }
 }

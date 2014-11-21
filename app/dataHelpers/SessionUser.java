@@ -14,9 +14,12 @@ public class SessionUser {
     private String email;
     private Photo activeProfileImage;
     private Address location;
+    private boolean isPerson = false;
+
 
     public SessionUser( SystemUser systemUser){
         if ( systemUser.isItAPerson()){
+            isPerson = true;
             setFirstName( systemUser.getPerson().getFirstName() );
             setLastName( systemUser.getPerson().getLastName() );
             setFullName( getFirstName() + " " + getLastName());
@@ -30,10 +33,13 @@ public class SessionUser {
        setUserName( systemUser.getUserName());
 
        setActiveProfileImage( SystemUser.getActiveProfilePhoto( systemUser.getId() ) );
-       setLocation( systemUser.getLocation() );
+       setLocation( systemUser.getAddress() );
     }
 
 
+    public boolean isPerson(){
+        return isPerson;
+    }
     public String getUserName() {
         return userName;
     }

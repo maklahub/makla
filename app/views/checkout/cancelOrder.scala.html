@@ -1,0 +1,33 @@
+@(order: Order)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+    });
+</script>
+
+
+<div class="container-fluid container-makla" id="content-container">
+    <h3 class="sub-title">Please contact the order provider:</h3>
+
+    <div class="row-fluid">
+        <div class="span6"><strong><a href="/profile/@order.getProvider().getReference()">@order.getProvider().getFullName()</a> </strong> </div>
+        <div class="span6"><strong> Phone: @order.getProvider().getOrganization().getPhoneNumber()</strong> </div>
+        <div>Discovery Delivery Support</div>
+        <div>Email: <i> <a href="mailto:support@@discoverydelivery.com"> support(at)discoverydelivery.com</a></i></div>
+    </div>
+
+</div>
+
+
+</body>
+</html>

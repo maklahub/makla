@@ -77,6 +77,25 @@ public class Menus extends Controller {
         return ok( views.html.menus.menuItems.render( menuAsJson) ) ;
     }
 
+ public static Result getMenusByShop( String reference, String shopType){
+          SystemUser org = SystemUser.findSystemUserByReference( reference );
+          Cart cart = null;
+          SystemUser currentUser = null;
+          List<Menu> menus = Menu.findMenuByOrganization( org.getId());
+          if ( session("sessionUser") != null){
+              currentUser = SystemUser.findUserById(session("currentUserId"));
+              cart = Cart.findCartBySystemUser( currentUser.getId() );
+              if ( cart == null && currentUser.isItAPerson() ){
+                  cart = new Cart( "New cart", currentUser);
+                  cart.save();
+              }
+          }
+
+
+
+        return ok( views.html.menus.menus.render( org, menus, cart, currentUser)) ;
+    }
+
 
     public static Result addMenuItemToMenu() throws IOException {
         System.out.println( "\n URI: " + request().uri());

@@ -26,7 +26,8 @@ $(function () {
         $.each($finputText, function (i, element) {
             $(element).val().length > 0 ? "" : $(element).siblings().fadeIn();
         });
-        $(this).hide().siblings().focus();
+        //$(this).hide().siblings().focus();
+        $(this).removeClass('flabel').addClass('flabel-right').siblings().focus();
     });
 
     /*
@@ -42,7 +43,8 @@ $(function () {
     */
 
     $body.on('focus', '.finputText, #comment-text-area', function () {
-        $(this).siblings().hide();
+        //$(this).siblings().hide();
+        $(this).siblings().first().removeClass('flabel').addClass('flabel-right');
     });
 
     $body.on('blur', '.finputText, #comment-text-area', function () {
@@ -172,18 +174,23 @@ function unGrayScale( ){
 
 // set animation - margin top for the main content
 
-function slideDownMainContent(){
+function slideDownMainContent( u ){
     var $topHeaderBar = $('#header-top-bar');
     var $contentWrapper = $('#content-container');
-    var marginTop =  $topHeaderBar.height() + 6;
-    //alert( marginTop)
-
+    var marginTop =  $topHeaderBar.height();
+    if ( u ){
+        //alert( "Add tool bar height");
+        marginTop += 45;
+    }
+    else {
+        marginTop += 10;
+    }
     //console.log( $contentWrapper );
     $contentWrapper.css({opacity:0});
     $contentWrapper.animate({
         'margin-top' : marginTop + "px",
         'opacity': 1
-    }, 'slow', function(){
+    }, '1000', function(){
         //alert(' done ');
     });
 
@@ -264,7 +271,7 @@ function displayPhotoMediaFrame( $this, loggedIn ){
             top:0
         }, "slow", function(){
             $(".close-dropDown").on( 'click', function(){
-                $( this).parent().parent().fadeOut();
+                $( this).parent().parent().parent().fadeOut();
             });
         });
     });

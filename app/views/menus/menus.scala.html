@@ -1,0 +1,189 @@
+@(org: SystemUser, menus: List[Menu], cart : Cart, currentUser : SystemUser)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+<script type="text/javascript">
+    $( document).ready( function(){
+        var $loading = $('#loading');
+        @if(currentUser != null && session.get("sessionUser") && currentUser.isItAPerson() ){
+
+            var itemsSize = "@cart.getCartItems().size()";
+            if ( itemsSize > 0 ){
+                $('#tool-bar').html( "<div class='toolbar-html'><span class='cart-icon'></span><span class='badge badge-info'>Items: <i id='cart-items-size' >@if( cart != null ){ @cart.getCartItems().size()}</i></span><span class='badge badge-info'>Total: $<i id='cart-total' >@if(cart != null ){ @cart.getTotalAmountWithTax()}</i></span><span class='btn' id='show-cart-btn'> View cart</span><form style='margin: 0; display: inline-block;' method='post' action='/checkout'><input type='hidden' name='cartId' value= @cart.getId()><input type='submit' class='btn btn-primary' value='Checkout' id='tool-bart-checkout-btn'></form></div>");
+            }
+            else {
+                $('#tool-bar').html( "<div class='toolbar-html'><span class='cart-icon'></span><span class='badge badge-info'>Items: <i id='cart-items-size' >@if( cart != null ){ @cart.getCartItems().size()}</i></span><span class='badge badge-info'>Total: $<i id='cart-total' >@if(cart != null ){ @cart.getTotalAmountWithTax()}</i></span><span class='btn' id='show-cart-btn' style='display: none'> View cart</span><form style='margin: 0; display: inline-block;' method='post' action='/checkout'><input type='hidden' name='cartId' value= @cart.getId()><input type='submit' class='btn btn-primary' value='Checkout' id='tool-bart-checkout-btn' style='display: none'></form></div>");
+            }
+
+        };
+
+
+
+        var documentWidth = $( document).width();
+        // alert( $( document).width());
+
+        $(function(){
+
+            var $container = $(' #org-menus-container');
+            var $cartContainer = $(' #cart');
+                $container.css( 'visibility', 'hidden');
+
+                $container.imagesLoaded( function() {
+                $loading.hide();
+                $container.css('visibility', 'visible');
+
+                $('.add-to-cart-btn').on('click', function(){
+                    var $this = $( this );
+                    var itemImg = $this.attr("data-img");
+                    var $qty = $this.parent().find('.menu-item-qty' );
+                    var $parent = $this.parent();
+                    var menuItemId =  $(this).attr('data-id');
+                    var loggedIn = 0;
+                    @if(session.get("sessionUser")){
+                        var $img = $("<img>");
+                            $img.attr('src', itemImg).css({"height":"40px", "border-radius" : "50%"});
+                            $this.append( $img );
+                        $img.animate({
+                            opacity: 0.25,
+                            top: "-=50",
+                            //height: "toggle"
+                            height: 0
+                        }, 2000, function() {
+                            // Animation complete.
+                        });
+
+                            loggedIn = 1 ;
+                        var uri = "/addToCart";
+                        var o = {};
+                        o.id = menuItemId;
+                        o.name = "item name";
+                        o.qty = $qty.val() || 1;
+                        ajaxHtml( uri, $cartContainer , o, Cart );
+                        //$parent.parent().fadeOut();
+                       // $parent.parent().css('opacity', 0.8);
+                    };
+                    if (!loggedIn ){
+                        window.location.href="/logIntoOrder";
+                    }
+
+
+                });
+
+            });
+
+            $("#show-cart-btn").on( 'click', function(){
+                 $cartContainer.toggle();
+                 $("#shadow-container").toggle();
+                 var $el = $(this);
+                 $el.text($el.text() == "Hide cart" ? "View cart": "Hide cart");
+            });
+
+            $( document ).on('click', '#close-cart-btn', function(){
+                $("#show-cart-btn").text("View cart");
+                $cartContainer.hide();
+                $("#shadow-container").hide();
+            });
+
+            $( document ).on('click', '.remove-cart-item', function(){
+                $this = $( this );
+                var cartItemId = $this.attr('data-id');
+                var $cartItemContainer =  $("#" + cartItemId);
+                //alert( cartItemId );
+                var uri = "/removeCartItem";
+                var o = {};
+                o.id = cartItemId
+                apiCall(  uri, o , function( d ){
+                    //$cartContainer.html( new Cart( d ).render().fadeIn() )
+                      //alert( JSON.stringify(d) );
+                    $cartContainer.html( $(new Cart( d ).render()) );
+
+                });
+            });
+
+        });
+    });
+
+
+</script>
+<!--   Cart  -->
+<div class="" id="cart" style="display: none; margin-top: 80px">
+    @if(  currentUser != null && currentUser.isItAPerson() && cart != null && cart.getTotalTaxAmount() > 0  ) {
+
+    <div  id="cart-container">
+        <div class="row-fluid"><div class="span12"><h1 class="cart-title">My Cart</h1></div><span id="close-cart-btn" class="btn btn-mini">  </span></div>
+        <div class="row-fluid" id="cartItems">
+            <ul>
+
+                @for( cartItem <- cart.getCartItems() ){
+                <li class="cart-item-li">
+                    <div class="padding5px"><div class="cart-item-img-desc"><span data-id= @cartItem.getId() class="remove-cart-item" title="Remove Item"> remove</span>
+                        <span class="cart-item-qty"> @cartItem.getQuantity()X</span><img class="cart-item-img" src="@cartItem.getCartItemPhoto().getUrl()" alt=""><span class="cart-item-desc"> @cartItem.getName()</span>
+                        <span class='cart-item-price'> $ @cartItem.getAmount()</span><div class='clearfix'></div></div></div>
+                </li>
+                }
+            </ul>
+        </div>
+        <div class="cart-total-amount"> <p style="font-weight: 600 !important;"> Tax: $ @cart.getTotalTaxAmount() </p><span class="cart-ta badge badge-success">$ @cart.getTotalAmountWithTax()</span></div>
+        <div class="check-out"><form style="margin: 0" method="post" action="/checkout"><input type="hidden" name="cartId" value= @cart.getId()><input type="submit" class="checkout-btn" value="Checkout" id= @cart.getId()></form></div>
+    </div>
+    }
+</div>
+<div class="container-fluid" id="content-container">
+    <div id="loading"><img src="/images/loader.gif" alt=""></div>
+
+
+    <div id="org-menus-container" class="container">
+        <div>
+            <h1>
+               <a href="/profile/@org.getReference()">
+                @org.getFullName
+               </a>Menu
+            </h1>
+        </div>
+        @for( menu <- menus ) {
+
+        <div class="row-fluid menu-container">
+        <div class="row-fluid">
+            <div class="span12">
+                <h1 class="menu-title">  @menu.getName()
+                </h1>
+            </div>
+        </div>
+        <div class="row-fluid">
+            @for( menuItem <- menu.getMenuItems() ){
+            <div style="padding-left: 5px">
+                <div class="item-title"> @menuItem.getName()  $@menuItem.getPrice()</div>
+
+                <div class="row-fluid">
+
+                    <div class="span2" style="border-radius: 50%; border: solid #121212 1px; overflow: hidden;" data-id= @menuItem.getId()>
+                        <img id="@menuItem.getId()" src="@menuItem.getMenuItemPhoto().getUrl()">
+
+                    </div>
+                    <div class=" span8 item-description"><p> @menuItem.getDescription()</p></div>
+                    @if( currentUser == null || currentUser.isItAPerson() ){
+                    <div class=" span2">
+                        <span class="qty-label">QTY</span><input class="menu-item-qty" type="text" name="qty" placeholder= "1" value="1">
+                        <div class="btn add-to-cart-btn" data-id=@menuItem.getId() data-img="@menuItem.getMenuItemPhoto().getUrl()"> Add to cart</div>
+
+                    </div>
+                    }
+                </div>
+            </div>
+
+
+            <hr class="hr">
+            }
+        </div></div>
+
+        }
+    </div>
+</div>
+
+   <div id="shadow-container"></div>
+</body>
+</html>

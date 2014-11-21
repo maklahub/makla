@@ -15,6 +15,7 @@ public class Document extends Model {
     private String id = UUID.randomUUID().toString().replaceAll("-","");
     private String reference;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String fileName;
     private String url;
@@ -33,11 +34,12 @@ public class Document extends Model {
     @JsonIgnore
     private SystemUser owner;
     private Date createTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
     @Enumerated(value=EnumType.ORDINAL)
     Status status = Status.active;
+    @Version
+    public long version;
 
 
     @EnumMapping(nameValuePairs="active = a, inactive = i")

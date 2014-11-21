@@ -5,9 +5,10 @@
 <script>
     $(document).ready(function () {
         //alert(" hi " + new ToolBar().render());
+        var u = @Html(session.get("sessionUser"));
         var myphotos = @Html(myphotos);
         var $myphotosContainer = $("#artista-photos-container");
-        $('#tool-bar').html(new ToolBar(toolBarObjects.myphotosToolBar).render());
+        $('#tool-bar').html(new ToolBar(toolBarObjects.myphotosToolBar, u).render());
 
         $.each(myphotos, function (i, e) {
             //console.log( JSON.stringify(e));
@@ -34,7 +35,7 @@
             $dropDownContainer.attr({'id':"dropDownContainer", 'class':"div-absolute-center form-background" });
 
             $dropDownShadow.css({'z-index':1, 'position':'absolute', 'backgroundColor':'rgb(6, 1, 8)', height:"100%", width:"100%", 'top':0, 'opacity':0.8});
-            $dropDownContainer.css({'position':'absolute', 'backgroundColor':'rgb(230, 230, 230)', 'width':$bodyWidth / 2, 'top':"-400px", "min-width" : "300px", "max-width" :"360px", padding: "10px"});
+            $dropDownContainer.css({'position':'absolute', 'backgroundColor':'rgb(230, 230, 230)', 'width':"100%", 'top':"-400px", "min-width" : "300px", "max-width" :"500px", padding: "10px"});
 
             $body.append($dropDownShadow);
             // var wHtml = new DropDownWindow().render();

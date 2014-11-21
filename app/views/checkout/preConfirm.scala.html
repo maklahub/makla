@@ -1,0 +1,40 @@
+@(order: Order)
+
+@if(session.get("sessionUser")) {
+@headerIn()
+} else {
+@headerOut()
+}
+
+
+<script type="text/javascript" xmlns="http://www.w3.org/1999/html">
+
+    $(document).ready(function () {
+        $body = $( "body");
+        $loadingImage = $( "#loading-image");
+
+
+
+    });
+</script>
+
+
+<div class="container-fluid container-makla" id="content-container">
+    <h1 style="text-align: center">Set up Delivery Time for Order # @order.getReference
+          <div style="width: 120px; margin: 25px auto">
+
+              <form action="@controllers.routes.Application.index().absoluteURL()order/@order.getId/confirm" method="post">
+              <table>
+                  <tr><td><div class="frow"><label class="flabel">Hours</label><input type="text" class="finputText" name="hours"></div></td></tr>
+                  <tr><td><div class="frow"><label class="flabel">Minutes</label><input type="text" class="finputText" name="minutes"></div></td></tr>
+                  <tr><td> <div > <input style="width: 100%; font-size: 15pt; padding: 10px 0px " class="btn btn-success" type="submit" value="Confirm"></div></td></tr>
+              </table>
+              </form>
+          </div>
+
+</div>
+
+
+
+</body>
+</html>

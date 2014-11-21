@@ -18,28 +18,34 @@ public class Cart extends Model {
     private static String reference ;
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
-    private SystemUser owner;
+    private SystemUser requestor;
+    @OneToOne(cascade = CascadeType.ALL)
+    private SystemUser provider;
     private double totalAmount;
+    private final double taxRate = 10;
+    private double totalTaxAmount;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToMany( cascade = CascadeType.ALL )
     private List<CartItem> cartItems;
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
 
-    public Cart( String name, SystemUser owner){
+    public Cart( String name, SystemUser requestor){
         setName( name );
-        setOwner( owner );
+        setRequestor( requestor );
         setCreateTime( new Date() );
     }
 
     private static Finder< String, Cart > find = new Finder<String, Cart>( String.class, Cart.class );
 
-    public static Cart findCartBySystemUser( String ownerId ){
-        Cart cart = Ebean.find(Cart.class).where().eq("owner.id", ownerId).findUnique();
+    public static Cart findCartBySystemUser( String requestorId ){
+        Cart cart = Ebean.find(Cart.class).where().eq("requestor.id", requestorId).findUnique();
         System.out.println("Cart: ---> " + cart);
         return cart;
     }
@@ -48,6 +54,22 @@ public class Cart extends Model {
         Cart cart = Ebean.find(Cart.class).where().eq("id", id).findUnique();
         System.out.println("Cart: ---> " + cart);
         return cart;
+    }
+
+    public double getTotalAmountWithTax(){
+        return Double.valueOf(new DecimalFormat("#0.00").format( getTotalAmount() + getTotalTaxAmount() ));
+    }
+
+    public double getTotalTaxAmount() {
+        totalTaxAmount = (getTaxRate()/100) * getTotalAmount();
+        return Double.valueOf(new DecimalFormat("#0.00").format( totalTaxAmount ));
+    }
+    public double getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTotalTaxAmount(double totalTaxAmount) {
+        this.totalTaxAmount = totalTaxAmount;
     }
     public static String getReference() {
         return reference;
@@ -70,13 +92,7 @@ public class Cart extends Model {
         this.name = name;
     }
 
-    public SystemUser getOwner() {
-        return owner;
-    }
 
-    public void setOwner(SystemUser owner) {
-        this.owner = owner;
-    }
 
     public String getDescription() {
         return description;
@@ -123,7 +139,7 @@ public class Cart extends Model {
     public double getTotalAmount() {
         this.totalAmount = 0;
         for ( CartItem ci :  getCartItems() ){
-            totalAmount += ci.getPrice();
+            totalAmount += ci.getAmount();
         }
         totalAmount = Double.parseDouble(new DecimalFormat("#0.00").format( totalAmount ));
         return totalAmount;
@@ -139,5 +155,21 @@ public class Cart extends Model {
 
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public SystemUser getProvider() {
+        return provider;
+    }
+
+    public void setProvider(SystemUser provider) {
+        this.provider = provider;
+    }
+
+    public SystemUser getRequestor() {
+        return requestor;
+    }
+
+    public void setRequestor(SystemUser requestor) {
+        this.requestor = requestor;
     }
 }

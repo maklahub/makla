@@ -9,21 +9,25 @@ GET     /home                       controllers.Application.home()
 #GET     /deleteArtista/:id          controllers.Application.deleteArtista( id: Long )
 GET     /byName/:name               controllers.Application.byName( name: String )
 GET     /signOut                    controllers.Application.signOut()
-GET     /profile/:userName          controllers.Application.profile( userName: String )
+GET     /profile/:reference          controllers.Application.profile( reference: String )
 GET     /myprofile                  controllers.Application.myProfile()
 GET     /myphotos                   controllers.Application.myPhotos()
 GET     /myvideos                   controllers.Application.myVideos()
 GET     /search/:q                  controllers.Application.searchArtistas( q: String )
 GET     /order/:q                   controllers.Checkout.getOrder( q: String )
+GET     /order/:q/preconfirm        controllers.Checkout.preConfirmOrder( q: String )
+GET     /order/:q/cancel            controllers.Checkout.cancelOrder( q: String )
+
 GET     /menus                      controllers.Menus.index()
 GET     /menus/menu/:q              controllers.Menus.getMenuItems( q: String )
+GET     /:shopType/:q/menus         controllers.Menus.getMenusByShop( q: String, shopType: String )
 
 GET     /widget/:userName           controllers.Application.myWidget( userName: String )
 
 
 
 
-
+POST    /order/:q/confirm           controllers.Checkout.confirmOrder( q: String )
 POST     /addVideo                  controllers.Register.addVideo()
 POST     /completeRegistration      controllers.Register.completeRegistration()
 POST     /addMyPhotos               controllers.AddPhotos.addMyPhotos()
@@ -34,14 +38,17 @@ POST     /checkout                  controllers.Checkout.index()
 POST     /pay                       controllers.Checkout.pay()
 POST     /addMenu                   controllers.Menus.addMenu()
 POST     /addItemToMenu             controllers.Menus.addMenuItemToMenu()
+POST     /removeMenuItem            controllers.AddMenuItem.removeMenuItem()
 
 
 GET      /login                     controllers.LogIn.index()
+GET      /setUpMerchantAccount      controllers.Register.MerchantAccountSetUp()
 GET      /logIntoOrder              controllers.LogIn.logIntoOrder()
 POST      /login                    controllers.LogIn.index()
 POST      /loginToComment           controllers.LogIn.loginToComment()
 GET    /register                    controllers.Register.index()
 POST     /register                  controllers.Register.index()
+POST     /saveBusinessHours         controllers.Register.saveBusinessHours()
 
 POST    /saveProfileData            controllers.Register.saveProfileData()
 

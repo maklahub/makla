@@ -24,6 +24,7 @@ public class Person extends Model {
     private String phoneNumber;
     private String cell;
     private Date birthDate;
+    private String description;
     @Enumerated(EnumType.STRING)
     private Sex gender;
     @ManyToMany( cascade = CascadeType.ALL )
@@ -32,16 +33,11 @@ public class Person extends Model {
     private PersonCategory category;
     @ManyToMany( cascade = CascadeType.ALL )
     private List< Organization > organizations;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Address address;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Address billingAddress;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Address shippingAddress;
     private Date createTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
     public List<Organization> getOrganizations() {
         return organizations;
@@ -65,6 +61,14 @@ public class Person extends Model {
 
     public void setCategory(PersonCategory category) {
         this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 
@@ -195,34 +199,6 @@ public class Person extends Model {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public Address getAddressId() {
-        if ( this.address == null ){
-              System.out.println("---------> address is null");
-            return new Address("","","");
-        }
-        return address;
-    }
-
-    public void setAddressId(Address address) {
-        this.address = address;
-    }
-
-    public Address getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(Address billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
     }
 
     public Date getCreateTime() {

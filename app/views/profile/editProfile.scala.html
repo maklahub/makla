@@ -1,4 +1,4 @@
-@(profileData: String, personCategories: String, orgCategories: String)
+@(profileData: String, personCategories: String, orgCategories: String, availability: Availability)
 @headerIn()
 
 
@@ -12,8 +12,10 @@
         var profileVideos = profileData.videos;
         var systemUser = profileData.systemUser;
         var $personalDataContainer = $('#personal-date');
+        var u = @Html(session.get("sessionUser"));
 
-        $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar).render());
+        // Set up Tool Bar
+        $('#tool-bar').html(new ToolBar(toolBarObjects.editProfileToolBar, u).render( ));
         $('#edit-myprofile-btn').addClass( 'btn-success' );
         $("#pImage").attr({'src':encodeURI( systemUser.profileImageUrl), 'data-id': systemUser.profileImageId, title: "Profile Photo"});
         $("#profilePersonalInfo").html(new ProfilePersonalInfo( systemUser ).html );
@@ -21,8 +23,13 @@
             $("#profile-edit-form").append( new EditOrganizationProfileForm( systemUser, systemUser.organization , orgCategories ).renderHtml());
         }
         else {
-            $("#profile-edit-form").append( new EditPersonProfileForm( systemUser.person.firstName, systemUser.person.lastName,"", personCategories ).renderHtml());
+            $( "#business-hours-btn").hide();
+            $("#profile-edit-form").append( new EditPersonProfileForm( systemUser, systemUser.person.firstName, systemUser.person.lastName,"", personCategories ).renderHtml());
         }
+
+        $( "#business-hours-btn" ).click(function() {
+            $( "#business-hours" ).toggle( "slow" );
+        });
 
     });
 </script>
@@ -30,7 +37,7 @@
                 <div class="container-fluid" id="content-container">
                     <div class="row-fluid">
                         @sidemenu.sidemenu()
-                        <div class="span12">
+                        <div class="span11">
                             <div class="container-fluid" id="personalInfoContainer">
                                 <div class="span4">
                                     <div class="artista-img" id="profileImageContainer">
@@ -39,11 +46,22 @@
                                 </div>
                                 <div class="span8">
                                     <div id="profilePersonalInfo">
-                                        <div><h2 class="h"> Elhassan Rais</h2></div>
-                                        <div><h4 class="h"> Professional Acrobat</h4></div>
-                                        <div><h5 class="h"> Berkeley, CA</h5></div>
-                                        <div><p><strong> Profession:</strong> Human pyramids, Moroccan Tumbling, Chinese pole and Hnd
-                                            balancing </p></div>
+                                    </div>
+                                    <div class="btn" id="business-hours-btn">Business Hours</div>
+                                    <div id="business-hours" style="display: none; position: relative;">
+                                        <table style="width: 200px">
+                                            <form method="post" action="/saveBusinessHours">
+                                            <tr><td><span class="label">Monday: </span></td><td><div> <input name="monday" type="text" class="text-input-small" value="@availability.getMonday">  </div></td></tr>
+                                            <tr><td><span class="label">Tuesday:</span></td><td><div>  <input name="tuesday" type="text" class="text-input-small" value="@availability.getTuesday ">  </div></td></tr>
+                                            <tr><td><span class="label">Wednesday: </span></td><td> <div>   <input name="wednesday" type="text" class="text-input-small" value="@availability.getWednesday">  </div></td></tr>
+                                            <tr><td><span class="label">Thursday:</span></td><td> <div>  <input name="thursday" type="text" class="text-input-small" value="@availability.getThursday">  </div></td></tr>
+                                            <tr><td><span class="label">Friday: </span></td><td> <div> <input name="friday" type="text" class="text-input-small" value="@availability.getFriday">  </div></td></tr>
+                                            <tr><td><span class="label">Saturday:</span></td><td>     <div>  <input name="saturday" type="text" class="text-input-small" value="@availability.getSaturday">  </div></td></tr>
+                                            <tr><td><span class="label">Sunday:</span></td><td>  <div>  <input name="sunday" type="text" class="text-input-small" value="@availability.getSunday">  </div></td></tr>
+                                             <tr><td><div ><input class="btn" type="submit" value="update"></div></td></tr>
+                                            </form>
+                                        </table>
+                                        </div>
 
                                     </div>
 

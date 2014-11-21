@@ -20,6 +20,7 @@ public class Menu extends Model {
     private SystemUser owner;
     @OneToOne(cascade = CascadeType.ALL)
     private Photo menuPhoto;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToMany( cascade = CascadeType.ALL )
     private List<MenuItem> menuItems;
@@ -27,9 +28,10 @@ public class Menu extends Model {
     private MenuType menuType;  // lunch, dinner, breakfast
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
 
     public enum MenuType{

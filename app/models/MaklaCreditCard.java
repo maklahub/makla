@@ -23,13 +23,15 @@ public class MaklaCreditCard extends Model {
     @JsonBackReference
     private SystemUser owner;
     private String payPalCreditCardId;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private String creditCardNumber;
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
+    @Version
+    public long version;
 
     public MaklaCreditCard( SystemUser owner, String payPalCardId , String cardNumber ){
         setCreateTime( new Date()) ;

@@ -19,18 +19,22 @@ public class CartItem extends Model {
     private String name;
     @OneToOne(cascade = CascadeType.ALL)
     private Photo cartItemPhoto;
+    @Column(columnDefinition = "TEXT")
     private String Description;
+    private double amount;
     private double price;
-    private int quantity;
+    private int quantity = 1;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private Cart cart;
+    @OneToOne(cascade = CascadeType.ALL)
+    private SystemUser owner;
     private Date createTime;
     private Date closeTime;
-    @Version
     @Column(columnDefinition = "timestamp")
     private Date updateTime;
-    String test;
+    @Version
+    public long version;
 
 
     public CartItem( String name, Cart cart, double price ){
@@ -40,12 +44,14 @@ public class CartItem extends Model {
         setCreateTime( new Date() );
     }
 
-    public CartItem( Cart cart, MenuItem menuItem){
+    public CartItem( Cart cart, MenuItem menuItem, int quantity){
+        setQuantity( quantity );
         setCart( cart );
         setName( menuItem.getName() );
         setDescription( menuItem.getDescription() );
         setPrice( menuItem.getPrice() );
         setCartItemPhoto( menuItem.getMenuItemPhoto() );
+        setOwner( menuItem.getMenu().getOwner() );
         setCreateTime( new Date() );
     }
 
@@ -154,5 +160,21 @@ public class CartItem extends Model {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getAmount() {
+        return getQuantity() * getPrice();
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public SystemUser getOwner() {
+        return owner;
+    }
+
+    public void setOwner(SystemUser owner) {
+        this.owner = owner;
     }
 }

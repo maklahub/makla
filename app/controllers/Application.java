@@ -16,33 +16,30 @@ public class Application extends Controller {
 
 
 
-    public static Result index1(){
+    public static Result index(){
 
-        String menus = Json.toJson( Menu.getAllMenus() ).toString();
-        //System.out.print( allArtistas );
-        //   return ok(views.html.index.render( artistasAsJson, userTypesAsJson));
-       // return ok( menus );
-        return ok( views.html.index.render( menus, null ) );
+        List< UserType > userTypes = UserType.getUserTypes();
+        List< AccountType > accountTypes = AccountType.getAccountTypes();
+        if ( userTypes.size() <=0 ){
+            createUserTypeIfNotExist();
+            userTypes = UserType.getUserTypes();
+        }
+        if ( accountTypes.size() <= 0 ){
+            createAccountTypeIfNotExist();
+            accountTypes = AccountType.getAccountTypes();
+        }
+        List<SystemUser> organizations = SystemUser.findAllOrganizations();
+        return ok( views.html.index.render( organizations ) );
 
 
     }
 
-    public static Result index() {
+
+
+    public static Result indexNo() {
         String cartItemsAsJson = "{status: 'empty'}";
         String cartAsJson = "{status: 'empty'}";
-        //createMenuDummy();
-        /*
-        Person p = new Person("Elhassan", "Rais", "b@b.com");
-        Sys//temUser s = new SystemUser( p, "email", null) ;
-        Cart c = new Cart(" new cart", s);
-        Order o = new Order( s );
-        OrderItem oi = new OrderItem(o, " order 1","Moroccan Tajin");
-        c.save();
-        oi.save();
 
-      /*  if ( session("sessionUser") != null){
-            return redirect( controllers.routes.Application.home() );
-        } **/
         List< UserType > userTypes = UserType.getUserTypes();
         List< AccountType > accountTypes = AccountType.getAccountTypes();
         if ( userTypes.size() <=0 ){
@@ -79,11 +76,13 @@ public class Application extends Controller {
             cartItemsAsJson = Json.toJson( cartItems ).toString();
             cartAsJson = Json.toJson( cart ).toString();
             //if ( cartItemsAsJson == null ){ cartItemsAsJson = "empty";}
-            return ok(views.html.index.render( menus, cartAsJson ));
+            //return ok(views.html.index.render( menus, cartAsJson ));
+            return ok("");
 
         }
         else {
-            return ok(views.html.index.render( menus, cartAsJson ));
+            //return ok(views.html.index.render( menus, cartAsJson ));
+            return ok("");
 
         }
 
@@ -165,12 +164,17 @@ public class Application extends Controller {
         return ok( Json.toJson( searchResult ));
     }
 
-   public static Result profile( String userName ){
-       SystemUser systemUser = SystemUser.findSystemUserByUserName( userName );
+   public static Result profile( String reference ){
+       SystemUser systemUser = SystemUser.findSystemUserByReference( reference );
        ProfileData profileData = new ProfileData(systemUser);
+       Availability availability = Availability.findAvailabilityByUser( systemUser.getId() );
+       if ( availability == null){
+           availability = new Availability( systemUser, "", "", "","","","","");
+           availability.save();
+       }
        //return ok( views.html.profile.profile.render( profileData.toString() ));
       // return ok( views.html.profile.profile.render( Json.toJson( profileData ).toString() ));
-       return ok( views.html.profile.profile.render( Json.toJson( profileData ).toString() ));
+       return ok( views.html.profile.profile.render( Json.toJson( profileData ).toString(), availability ));
    }
 
     //
@@ -185,10 +189,17 @@ public class Application extends Controller {
             String orgCategoriesAsJson = Json.toJson( orgCategories ).toString();
             String currentUserId = session("currentUserId");
             SystemUser currentUser = SystemUser.findUserById( currentUserId );
+            Availability availability = Availability.findAvailabilityByUser( currentUserId );
             System.out.println( "********* current User: " + currentUser);
+            System.out.println( "********* Availability: " + availability);
             ProfileData profileData = new ProfileData( currentUser );
+
+            if ( availability == null){
+                 availability = new Availability( currentUser, "", "", "","","","","");
+                availability.save();
+            }
              //return  ok( session("user"));
-           return  ok( views.html.profile.editProfile.render( Json.toJson( profileData ).toString(),personCategoriesAsJson, orgCategoriesAsJson ) );
+           return  ok( views.html.profile.editProfile.render( Json.toJson( profileData ).toString(),personCategoriesAsJson, orgCategoriesAsJson, availability ) );
         }
         else {
            return  ok(" no session -  not logged in");
@@ -275,11 +286,13 @@ public class Application extends Controller {
 
     }
     public static void createUserTypeIfNotExist(){
-        new UserType( "restaurant", "ut-00001", "Restaurant" ).save();
-        new UserType( "cafe", "ut-00002", "Cafe" ).save();
-        new UserType( "whole-food", "ut-00003", "Whole food" ).save();
-        new UserType( "catering", "ut-00004", "Catering" ).save();
-        new UserType( "customer", "ut-00004", "customer" ).save();
+        //new UserType( "restaurant", "ut-00001", "Restaurant" ).save();
+        //new UserType( "cafe", "ut-00002", "Cafe" ).save();
+        //new UserType( "whole-food", "ut-00003", "Whole food" ).save();
+        //new UserType( "catering", "ut-00004", "Catering" ).save();
+        new UserType( "customer", "ut-00004", "Customer" ).save();
+        new UserType( "merchant", "ut-00005", "Merchant" ).save();
+
 
     }
 
